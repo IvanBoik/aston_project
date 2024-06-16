@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-insert-product
+      author: Kirill Zemlyakov
+      changes:
+        - createTable:
+            tableName: PRODUCT
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: "pk_product"
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: decimal(12,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: "fk_product_type"
+                    references: "product_type(id)"
+                    nullable: false
+              - column:
+                  name: is_recipe
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: creator_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: "fk_product_creator"
+                    references: "creator(id)"
+                    nullable: false
+        - sqlFile:
+            path: db/script/insert-product.sql
