@@ -15,7 +15,7 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: "pk_attribute"
               - column:
-                  name: name
+                  name: attribute
                   type: varchar(255)
                   constraints:
                     nullable: false
