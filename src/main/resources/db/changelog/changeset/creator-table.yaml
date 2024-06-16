@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-insert-creator
+      author: Kirill Zemlyakov
+      changes:
+        - createTable:
+            tableName: CREATOR
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: "pk_creator"
+              - column:
+                  name: country
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - sqlFile:
+            path: db/script/insert-creator.sql
+            encoding: UTF-8
