@@ -30,4 +30,4 @@ databaseChangeLog:
         - addPrimaryKey:
             constraintName: "pk_attribute_value"
             tableName: ATTRIBUTE_VALUE
-            columnNames: "product_id,attribute_id,value_id"
+            columnNames: "product_id,attribute_id"
