@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Entity
-@Table
 @Getter
 @Setter
 public class Product {
