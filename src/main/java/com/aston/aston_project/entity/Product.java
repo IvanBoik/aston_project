@@ -25,7 +25,7 @@ public class Product {
     @JoinColumn(name = "type_id")
     private Type type;
 
-    @Column(name = "recepie")
+    @Column(name = "is_recipe")
     private Boolean isPrescriptionRequired;
 
     @ManyToOne(fetch = FetchType.EAGER)
