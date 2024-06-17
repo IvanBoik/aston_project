@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-insert-pharmacy-product
+      author: Kirill Zemlyakov
+      changes:
+        - createTable:
+            tableName: PHARMACY_PRODUCT
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: "pk_pharmacy_product"
+              - column:
+                  name: product_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_pharmacy_product_product"
+                    references: "product(id)"
+              - column:
+                  name: pharmacy_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_pharmacy_product_pharmacy"
+                    references: "pharmacy(id)"
+              - column:
+                  name: count
+                  type: INT
+                  constraints:
+                    nullable: false
+        - sqlFile:
+            path: db/script/insert-pharmacy-product.sql
+            encoding: UTF-8
