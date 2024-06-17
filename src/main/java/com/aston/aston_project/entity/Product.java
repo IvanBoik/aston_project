@@ -13,8 +13,9 @@ import java.util.Map;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String name;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "attribute_value",
             joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
