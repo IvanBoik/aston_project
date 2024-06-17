@@ -23,7 +23,7 @@ public class User {
     private Role role;
 
     @ManyToMany
-    @JoinTable(name = "wish_list",
+    @JoinTable(name = "WISH_LIST",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
