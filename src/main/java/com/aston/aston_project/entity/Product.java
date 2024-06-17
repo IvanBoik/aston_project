@@ -14,7 +14,21 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
+    private Float price;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id")
+    private Type type;
+
+    @Column(name = "recepie")
+    private Boolean isPrescriptionRequired;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id")
+    private Producer producer;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "attribute_value",
