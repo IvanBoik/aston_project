@@ -1,7 +1,7 @@
-INSERT INTO creator(country, name) VALUES
-('Россия', 'Фармстандарт'),
-('Россия', 'Фармсинтез'),
-('Россия', 'Эвалар'),
-('Россия', 'Герофарм'),
-('Германия', 'BioNTech'),
-('США', 'Johnson&Johnson');
+INSERT INTO creator(country_id, name) VALUES
+(1, 'Фармстандарт'),
+(1, 'Фармсинтез'),
+(1, 'Эвалар'),
+(1, 'Герофарм'),
+(4, 'BioNTech'),
+(2, 'Johnson&Johnson');
