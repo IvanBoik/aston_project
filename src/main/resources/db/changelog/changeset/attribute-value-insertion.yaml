@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-attribute-value
+      author: Kirill Zemlyakov
+      changes:
+        - sqlFile:
+            path: db/script/insert-attribute-value.sql
+            encoding: UTF-8
