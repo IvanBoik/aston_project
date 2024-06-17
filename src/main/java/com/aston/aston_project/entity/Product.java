@@ -3,7 +3,6 @@ package com.aston.aston_project.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,5 +39,4 @@ public class Product {
     )
     @MapKeyJoinColumn (name = "attribute_id",referencedColumnName = "id")
     private Map<Attribute, Value> attributesValues = new HashMap<>();
-
 }
