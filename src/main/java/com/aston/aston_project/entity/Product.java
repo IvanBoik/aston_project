@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Builder
