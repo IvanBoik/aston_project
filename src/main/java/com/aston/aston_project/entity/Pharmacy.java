@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "PHARMACY")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
