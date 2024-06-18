@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-product-list
+      author: Kirill Zemlyakov
+      changes:
+        - createTable:
+            tableName: PRODUCT_LIST
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: "pk_product_list"
+              - column:
+                  name: product_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_product_list_product"
+                    references: "product(id)"
+              - column:
+                  name: order_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_product_list_order"
+                    references: "order(id)"
+              - column:
+                  name: count
+                  type: INT
+                  constraints:
+                    nullable: false

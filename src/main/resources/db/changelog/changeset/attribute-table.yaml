@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-attribute
+      author: Kirill Zemlyakov
+      changes:
+        - createTable:
+            tableName: ATTRIBUTE
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: "pk_attribute"
+              - column:
+                  name: attribute
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true

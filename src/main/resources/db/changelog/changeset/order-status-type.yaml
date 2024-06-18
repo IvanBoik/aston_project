@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-insert-order-status
+      author: Kirill Zemlyakov
+      changes:
+        - createTable:
+            tableName: ORDER_STATUS_TYPE
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: "pk_order_status"
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+        - sqlFile:
+            path: db/script/insert-order-status-type.sql
+            encoding: UTF-8

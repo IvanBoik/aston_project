@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-insert-wish-list
+      author: Kirill Zemlyakov
+      changes:
+        - createTable:
+            tableName: WISH_LIST
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: "pk_wish_list"
+              - column:
+                  name: product_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_wish_list_product"
+                    references: "product(id)"
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_wish_list_user"
+                    references: "user(id)"
