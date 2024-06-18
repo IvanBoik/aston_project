@@ -31,5 +31,5 @@ public class Pharmacy {
 
     @OneToMany(mappedBy = "pharmacy", fetch = FetchType.LAZY)
 
-    private List<PharmacyProduct> product = new ArrayList<>();
+    private List<PharmacyProduct> productList = new ArrayList<>();
 }

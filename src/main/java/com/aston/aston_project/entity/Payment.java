@@ -1,8 +1,7 @@
 package com.aston.aston_project.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,6 +12,10 @@ import java.time.LocalTime;
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,11 +25,11 @@ public class Payment {
     @UpdateTimestamp
     private LocalTime time;
     private BigDecimal sum; //в миграции покорректировать название
-
     @Enumerated(EnumType.STRING)
     private StatusTransaction statusId;
-
-    private Integer orderId;
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order orderId;
     @ManyToOne
     @JoinColumn(name = "from_id")
     private User fromId;
