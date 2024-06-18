@@ -1,12 +1,12 @@
 package com.aston.aston_project.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -21,14 +21,18 @@ public class Payment {
     private LocalDate date;
     @UpdateTimestamp
     private LocalTime time;
-    private Float sum; //в миграции покорректировать название
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "status_id")
+    private BigDecimal sum; //в миграции покорректировать название
+
+    @Enumerated(EnumType.STRING)
     private StatusTransaction statusId;
 
     private Integer orderId;
-    private Integer fromId;
-    private Integer toId;
+    @ManyToOne
+    @JoinColumn(name = "from_id")
+    private User fromId;
+    @ManyToOne
+    @JoinColumn(name = "to_id")
+    private Pharmacy toId;
 
 
 }
