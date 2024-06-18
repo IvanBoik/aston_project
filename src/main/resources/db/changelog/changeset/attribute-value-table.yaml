@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-attribute-value
+      author: Kirill Zemlyakov
+      changes:
+        - createTable:
+            tableName: ATTRIBUTE_VALUE
+            columns:
+              - column:
+                  name: product_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_attribute_value_product"
+                    references: "product(id)"
+              - column:
+                  name: attribute_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: "fk_attribute_attribute_value"
+                    references: "attribute(id)"
+                    nullable: false
+              - column:
+                  name: value_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: "fk_value_attribute_value"
+                    references: "value(id)"
+                    nullable: false
+        - addPrimaryKey:
+            constraintName: "pk_attribute_value"
+            tableName: ATTRIBUTE_VALUE
+            columnNames: "product_id,attribute_id"

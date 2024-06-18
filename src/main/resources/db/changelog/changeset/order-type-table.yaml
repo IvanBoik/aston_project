@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-insert-order-type
+      author: Kirill Zemlyakov
+      changes:
+        - createTable:
+            tableName: ORDER_TYPE
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: "pk_order_type"
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+        - sqlFile:
+            path: db/script/insert-order-type.sql

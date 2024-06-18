@@ -1,0 +1,59 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-payment
+      author: Kirill Zemlyakov
+      changes:
+        - createTable:
+            tableName: PAYMENT
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: "pk_payment"
+                    nullable: false
+              - column:
+                  name: date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time
+                  type: time(0) without time zone
+                  constraints:
+                    nullable: false
+              - column:
+                  name: summ
+                  type: decimal(12,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_payment_status"
+                    references: "payment_type(id)"
+              - column:
+                  name: order_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_payment_order"
+                    references: "order(id)"
+              - column:
+                  name: from_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_payment_from"
+                    references: "user(id)"
+              - column:
+                  name: to_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_payment_to"
+                    references: "pharmacy(id)"
