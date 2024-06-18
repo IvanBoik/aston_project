@@ -29,6 +29,6 @@ public class Pharmacy {
     @ManyToOne(fetch = FetchType.LAZY)
     private Address address;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pharmacy", fetch = FetchType.LAZY)
     private List<PharmacyProduct> product = new ArrayList<>();
 }
