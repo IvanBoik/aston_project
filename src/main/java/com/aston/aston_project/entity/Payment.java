@@ -24,7 +24,7 @@ public class Payment {
     private LocalDate date;
     @UpdateTimestamp
     private LocalTime time;
-    private BigDecimal sum; //в миграции покорректировать название
+    private BigDecimal amount;
     @Enumerated(EnumType.STRING)
     private StatusTransaction statusId;
     @ManyToOne
