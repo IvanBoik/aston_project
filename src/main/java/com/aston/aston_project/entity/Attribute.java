@@ -10,6 +10,6 @@ import lombok.Setter;
 public class Attribute {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String attribute;
 }
