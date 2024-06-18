@@ -8,24 +8,21 @@ import java.sql.Timestamp;
 
 @Entity
 @Data
-@Table(name = "orders")
 public class Order {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_user", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User idUser;
 
-    @Column(name = "time")
     @CreationTimestamp
     private Timestamp time;
 
     @ManyToOne
-    @JoinColumn(name = "id_address", referencedColumnName = "id")
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address idAddress;
 
     @Enumerated(EnumType.STRING)

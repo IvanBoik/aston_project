@@ -10,16 +10,15 @@ import lombok.Data;
 public class ProductList {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_product", referencedColumnName = "id")
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product idProduct;
 
     @ManyToOne
-    @JoinColumn(name = "id_order")
+    @JoinColumn(name = "order_id")
     private Order idOrder;
 
     @Column(name = "count")

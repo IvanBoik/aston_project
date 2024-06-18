@@ -12,12 +12,9 @@ import java.sql.Timestamp;
 public class Recipes {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "link_recipe")
-    @NotBlank(message = "link of recipe mustn't be the empty string")
     private String link;
 
     @ManyToOne
