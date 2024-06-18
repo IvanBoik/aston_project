@@ -9,16 +9,20 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
+@NamedEntityGraph(name = "withPharmacy", attributeNodes = {@NamedAttributeNode("pharmacy")})
+@NamedEntityGraph(name = "withProduct", attributeNodes = {@NamedAttributeNode("product")})
+@NamedEntityGraph(name = "withPharmacyAndProduct", attributeNodes = {
+        @NamedAttributeNode("pharmacy"), @NamedAttributeNode("product")})
 public class PharmacyProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Pharmacy pharmacy;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Product product;
 
     private Integer count;
