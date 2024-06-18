@@ -1,10 +1,7 @@
 package com.aston.aston_project.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-
-import java.sql.Timestamp;
 
 @Entity
 @Data
