@@ -41,7 +41,7 @@ public class PaymentApiTests {
     }
 
     @Test
-    public void payment_api_throws_exception() throws PaymentException{
+    public void payment_api_throws_exception() {
         assertThrows(PaymentException.class,()->mockPaymentAPI.tryPay(new BigDecimal(-100)));
     }
 
