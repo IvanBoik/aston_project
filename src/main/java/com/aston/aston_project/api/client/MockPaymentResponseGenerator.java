@@ -30,18 +30,18 @@ public class MockPaymentResponseGenerator{
     }
 
     private static StatusTransaction generateStatus(){
-        int condition = RANDOM.nextInt(2);
-        if (condition == 0) {
+        int condition = RANDOM.nextInt(100);
+        if (condition <15) {
             return StatusTransaction.DECLINED;
         }
         return StatusTransaction.PAID;
     }
 
     private static LocalDate getDate(){
-        return LocalDate.now(ZoneId.of("UTC-0"));
+        return LocalDate.now(ZoneId.of("Europe/Moscow"));
     }
 
     private static LocalTime getTime(){
-        return LocalTime.now(ZoneId.of("UTC-0"));
+        return LocalTime.now(ZoneId.of("Europe/Moscow"));
     }
 }
