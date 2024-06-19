@@ -7,11 +7,15 @@ import com.aston.aston_project.api.recipe.util.RecipeCheckerResponse;
 import com.aston.aston_project.entity.Product;
 import com.aston.aston_project.entity.ProductList;
 import com.aston.aston_project.entity.Recipes;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.junitpioneer.jupiter.RetryingTest;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -32,14 +36,12 @@ public class RecipeCheckerTests {
 
     @Mock
     private Product product;
-
+    @Spy
+    private MockRecipeResponseGenerator generator;
+    @InjectMocks
     private MockRecipeChecker recipeCheckerApi;
 
 
-    @BeforeEach
-    public void init(){
-        recipeCheckerApi = new MockRecipeChecker(new MockRecipeResponseGenerator());
-    }
     @RetryingTest(2)
     public void recipe_signature_and_product_name_is_correct_test(){
         when(product.getName()).thenReturn("Азитромицин");
@@ -54,30 +56,33 @@ public class RecipeCheckerTests {
         assertThrows(RecipeCheckerException.class,()->recipeCheckerApi.check(null));
     }
 
-    @Test
-    public void recipe_link_signature_is_not_valid(){
-        when(product.getName()).thenReturn("Азитромицин");
+    @ParameterizedTest
+    @CsvSource(value = "Aзитромицин , 00-1234567890")
+    public void recipe_link_signature_is_not_valid(String productName,String recipeLink){
+        when(product.getName()).thenReturn(productName);
         when(productList.getIdProduct()).thenReturn(product);
         when(recipe.getIdProductList()).thenReturn(productList);
-        when(recipe.getLink()).thenReturn("00-1234567890");
+        when(recipe.getLink()).thenReturn(recipeLink);
         assertThat(recipeCheckerApi.check(recipe).isValid()).isEqualTo(false);
     }
 
-    @Test
-    public void recipe_product_name_is_blank(){
-        when(product.getName()).thenReturn("");
+    @ParameterizedTest
+    @CsvSource(value = ", 00Д1234567890")
+    public void recipe_product_name_is_blank(String productName,String recipeLink){
+        when(product.getName()).thenReturn(productName);
         when(productList.getIdProduct()).thenReturn(product);
         when(recipe.getIdProductList()).thenReturn(productList);
-        when(recipe.getLink()).thenReturn("00Д1234567890");
+        when(recipe.getLink()).thenReturn(recipeLink);
         assertThrows(RecipeCheckerException.class,()->recipeCheckerApi.check(recipe));
     }
 
-    @Test
-    public void recipe_product_name_is_null(){
+    @ParameterizedTest
+    @ValueSource(strings = "00Д1234567890")
+    public void recipe_product_name_is_null(String recipeLink){
         when(product.getName()).thenReturn(null);
         when(productList.getIdProduct()).thenReturn(product);
         when(recipe.getIdProductList()).thenReturn(productList);
-        when(recipe.getLink()).thenReturn("00Д1234567890");
+        when(recipe.getLink()).thenReturn(recipeLink);
         assertThrows(RecipeCheckerException.class,()->recipeCheckerApi.check(recipe));
     }
 
@@ -99,6 +104,4 @@ public class RecipeCheckerTests {
         when(recipe.getLink()).thenReturn("00Д1234567890");
         assertThat(recipeCheckerApi.check(recipe).isValid()).isEqualTo(false);
     }
-
-
 }

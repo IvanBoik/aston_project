@@ -31,7 +31,7 @@ public class MockPaymentResponseGenerator{
 
     private StatusTransaction generateStatus(){
         int condition = RANDOM.nextInt(100);
-        if (condition <15) {
+        if (condition < 15) {
             return StatusTransaction.DECLINED;
         }
         return StatusTransaction.PAID;
