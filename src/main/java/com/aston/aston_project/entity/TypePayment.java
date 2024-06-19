@@ -13,9 +13,5 @@ public enum TypePayment {
     ELECTRONIC_WALLET,
     CRYPTOCURRENCY,
     CASHLESS,
-    BARTER;
-
-
-    TypePayment() {
-    }
+    BARTER
 }
