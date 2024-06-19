@@ -1,4 +1,4 @@
-package com.aston.aston_project.api.util;
+package com.aston.aston_project.api.payment.util;
 
 import com.aston.aston_project.entity.StatusTransaction;
 

@@ -1,6 +1,6 @@
 package com.aston.aston_project.controller;
 
-import com.aston.aston_project.api.client.MockPaymentResponseGenerator;
+import com.aston.aston_project.api.payment.client.MockPaymentResponseGenerator;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

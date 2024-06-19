@@ -1,9 +1,9 @@
-package com.aston.aston_project.api;
+package com.aston.aston_project.api.payment;
 
-import com.aston.aston_project.api.client.MockPaymentAPI;
-import com.aston.aston_project.api.client.MockPaymentResponse;
-import com.aston.aston_project.api.client.MockPaymentResponseGenerator;
-import com.aston.aston_project.api.util.PaymentException;
+import com.aston.aston_project.api.payment.client.MockPaymentAPI;
+import com.aston.aston_project.api.payment.client.MockPaymentResponse;
+import com.aston.aston_project.api.payment.client.MockPaymentResponseGenerator;
+import com.aston.aston_project.api.payment.util.PaymentException;
 import com.aston.aston_project.entity.StatusTransaction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +28,12 @@ public class PaymentApiTests {
     public void payment_api_returns_paid_status() throws PaymentException {
         MockPaymentResponse response = mockPaymentAPI.tryPay(new BigDecimal(1000));
         assertThat(response.status()).isEqualTo(StatusTransaction.PAID);
+    }
+
+    @RetryingTest(20)
+    public void payment_api_returns_declined_status() throws PaymentException {
+        MockPaymentResponse response = mockPaymentAPI.tryPay(new BigDecimal(1000));
+        assertThat(response.status()).isEqualTo(StatusTransaction.DECLINED);
     }
 
     @Test

@@ -1,6 +1,6 @@
-package com.aston.aston_project.api.client;
+package com.aston.aston_project.api.payment.client;
 
-import com.aston.aston_project.api.util.PaymentResponse;
+import com.aston.aston_project.api.payment.util.PaymentResponse;
 import com.aston.aston_project.entity.StatusTransaction;
 
 import java.math.BigDecimal;

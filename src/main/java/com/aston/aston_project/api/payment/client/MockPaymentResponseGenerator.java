@@ -1,4 +1,4 @@
-package com.aston.aston_project.api.client;
+package com.aston.aston_project.api.payment.client;
 
 import com.aston.aston_project.entity.StatusTransaction;
 import org.springframework.stereotype.Component;
@@ -24,12 +24,12 @@ public class MockPaymentResponseGenerator{
         );
     }
 
-    private static String generateTransaction() {
+    private String generateTransaction() {
         UUID uuid = UUID.randomUUID();
         return uuid.toString().substring(0, 20).replace("-", "");
     }
 
-    private static StatusTransaction generateStatus(){
+    private StatusTransaction generateStatus(){
         int condition = RANDOM.nextInt(100);
         if (condition <15) {
             return StatusTransaction.DECLINED;
@@ -37,11 +37,11 @@ public class MockPaymentResponseGenerator{
         return StatusTransaction.PAID;
     }
 
-    private static LocalDate getDate(){
+    private LocalDate getDate(){
         return LocalDate.now(ZoneId.of("Europe/Moscow"));
     }
 
-    private static LocalTime getTime(){
+    private LocalTime getTime(){
         return LocalTime.now(ZoneId.of("Europe/Moscow"));
     }
 }
