@@ -1,6 +1,7 @@
 package com.aston.aston_project.util;
 
 import com.aston.aston_project.util.exception.DataException;
+import com.aston.aston_project.util.exception.DuplicateEmailException;
 import com.aston.aston_project.util.exception.TokenException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -92,6 +93,12 @@ public class ExceptionController implements ResponseBodyAdvice<Object> {
     public String internalServerError(Throwable thr){
         log.error(thr.getMessage());
         return "Internal server error";
+    }
+
+    @ExceptionHandler(DuplicateEmailException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String duplicateEmailException(DuplicateEmailException e) {
+        return e.getMessage();
     }
 
     @Override
