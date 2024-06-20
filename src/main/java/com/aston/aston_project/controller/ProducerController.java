@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -22,7 +23,7 @@ public class ProducerController {
     public ResponseEntity<ProducerDto> getById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(producerService.getById(id));
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             return ResponseEntity.badRequest().build();
         }
     }

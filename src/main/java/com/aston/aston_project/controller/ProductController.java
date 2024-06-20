@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.NoSuchElementException;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/products")
@@ -17,7 +19,7 @@ public class ProductController {
     public ResponseEntity<ProductDto> getById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(productService.getById(id));
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             return ResponseEntity.badRequest().build();
         }
     }//todo
