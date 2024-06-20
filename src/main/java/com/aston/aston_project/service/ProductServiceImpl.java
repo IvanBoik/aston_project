@@ -1,28 +1,26 @@
 package com.aston.aston_project.service;
 
+import com.aston.aston_project.dto.ProductDto;
+import com.aston.aston_project.dto.util.ProductDtoMapping;
 import com.aston.aston_project.entity.Product;
 import com.aston.aston_project.repository.ProductRepository;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductDtoMapping productDtoMapping;
 
-    //todo
-    @Override
-    public void add(Product product) {
-    }
 
-    //todo
     @Override
-    public Product getById(Long id) {
-        return null;
+    public ProductDto getById(Long id) {
+        return productDtoMapping.entityToDto(productRepository.findById(id).orElseThrow());
     }
 
     //todo
@@ -31,6 +29,10 @@ public class ProductServiceImpl implements ProductService {
         return List.of();
     }
 
+    //todo
+    @Override
+    public void add(Product product) {
+    }
     //todo
     @Override
     @Transactional

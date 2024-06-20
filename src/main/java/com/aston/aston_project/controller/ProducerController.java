@@ -4,7 +4,7 @@ import com.aston.aston_project.dto.ProducerDto;
 import com.aston.aston_project.entity.Country;
 import com.aston.aston_project.entity.Producer;
 import com.aston.aston_project.service.ProducerService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/api/producers")
 public class ProducerController {
 
@@ -23,7 +23,7 @@ public class ProducerController {
         try {
             return ResponseEntity.ok(producerService.getById(id));
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
     }
 

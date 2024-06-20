@@ -7,14 +7,14 @@ import com.aston.aston_project.entity.Country;
 import com.aston.aston_project.entity.Producer;
 import com.aston.aston_project.repository.ProducerRepository;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProducerServiceImpl implements ProducerService {
     private final ProducerRepository producerRepository;
     private final ProducerDtoMapping producerDtoMapping;
@@ -22,12 +22,6 @@ public class ProducerServiceImpl implements ProducerService {
     @Override
     public ProducerDto getById(Long id) {
         return producerDtoMapping.entityToDto(producerRepository.findById(id).orElseThrow());
-//        if (optionalProducer.isPresent()) {
-//            return optionalProducer.get();
-//        } else {
-//            throw new ProducerNotFountException("producer with id " + id + " not found");
-//        }
-//        return producerDto;
     }
 
     @Override
