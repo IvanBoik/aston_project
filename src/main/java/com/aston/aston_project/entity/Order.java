@@ -29,12 +29,7 @@ public class Order {
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address idAddress;
 
-    @Enumerated(EnumType.STRING)
     private TypeOrder typeOrder;
-
-    @Enumerated(EnumType.STRING)
     private Status status;
-
-    @Enumerated(EnumType.STRING)
     private TypePayment typePayment;
 }
