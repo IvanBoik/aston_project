@@ -1,6 +1,6 @@
 package com.aston.aston_project.api.payment.client;
 
-import com.aston.aston_project.entity.StatusTransaction;
+import com.aston.aston_project.entity.en.PaymentTypeEnum;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -29,12 +29,12 @@ public class MockPaymentResponseGenerator{
         return uuid.toString().substring(0, 20).replace("-", "");
     }
 
-    private StatusTransaction generateStatus(){
+    private PaymentTypeEnum generateStatus(){
         int condition = RANDOM.nextInt(100);
         if (condition <15) {
-            return StatusTransaction.DECLINED;
+            return PaymentTypeEnum.DECLINED;
         }
-        return StatusTransaction.PAID;
+        return PaymentTypeEnum.PAYED;
     }
 
     private LocalDate getDate(){

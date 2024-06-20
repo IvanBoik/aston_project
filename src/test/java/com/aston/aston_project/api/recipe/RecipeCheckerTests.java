@@ -6,7 +6,7 @@ import com.aston.aston_project.api.recipe.util.RecipeCheckerException;
 import com.aston.aston_project.api.recipe.util.RecipeCheckerResponse;
 import com.aston.aston_project.entity.Product;
 import com.aston.aston_project.entity.ProductList;
-import com.aston.aston_project.entity.Recipes;
+import com.aston.aston_project.entity.Recipe;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 public class RecipeCheckerTests {
 
     @Mock
-    private Recipes recipe;
+    private Recipe recipe;
 
     @Mock
     private ProductList productList;
@@ -45,8 +45,8 @@ public class RecipeCheckerTests {
     @RetryingTest(2)
     public void recipe_signature_and_product_name_is_correct_test(){
         when(product.getName()).thenReturn("Азитромицин");
-        when(productList.getIdProduct()).thenReturn(product);
-        when(recipe.getIdProductList()).thenReturn(productList);
+        when(productList.getProduct()).thenReturn(product);
+        when(recipe.getProductList()).thenReturn(productList);
         when(recipe.getLink()).thenReturn("00Д1234567890");
         assertThat(recipeCheckerApi.check(recipe).isValid()).isEqualTo(true);
     }
@@ -60,8 +60,8 @@ public class RecipeCheckerTests {
     @CsvSource(value = "Aзитромицин , 00-1234567890")
     public void recipe_link_signature_is_not_valid(String productName,String recipeLink){
         when(product.getName()).thenReturn(productName);
-        when(productList.getIdProduct()).thenReturn(product);
-        when(recipe.getIdProductList()).thenReturn(productList);
+        when(productList.getProduct()).thenReturn(product);
+        when(recipe.getProductList()).thenReturn(productList);
         when(recipe.getLink()).thenReturn(recipeLink);
         assertThat(recipeCheckerApi.check(recipe).isValid()).isEqualTo(false);
     }
@@ -70,8 +70,8 @@ public class RecipeCheckerTests {
     @CsvSource(value = ", 00Д1234567890")
     public void recipe_product_name_is_blank(String productName,String recipeLink){
         when(product.getName()).thenReturn(productName);
-        when(productList.getIdProduct()).thenReturn(product);
-        when(recipe.getIdProductList()).thenReturn(productList);
+        when(productList.getProduct()).thenReturn(product);
+        when(recipe.getProductList()).thenReturn(productList);
         when(recipe.getLink()).thenReturn(recipeLink);
         assertThrows(RecipeCheckerException.class,()->recipeCheckerApi.check(recipe));
     }
@@ -80,8 +80,8 @@ public class RecipeCheckerTests {
     @ValueSource(strings = "00Д1234567890")
     public void recipe_product_name_is_null(String recipeLink){
         when(product.getName()).thenReturn(null);
-        when(productList.getIdProduct()).thenReturn(product);
-        when(recipe.getIdProductList()).thenReturn(productList);
+        when(productList.getProduct()).thenReturn(product);
+        when(recipe.getProductList()).thenReturn(productList);
         when(recipe.getLink()).thenReturn(recipeLink);
         assertThrows(RecipeCheckerException.class,()->recipeCheckerApi.check(recipe));
     }
@@ -89,8 +89,8 @@ public class RecipeCheckerTests {
     @RetryingTest(20)
     public void recipe_product_name_returns_shuffled_with_15_percent(){
         when(product.getName()).thenReturn("Азитромицин");
-        when(productList.getIdProduct()).thenReturn(product);
-        when(recipe.getIdProductList()).thenReturn(productList);
+        when(productList.getProduct()).thenReturn(product);
+        when(recipe.getProductList()).thenReturn(productList);
         when(recipe.getLink()).thenReturn("00Д1234567890");
         RecipeCheckerResponse check = recipeCheckerApi.check(recipe);
         assertThat(check.productName()).isNotEqualTo(product.getName());
@@ -99,8 +99,8 @@ public class RecipeCheckerTests {
     @RetryingTest(20)
     public void recipe_status_generates_negative_with_15_percents(){
         when(product.getName()).thenReturn("Азитромицин");
-        when(productList.getIdProduct()).thenReturn(product);
-        when(recipe.getIdProductList()).thenReturn(productList);
+        when(productList.getProduct()).thenReturn(product);
+        when(recipe.getProductList()).thenReturn(productList);
         when(recipe.getLink()).thenReturn("00Д1234567890");
         assertThat(recipeCheckerApi.check(recipe).isValid()).isEqualTo(false);
     }

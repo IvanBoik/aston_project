@@ -9,7 +9,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class Recipes {
+public class Recipe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,11 +17,9 @@ public class Recipes {
 
     private String link;
 
-    @ManyToOne
-    @JoinColumn(name = "id_product", referencedColumnName = "id")
-    private ProductList idProductList;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private ProductList productList;
 
-    @ManyToOne
-    @JoinColumn(name = "id_order", referencedColumnName = "id")
-    private Order idOrder;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Order order;
 }

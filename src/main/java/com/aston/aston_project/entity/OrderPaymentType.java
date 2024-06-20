@@ -1,20 +1,21 @@
 package com.aston.aston_project.entity;
 
+import com.aston.aston_project.entity.en.OrderPaymentEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "type_payment")
 @Getter
 @Setter
-public class TypePayment {
+public class OrderPaymentType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private OrderPaymentEnum name;
 //    CASH_TO_COURIER,
 //    CARD_TO_COURIER,
 //    PAYMENT_UPON_RECEIPT,

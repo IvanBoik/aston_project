@@ -1,7 +1,7 @@
 package com.aston.aston_project.api.recipe.client;
 
 import com.aston.aston_project.api.recipe.util.RecipeCheckerException;
-import com.aston.aston_project.entity.Recipes;
+import com.aston.aston_project.entity.Recipe;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -14,7 +14,7 @@ public class MockRecipeResponseGenerator {
 
     private static final ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
 
-    public MockRecipeCheckerResponse generate(Recipes recipes){
+    public MockRecipeCheckerResponse generate(Recipe recipes){
         return new MockRecipeCheckerResponse(
                 generateProductName(recipes),
                 generateExpiresAt(),
@@ -22,8 +22,8 @@ public class MockRecipeResponseGenerator {
         );
     }
 
-    private boolean generateRecipeStatus(Recipes recipes) {
-        String productName = recipes.getIdProductList().getIdProduct().getName();
+    private boolean generateRecipeStatus(Recipe recipes) {
+        String productName = recipes.getProductList().getProduct().getName();
         boolean linkIsValid = validateRecipeLink(recipes.getLink());
         if(linkIsValid){
             if(productName == null || productName.isBlank()){
@@ -43,8 +43,8 @@ public class MockRecipeResponseGenerator {
         return recipeLink.matches(RECIPE_REGEX);
     }
 
-    private String generateProductName(Recipes recipes){
-        String productName = recipes.getIdProductList().getIdProduct().getName();
+    private String generateProductName(Recipe recipes){
+        String productName = recipes.getProductList().getProduct().getName();
         if(productName==null){
             throw new RecipeCheckerException("Product name is null");
         }
