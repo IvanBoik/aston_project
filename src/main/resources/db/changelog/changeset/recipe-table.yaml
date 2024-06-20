@@ -15,12 +15,12 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: "pk_recipe"
               - column:
-                  name: product_id
+                  name: product_list_id
                   type: BIGINT
                   constraints:
                     nullable: false
-                    foreignKeyName: "fk_recipe_product"
-                    references: "product(id)"
+                    foreignKeyName: "fk_recipe_product_list"
+                    references: "product_list(id)"
               - column:
                   name: link
                   type: varchar(255)

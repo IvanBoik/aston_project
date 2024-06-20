@@ -1,8 +1,8 @@
 package com.aston.aston_project.api.auth;
 
 import com.aston.aston_project.entity.Role;
-import com.aston.aston_project.entity.RoleValue;
 import com.aston.aston_project.entity.User;
+import com.aston.aston_project.entity.en.RoleEnum;
 import com.aston.aston_project.repository.UserRepository;
 import com.aston.aston_project.service.UserService;
 import com.google.common.hash.Hashing;
@@ -46,8 +46,8 @@ public class AuthControllerTests {
     @BeforeEach
     public void init(){
         Role role = new Role();
-        role.setId(1L);
-        role.setName(RoleValue.ROLE_USER);
+        role.setId(1);
+        role.setName(RoleEnum.ROLE_USER);
         test = User.builder()
                 .email("test@test.tt")
                 .role(role)

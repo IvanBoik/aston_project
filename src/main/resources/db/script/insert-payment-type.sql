@@ -1,5 +1,5 @@
 INSERT INTO payment_type(name) VALUES
-('Оплачен'),
-('Отклонен'),
-('В обработке'),
-('Ошибка');
+('PAYED'),
+('DECLINED'),
+('IN_PROCESS'),
+('OTHER');

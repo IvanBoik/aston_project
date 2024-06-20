@@ -1,20 +1,21 @@
 package com.aston.aston_project.entity;
 
+import com.aston.aston_project.entity.en.OrderStatusEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "CREATOR")
+@Table(name = "order_status_type")
 @Getter
 @Setter
-public class Producer {
+public class OrderStatus {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Country country;
-
-    private String name;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "name")
+    private OrderStatusEnum status;
 }

@@ -1,7 +1,6 @@
 package com.aston.aston_project.util;
 
-import com.aston.aston_project.entity.Role;
-import com.aston.aston_project.entity.RoleValue;
+import com.aston.aston_project.entity.en.RoleEnum;
 import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -12,7 +11,7 @@ import java.util.List;
 public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
     private String email;
     private String password;
-    private RoleValue role;
+    private RoleEnum role;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(role);

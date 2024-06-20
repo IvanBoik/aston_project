@@ -13,7 +13,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate: #при старте хибер делает импорт сущностей в бд как вы ему тут сказали:
-      ddl-auto: none #create-drop(создает при старте и удаляет при окончании работы), create(просто создает), none(ничего не делает)
+      ddl-auto: validate #create-drop(создает при старте и удаляет при окончании работы), create(просто создает), none(ничего не делает)
 logging:
   level:
     org.springframework.web: "info"
@@ -29,3 +29,5 @@ jwt:
   secret: ${JWT_SECRET}
   subject: ${JWT_SUBJECT}}
   issuer: ${JWT_ISSUER}
+
+security: enabled # Можем отключить для разработки

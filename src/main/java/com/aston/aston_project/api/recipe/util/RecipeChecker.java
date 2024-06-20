@@ -1,8 +1,8 @@
 package com.aston.aston_project.api.recipe.util;
 
-import com.aston.aston_project.entity.Recipes;
+import com.aston.aston_project.entity.Recipe;
 
 public interface RecipeChecker {
 
-    RecipeCheckerResponse check(Recipes recipes);
+    RecipeCheckerResponse check(Recipe recipes);
 }

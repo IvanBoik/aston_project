@@ -15,5 +15,8 @@ public class Country {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * May be unique, see schema
+     */
     private String country;
 }
