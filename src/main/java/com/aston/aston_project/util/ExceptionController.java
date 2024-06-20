@@ -95,12 +95,6 @@ public class ExceptionController implements ResponseBodyAdvice<Object> {
         return "Internal server error";
     }
 
-    @ExceptionHandler(DuplicateEmailException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String duplicateEmailException(DuplicateEmailException e) {
-        return e.getMessage();
-    }
-
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         return true;
