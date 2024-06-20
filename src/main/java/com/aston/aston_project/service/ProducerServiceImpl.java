@@ -1,5 +1,7 @@
 package com.aston.aston_project.service;
 
+import com.aston.aston_project.dto.ProducerDto;
+import com.aston.aston_project.dto.util.ProducerDtoMapping;
 import com.aston.aston_project.dto.util.ProducerNotFountException;
 import com.aston.aston_project.entity.Country;
 import com.aston.aston_project.entity.Producer;
@@ -15,20 +17,17 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ProducerServiceImpl implements ProducerService {
     private final ProducerRepository producerRepository;
+    private final ProducerDtoMapping producerDtoMapping;
 
     @Override
-    public void add(Producer producer) {
-        producerRepository.save(producer);
-    }
-
-    @Override
-    public Producer getById(Long id) {
-        Optional<Producer> optionalProducer = producerRepository.findById(id);
-        if (optionalProducer.isPresent()) {
-            return optionalProducer.get();
-        } else {
-            throw new ProducerNotFountException("producer with id " + id + " not found");
-        }
+    public ProducerDto getById(Long id) {
+        return producerDtoMapping.entityToDto(producerRepository.findById(id).orElseThrow());
+//        if (optionalProducer.isPresent()) {
+//            return optionalProducer.get();
+//        } else {
+//            throw new ProducerNotFountException("producer with id " + id + " not found");
+//        }
+//        return producerDto;
     }
 
     @Override
@@ -44,6 +43,10 @@ public class ProducerServiceImpl implements ProducerService {
         return producerRepository.findByCountry(country);
     }
 
+    @Override
+    public void add(Producer producer) {
+        producerRepository.save(producer);
+    }
     @Override
     @Transactional
     public void update(Long id, Producer producer) {
