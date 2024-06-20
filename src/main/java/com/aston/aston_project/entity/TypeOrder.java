@@ -1,11 +1,20 @@
 package com.aston.aston_project.entity;
 
-public enum TypeOrder {
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
-    DELIVERY,
-    SELF_DELIVERY;
+@Entity
+@Table(name = "type_order")
+@Getter
+@Setter
+public class TypeOrder {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    TypeOrder() {
-    }
+    private String name;
+//    DELIVERY,
+//    SELF_DELIVERY
 }

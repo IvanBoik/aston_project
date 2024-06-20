@@ -5,8 +5,10 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
+@Table(schema = "public",name = "user")
 @Getter
 @Setter
 @Builder
