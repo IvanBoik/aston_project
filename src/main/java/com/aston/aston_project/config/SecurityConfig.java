@@ -48,10 +48,10 @@ public class SecurityConfig extends WebMvcConfigurationSupport {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .httpBasic(Customizer.withDefaults())
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .passwordManagement(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(Customizer.withDefaults())
+                .sessionManagement(AbstractHttpConfigurer::disable)
                 .exceptionHandling(configurer->
                         configurer.authenticationEntryPoint(authEntryPoint))
                 .authorizeHttpRequests(reqMatch ->
