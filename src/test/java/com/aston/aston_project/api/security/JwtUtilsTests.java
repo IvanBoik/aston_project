@@ -116,7 +116,7 @@ public class JwtUtilsTests {
                 .withExpiresAt(Instant.now().minus(1, ChronoUnit.DAYS))
                 .withIssuer("test")
                 .withSubject("incorrect")
-                .sign(Algorithm.HMAC256((String) "test"));
+                .sign(Algorithm.HMAC256("test"));
 
         assertThrows(TokenException.class,()-> jwtUtils.getUserEmail(invalidToken));
     }

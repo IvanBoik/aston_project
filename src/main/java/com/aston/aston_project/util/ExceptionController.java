@@ -1,5 +1,6 @@
 package com.aston.aston_project.util;
 
+import com.aston.aston_project.util.exception.DataException;
 import com.aston.aston_project.util.exception.TokenException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -77,6 +78,12 @@ public class ExceptionController implements ResponseBodyAdvice<Object> {
                ex.getName() +
                " request type " +
                ex.getParameter().getParameterType().getSimpleName();
+    }
+
+    @ExceptionHandler(DataException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String dataException(DataException e){
+        return e.getMessage();
     }
 
 
