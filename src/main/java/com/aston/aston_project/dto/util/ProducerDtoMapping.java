@@ -11,14 +11,14 @@ public class ProducerDtoMapping {
         Producer producer = new Producer();
         producer.setName(dto.getName());
         Country country = new Country();
-        country.setCountry(dto.getCountry());
+        country.setCountry(dto.getCountryName());
         producer.setCountry(country);
         return producer;
     }
     public ProducerDto entityToDto(Producer entity) {
         ProducerDto producerDto = new ProducerDto();
         producerDto.setName(entity.getName());
-        producerDto.setCountry(entity.getCountry().getCountry());
+        producerDto.setCountryName(entity.getCountry().getCountry());
         return producerDto;
     }
 

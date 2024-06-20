@@ -3,10 +3,9 @@ package com.aston.aston_project.controller;
 import com.aston.aston_project.dto.ProductDto;
 import com.aston.aston_project.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.NoSuchElementException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,20 +15,30 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDto> getById(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok(productService.getById(id));
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }//todo
+    public ProductDto getById(@PathVariable Long id) {
+        return productService.getById(id);
+    }
 
-//    @GetMapping("/{id}") //todo
-//
-//    @GetMapping("") //todo
-//
-//    @PutMapping("/{id}") //todo
-//
-//    @DeleteMapping("/{id}") //todo
+    //todo поиск с фильтрами по названию, производителю, цене, наличию необходимости рецепта
+    @GetMapping("")
+    public List<ProductDto> getAll() {
+        return productService.getAll();
+    }
 
+    @PostMapping("")
+    public void add(@RequestBody ProductDto dto) {
+        productService.add(dto);
+    }
+
+    @PutMapping("/{id}")
+    public void update(
+            @PathVariable Long id,
+            @RequestBody ProductDto dto) {
+        productService.update(id, dto);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        productService.delete(id);
+    }
 }

@@ -2,10 +2,10 @@ package com.aston.aston_project.service;
 
 import com.aston.aston_project.dto.ProducerDto;
 import com.aston.aston_project.dto.util.ProducerDtoMapping;
-import com.aston.aston_project.dto.util.ProducerNotFountException;
 import com.aston.aston_project.entity.Country;
 import com.aston.aston_project.entity.Producer;
 import com.aston.aston_project.repository.ProducerRepository;
+import com.aston.aston_project.util.exception.NotFoundDataException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,37 +21,51 @@ public class ProducerServiceImpl implements ProducerService {
 
     @Override
     public ProducerDto getById(Long id) {
-        return producerDtoMapping.entityToDto(producerRepository.findById(id).orElseThrow());
+        return producerDtoMapping.entityToDto(
+                producerRepository.findById(id)
+                        .orElseThrow(() -> new NotFoundDataException("Пользователь не найден"))
+        );
     }
 
     @Override
-    public List<Producer> getAll() {
-        return producerRepository.findAll();
-    }
-
-    public List<Producer> findByNameLike(String namePart) {
-        return producerRepository.findByNameLike(namePart);
-    }
-
-    public List<Producer> findByCountry(Country country) {
-        return producerRepository.findByCountry(country);
+    public List<ProducerDto> getAll() {
+        return producerRepository.findAll().stream()
+                .map(producerDtoMapping::entityToDto)
+                .toList();
     }
 
     @Override
-    public void add(Producer producer) {
-        producerRepository.save(producer);
+    public List<ProducerDto> findByNameLike(String namePart) {
+        return producerRepository.findByNameLike(namePart).stream()
+                .map(producerDtoMapping::entityToDto)
+                .toList();
     }
+
+    @Override
+    public List<ProducerDto> findByCountry(Country country) {
+        return producerRepository.findByCountry(country).stream()
+                .map(producerDtoMapping::entityToDto)
+                .toList();
+    }
+
+    @Override
+    public void add(ProducerDto dto) {
+        producerRepository.save(producerDtoMapping.dtoToEntity(dto));
+    }
+
     @Override
     @Transactional
-    public void update(Long id, Producer producer) {
+    public void update(Long id, ProducerDto dto) {
         Optional<Producer> optionalProducer = producerRepository.findById(id);
         if (optionalProducer.isPresent()) {
             Producer p = optionalProducer.get();
-            p.setName(producer.getName());
-            p.setCountry(producer.getCountry());
+            p.setName(dto.getName());
+            Country c = new Country();
+            c.setCountry(dto.getCountryName());
+            p.setCountry(c);
             producerRepository.save(p);
         } else {
-            throw new ProducerNotFountException("producer with id " + id + " not found");
+            throw new NotFoundDataException("producer with id " + id + " not found");
         }
     }
 
