@@ -2,11 +2,14 @@ package com.aston.aston_project.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.PositiveOrZero;
-import lombok.Data;
+import lombok.*;
 
 @Entity
-@Data
-@Table(name = "product_lists")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Builder
 public class ProductList {
 
     @Id

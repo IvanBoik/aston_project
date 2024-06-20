@@ -17,9 +17,5 @@ public enum Status {
     NOT_PAID,
     AWAITING_SHIPMENT,
     CHECKED,
-    RETURNED;
-
-
-    Status() {
-    }
+    RETURNED
 }
