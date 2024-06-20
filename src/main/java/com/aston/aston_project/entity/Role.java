@@ -1,5 +1,16 @@
 package com.aston.aston_project.entity;
 
-public enum Role {
-    ROLE_USER, ROLE_MANAGER
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Getter
+@Setter
+public class Role {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Enumerated(EnumType.STRING)
+    private RoleValue name;
 }
