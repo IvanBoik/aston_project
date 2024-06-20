@@ -9,5 +9,4 @@ public interface ProductListCRUDService {
     ProductList addProductList(ProductList productList);
     List<ProductList> getAllProductLists();
     ProductList getProductListByID(long id);
-    void updateProductListByID(long id, ProductList productList);
 }

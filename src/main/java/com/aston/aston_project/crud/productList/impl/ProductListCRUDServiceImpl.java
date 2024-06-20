@@ -38,10 +38,4 @@ public class ProductListCRUDServiceImpl implements ProductListCRUDService {
                     return null;
                 });
     }
-
-    @Override
-    public void updateProductListByID(long id, ProductList productList) {
-
-    }
-
 }
