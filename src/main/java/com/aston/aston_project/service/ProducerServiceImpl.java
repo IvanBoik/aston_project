@@ -23,7 +23,7 @@ public class ProducerServiceImpl implements ProducerService {
     public ProducerDto getById(Long id) {
         return producerDtoMapping.entityToDto(
                 producerRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundDataException("Пользователь не найден"))
+                        .orElseThrow(() -> new NotFoundDataException("Producer with id " + id + " not found"))
         );
     }
 
@@ -65,7 +65,7 @@ public class ProducerServiceImpl implements ProducerService {
             p.setCountry(c);
             producerRepository.save(p);
         } else {
-            throw new NotFoundDataException("producer with id " + id + " not found");
+            throw new NotFoundDataException("Producer with id " + id + " not found");
         }
     }
 

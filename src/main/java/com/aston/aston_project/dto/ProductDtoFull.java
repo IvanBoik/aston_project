@@ -11,7 +11,7 @@ import java.util.Map;
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ProductDto {
+public class ProductDtoFull {
 
     private String name;
     private BigDecimal price;

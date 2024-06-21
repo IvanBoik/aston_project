@@ -1,6 +1,7 @@
 package com.aston.aston_project.service;
 
-import com.aston.aston_project.dto.ProductDto;
+import com.aston.aston_project.dto.ProductDtoFull;
+import com.aston.aston_project.dto.ProductDtoShort;
 import com.aston.aston_project.dto.util.ProductDtoMapping;
 import com.aston.aston_project.entity.Product;
 import com.aston.aston_project.repository.ProductRepository;
@@ -20,25 +21,27 @@ public class ProductServiceImpl implements ProductService {
     private final ProductDtoMapping productDtoMapping;
 
     @Override
-    public ProductDto getById(Long id) {
-        return productDtoMapping.entityToDto(productRepository.findById(id).orElseThrow());
+    public ProductDtoFull getById(Long id) {
+        return productDtoMapping.entityToDtoFull(productRepository.findById(id)
+                .orElseThrow(() -> new NotFoundDataException("Product not found"))
+        );
     }
 
     @Override
-    public List<ProductDto> getAll() {
+    public List<ProductDtoShort> getAll() {
         return productRepository.findAll().stream()
-                .map(productDtoMapping::entityToDto)
+                .map(productDtoMapping::entityToDtoShort)
                 .toList();
     }
 
     @Override
-    public void add(ProductDto dto) {
+    public void add(ProductDtoFull dto) {
         productRepository.save(productDtoMapping.dtoToEntity(dto));
     }
 
     @Override
     @Transactional
-    public void update(Long id, ProductDto dto) {
+    public void update(Long id, ProductDtoFull dto) {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isPresent()) {
             Product p = optionalProduct.get();
