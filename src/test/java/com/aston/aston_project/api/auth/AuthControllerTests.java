@@ -1,12 +1,15 @@
 package com.aston.aston_project.api.auth;
 
+import com.aston.aston_project.dto.SignUpRequest;
 import com.aston.aston_project.entity.Role;
 import com.aston.aston_project.entity.User;
 import com.aston.aston_project.entity.en.RoleEnum;
 import com.aston.aston_project.repository.UserRepository;
 import com.aston.aston_project.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.hash.Hashing;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -18,6 +21,7 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.StandardCharsets;
@@ -42,6 +46,8 @@ public class AuthControllerTests {
     private UserRepository userRepository;
 
     private User test;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     public void init(){
@@ -98,5 +104,40 @@ public class AuthControllerTests {
                         .queryParam("email",email)
                         .queryParam("password",password))
                 .andExpect(status().isBadRequest());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = "usermailru")
+    public void signup_return_bad_request_when_email_is_not_correct(String email) throws Exception {
+        SignUpRequest request = new SignUpRequest(
+                "name", "surname", email, "password", 79626211678L
+        );
+        mockMvc.perform(post("/auth/signUp")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @ParameterizedTest
+    @ValueSource(longs = 10000000000000L)
+    public void signup_return_bad_request_when_phone_is_not_correct(Long phone) throws Exception {
+        SignUpRequest request = new SignUpRequest(
+                "name", "surname", "user.mail.ru", "password", phone
+        );
+        mockMvc.perform(post("/auth/signUp")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void signup_return_status_success_when_data_is_correct() throws Exception {
+        SignUpRequest request = new SignUpRequest(
+                "name", "surname", "user.mail.ru", "password", 79626211678L
+        );
+        mockMvc.perform(post("/auth/signUp")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
     }
 }
