@@ -1,6 +1,7 @@
 package com.aston.aston_project.util;
 
 import com.aston.aston_project.util.exception.DataException;
+import com.aston.aston_project.util.exception.DuplicateEmailException;
 import com.aston.aston_project.util.exception.TokenException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;

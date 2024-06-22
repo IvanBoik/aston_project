@@ -1,5 +1,6 @@
 package com.aston.aston_project.controller;
 
+import com.aston.aston_project.dto.SignUpRequest;
 import com.aston.aston_project.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,11 @@ public class AuthController {
             @RequestParam(value = "password") String password
     ){
         return userService.auth(email,password);
+    }
+
+    @PostMapping("/signUp")
+    public String signUp(@RequestBody SignUpRequest request) {
+        return userService.signUp(request);
     }
 
     @GetMapping("/test")

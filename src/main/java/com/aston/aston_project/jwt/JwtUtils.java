@@ -19,10 +19,10 @@ public class JwtUtils {
     private JwtProperties props;
 
     public String getUserEmail(String token){
-        return validateAndExstractUserEmail(token);
+        return validateAndExtractUserEmail(token);
     }
 
-    private String validateAndExstractUserEmail(String token) {
+    private String validateAndExtractUserEmail(String token) {
         try{
             DecodedJWT decodedToken = getVerifier().verify(token);
             String email = decodedToken.getClaim("email").asString();
