@@ -1,6 +1,5 @@
 package com.aston.aston_project.dto;
 
-import com.aston.aston_project.entity.Country;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +11,7 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProducerDto {
+public class ProducerDtoResponse {
     private String name;
     private String countryName;
 }

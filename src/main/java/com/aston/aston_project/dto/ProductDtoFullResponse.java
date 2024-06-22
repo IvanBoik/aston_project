@@ -11,13 +11,13 @@ import java.util.Map;
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ProductDtoFull {
+public class ProductDtoFullResponse {
 
     private String name;
     private BigDecimal price;
     private String type;
     private Boolean isPrescriptionRequired;
-    private ProducerDto producer;
+    private ProducerDtoResponse producer;
     private Map<String, String> attributesValues = new HashMap<>();
 
     public void setAttributesValues(String key, String value) {

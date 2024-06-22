@@ -4,13 +4,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
-@Getter
 @Setter
-public class ProductDtoShort {
+@Getter
+public class ProductRequest {
     private String name;
     private BigDecimal price;
-    private String type;
+    private Long type;
     private Boolean isPrescriptionRequired;
-    private ProducerDtoResponse producer;
+    private Long producer;
+    private Map<Long, Long> attributesValues;
+
 }

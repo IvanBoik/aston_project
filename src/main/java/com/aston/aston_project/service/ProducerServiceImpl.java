@@ -1,6 +1,6 @@
 package com.aston.aston_project.service;
 
-import com.aston.aston_project.dto.ProducerDto;
+import com.aston.aston_project.dto.ProducerDtoResponse;
 import com.aston.aston_project.dto.util.ProducerDtoMapping;
 import com.aston.aston_project.entity.Country;
 import com.aston.aston_project.entity.Producer;
@@ -20,7 +20,7 @@ public class ProducerServiceImpl implements ProducerService {
     private final ProducerDtoMapping producerDtoMapping;
 
     @Override
-    public ProducerDto getById(Long id) {
+    public ProducerDtoResponse getById(Long id) {
         return producerDtoMapping.entityToDto(
                 producerRepository.findById(id)
                         .orElseThrow(() -> new NotFoundDataException("Producer with id " + id + " not found"))
@@ -28,34 +28,34 @@ public class ProducerServiceImpl implements ProducerService {
     }
 
     @Override
-    public List<ProducerDto> getAll() {
+    public List<ProducerDtoResponse> getAll() {
         return producerRepository.findAll().stream()
                 .map(producerDtoMapping::entityToDto)
                 .toList();
     }
 
     @Override
-    public List<ProducerDto> findByNameLike(String namePart) {
+    public List<ProducerDtoResponse> findByNameLike(String namePart) {
         return producerRepository.findByNameLike(namePart).stream()
                 .map(producerDtoMapping::entityToDto)
                 .toList();
     }
 
     @Override
-    public List<ProducerDto> findByCountry(Country country) {
+    public List<ProducerDtoResponse> findByCountry(Country country) {
         return producerRepository.findByCountry(country).stream()
                 .map(producerDtoMapping::entityToDto)
                 .toList();
     }
 
     @Override
-    public void add(ProducerDto dto) {
+    public void add(ProducerDtoResponse dto) {
         producerRepository.save(producerDtoMapping.dtoToEntity(dto));
     }
 
     @Override
     @Transactional
-    public void update(Long id, ProducerDto dto) {
+    public void update(Long id, ProducerDtoResponse dto) {
         Optional<Producer> optionalProducer = producerRepository.findById(id);
         if (optionalProducer.isPresent()) {
             Producer p = optionalProducer.get();

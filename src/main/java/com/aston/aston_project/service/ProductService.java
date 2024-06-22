@@ -1,7 +1,8 @@
 package com.aston.aston_project.service;
 
-import com.aston.aston_project.dto.ProductDtoFull;
+import com.aston.aston_project.dto.ProductDtoFullResponse;
 import com.aston.aston_project.dto.ProductDtoShort;
+import com.aston.aston_project.dto.ProductRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,13 +11,15 @@ import java.util.List;
 public interface ProductService {
 
 
-    ProductDtoFull getById(Long id);
+    ProductDtoFullResponse getById(Long id);
 
     List<ProductDtoShort> getAll();
 
-    void add(ProductDtoFull productDtoFull);
+    void create(ProductRequest productRequest);
 
-    void update(Long id, ProductDtoFull productDtoFull);
+    void update(Long id, ProductRequest productRequest);
+
+    void updateRecipe(Long id, Boolean isRecipe);
 
     void delete(Long id);
 }

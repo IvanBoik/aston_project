@@ -1,11 +1,9 @@
 package com.aston.aston_project.dto.util;
 
-import com.aston.aston_project.dto.ProductDtoFull;
+import com.aston.aston_project.dto.ProductDtoFullResponse;
 import com.aston.aston_project.dto.ProductDtoShort;
-import com.aston.aston_project.entity.Attribute;
-import com.aston.aston_project.entity.Product;
-import com.aston.aston_project.entity.ProductType;
-import com.aston.aston_project.entity.Value;
+import com.aston.aston_project.dto.ProductRequest;
+import com.aston.aston_project.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,8 +15,8 @@ import java.util.Map;
 public class ProductDtoMapping {
     private final ProducerDtoMapping producerDtoMapping;
 
-    public ProductDtoFull entityToDtoFull(Product product) {
-        ProductDtoFull productDtoFull = new ProductDtoFull();
+    public ProductDtoFullResponse entityToDtoFull(Product product) {
+        ProductDtoFullResponse productDtoFull = new ProductDtoFullResponse();
         productDtoFull.setName(product.getName());
         productDtoFull.setPrice(product.getPrice());
         productDtoFull.setType(product.getType().getName());
@@ -40,27 +38,20 @@ public class ProductDtoMapping {
         return productDtoShort;
     }
 
-    public Product dtoToEntity(ProductDtoFull dto) {
-        ProductType t = new ProductType();
-        t.setName(dto.getType());
+    public Product dtoToEntity(ProductRequest dto) {
         Map<Attribute, Value> productEntityAttributes = new HashMap<>();
-        for (String attribute : dto.getAttributesValues().keySet()) {
-            Attribute a = new Attribute();
-            a.setAttribute(attribute);
-            for (String value : dto.getAttributesValues().values()) {
-                Value v = new Value();
-                v.setValue(value);
-                productEntityAttributes.put(a, v);
-            }
+        for (Long att : dto.getAttributesValues().keySet()) {
+            productEntityAttributes.put(new Attribute(att), new Value(dto.getAttributesValues().get(att)));
         }
-
         return Product.builder()
                 .name(dto.getName())
-                .type(t)
+                .type(new ProductType(dto.getType()))
                 .isPrescriptionRequired(dto.getIsPrescriptionRequired())
                 .price(dto.getPrice())
-                .producer(producerDtoMapping.dtoToEntity(dto.getProducer()))
+                .producer(new Producer(dto.getProducer()))
                 .attributesValues(productEntityAttributes)
                 .build();
+
     }
+
 }

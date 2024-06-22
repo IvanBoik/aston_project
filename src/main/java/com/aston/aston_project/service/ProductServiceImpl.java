@@ -1,10 +1,11 @@
 package com.aston.aston_project.service;
 
-import com.aston.aston_project.dto.ProductDtoFull;
+import com.aston.aston_project.dto.ProductDtoFullResponse;
 import com.aston.aston_project.dto.ProductDtoShort;
+import com.aston.aston_project.dto.ProductRequest;
 import com.aston.aston_project.dto.util.ProductDtoMapping;
-import com.aston.aston_project.entity.Product;
-import com.aston.aston_project.repository.ProductRepository;
+import com.aston.aston_project.entity.*;
+import com.aston.aston_project.repository.*;
 import com.aston.aston_project.util.exception.NotFoundDataException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductDtoMapping productDtoMapping;
 
     @Override
-    public ProductDtoFull getById(Long id) {
+    public ProductDtoFullResponse getById(Long id) {
         return productDtoMapping.entityToDtoFull(productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("Product not found"))
         );
@@ -35,26 +36,41 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void add(ProductDtoFull dto) {
+    public void create(ProductRequest dto) {
         productRepository.save(productDtoMapping.dtoToEntity(dto));
     }
 
     @Override
     @Transactional
-    public void update(Long id, ProductDtoFull dto) {
-        Optional<Product> optionalProduct = productRepository.findById(id);
-        if (optionalProduct.isPresent()) {
-            Product p = optionalProduct.get();
-            p.setName(dto.getName());
-            p.setPrice(dto.getPrice());
-            p.setType(productDtoMapping.dtoToEntity(dto).getType());
-            p.setIsPrescriptionRequired(dto.getIsPrescriptionRequired());
-            p.setProducer(productDtoMapping.dtoToEntity(dto).getProducer());
-            p.setAttributesValues(productDtoMapping.dtoToEntity(dto).getAttributesValues());
-            productRepository.save(p);
-        } else {
-            throw new NotFoundDataException("Product not found");
+    public void update(Long id, ProductRequest dto) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new NotFoundDataException("Product not found"));
+        if (dto.getName() != null) {
+            product.setName(dto.getName());
         }
+        if (dto.getType() != null) {
+            product.setType(new ProductType(dto.getType()));
+        }
+        if (dto.getPrice() != null) {
+            product.setPrice(dto.getPrice());
+        }
+        if (dto.getProducer() != null) {
+            product.setProducer(new Producer(dto.getProducer()));
+        }
+        if (!dto.getAttributesValues().isEmpty()) {
+            for (Long att : dto.getAttributesValues().keySet()) {
+                product.setAttributesValues(new Attribute(att), new Value(dto.getAttributesValues().get(att)));
+            }
+        }
+        productRepository.save(product);
+    }
+
+    @Override
+    public void updateRecipe(Long id, Boolean isRecipe) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new NotFoundDataException("Product not found"));
+        product.setIsPrescriptionRequired(isRecipe);
+        productRepository.save(product);
     }
 
     @Override

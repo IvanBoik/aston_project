@@ -1,6 +1,6 @@
 package com.aston.aston_project.controller;
 
-import com.aston.aston_project.dto.ProducerDto;
+import com.aston.aston_project.dto.ProducerDtoResponse;
 import com.aston.aston_project.entity.Country;
 import com.aston.aston_project.service.ProducerService;
 import lombok.RequiredArgsConstructor;
@@ -17,14 +17,14 @@ public class ProducerController {
     private final ProducerService producerService;
 
     @GetMapping("/{id}")
-    public ProducerDto getById(@PathVariable Long id) {
+    public ProducerDtoResponse getById(@PathVariable Long id) {
         return producerService.getById(id);
     }
 
     // здесь как раз попыталась объединить через необязательные параметры запроса выдачу нефильтрованного списка всех производителей
     // и с фильтрами по названию или стране, не уверена, что идея/реализация вообще рабочие
-    @GetMapping("")
-    public List<ProducerDto> getAll(
+    @GetMapping
+    public List<ProducerDtoResponse> getAll(
             @RequestParam(required = false) Optional<String> name,
             @RequestParam(required = false) Optional<Country> country) {
         if (name.isPresent()) {
@@ -36,15 +36,15 @@ public class ProducerController {
         return producerService.getAll();
     }
 
-    @PostMapping("")
-    public void add(@RequestBody ProducerDto dto) {
+    @PostMapping
+    public void add(@RequestBody ProducerDtoResponse dto) {
         producerService.add(dto);
     }
 
     @PutMapping("/{id}")
     public void update(
             @PathVariable Long id,
-            @RequestBody ProducerDto dto) {
+            @RequestBody ProducerDtoResponse dto) {
         producerService.update(id, dto);
     }
 
