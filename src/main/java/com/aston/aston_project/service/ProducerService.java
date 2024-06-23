@@ -1,7 +1,6 @@
 package com.aston.aston_project.service;
 
 import com.aston.aston_project.dto.ProducerDtoResponse;
-import com.aston.aston_project.entity.Country;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,13 +12,13 @@ public interface ProducerService {
 
     List<ProducerDtoResponse> getAll();
 
-    void add(ProducerDtoResponse producerDto);
+    void create(ProducerDtoResponse producerDto);
 
     void update(Long id, ProducerDtoResponse producerDto);
 
     void delete(Long id);
 
-    List<ProducerDtoResponse> findByNameLike(String s);
+    List<ProducerDtoResponse> findByNameLike(String namePart);
 
-    List<ProducerDtoResponse> findByCountry(Country country);
+    List<ProducerDtoResponse> findByCountry(Long countryId);
 }

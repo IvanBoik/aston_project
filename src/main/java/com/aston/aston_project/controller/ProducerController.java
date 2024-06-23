@@ -1,10 +1,10 @@
 package com.aston.aston_project.controller;
 
 import com.aston.aston_project.dto.ProducerDtoResponse;
-import com.aston.aston_project.entity.Country;
 import com.aston.aston_project.service.ProducerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -21,12 +21,10 @@ public class ProducerController {
         return producerService.getById(id);
     }
 
-    // здесь как раз попыталась объединить через необязательные параметры запроса выдачу нефильтрованного списка всех производителей
-    // и с фильтрами по названию или стране, не уверена, что идея/реализация вообще рабочие
     @GetMapping
     public List<ProducerDtoResponse> getAll(
             @RequestParam(required = false) Optional<String> name,
-            @RequestParam(required = false) Optional<Country> country) {
+            @RequestParam(required = false) Optional<Long> country) {
         if (name.isPresent()) {
             return producerService.findByNameLike(name.get());
         }
@@ -38,7 +36,7 @@ public class ProducerController {
 
     @PostMapping
     public void add(@RequestBody ProducerDtoResponse dto) {
-        producerService.add(dto);
+        producerService.create(dto);
     }
 
     @PutMapping("/{id}")

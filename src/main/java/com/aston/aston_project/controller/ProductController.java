@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,15 +22,26 @@ public class ProductController {
         return productService.getById(id);
     }
 
-    //todo поиск с фильтрами по названию, производителю, цене, наличию необходимости рецепта
     @GetMapping
-    public List<ProductDtoShort> getAll() {
+    public List<ProductDtoShort> getAll(
+            @RequestParam(required = false) Optional<String> name,
+            @RequestParam(required = false) Optional<Long> producer,
+            @RequestParam(required = false) Optional<Boolean> recipe
+    ) {
+        if (name.isPresent()) {
+            return productService.findByNameIgnoreCaseContaining(name.get());
+        }
+        if (producer.isPresent()) {
+            return productService.findByProducer(producer.get());
+        }
+        if (recipe.isPresent()) {
+            return productService.findByRecipe(recipe.get());
+        }
         return productService.getAll();
     }
 
     @PostMapping
     public void add(@RequestBody ProductRequest dto) {
-        //todo должнабыть проверка Header на role = manager
         productService.create(dto);
     }
 
@@ -39,6 +51,7 @@ public class ProductController {
             @RequestBody ProductRequest dto) {
         productService.update(id, dto);
     }
+
     @PutMapping
     public void updateRecipe(
             @RequestParam Long id,

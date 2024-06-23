@@ -4,6 +4,7 @@ import com.aston.aston_project.dto.ProducerDtoResponse;
 import com.aston.aston_project.dto.util.ProducerDtoMapping;
 import com.aston.aston_project.entity.Country;
 import com.aston.aston_project.entity.Producer;
+import com.aston.aston_project.repository.CountryRepository;
 import com.aston.aston_project.repository.ProducerRepository;
 import com.aston.aston_project.util.exception.NotFoundDataException;
 import jakarta.transaction.Transactional;
@@ -18,6 +19,7 @@ import java.util.Optional;
 public class ProducerServiceImpl implements ProducerService {
     private final ProducerRepository producerRepository;
     private final ProducerDtoMapping producerDtoMapping;
+    private final CountryRepository countryRepository;
 
     @Override
     public ProducerDtoResponse getById(Long id) {
@@ -42,14 +44,16 @@ public class ProducerServiceImpl implements ProducerService {
     }
 
     @Override
-    public List<ProducerDtoResponse> findByCountry(Country country) {
-        return producerRepository.findByCountry(country).stream()
+    public List<ProducerDtoResponse> findByCountry(Long countryId) {
+        Country c = countryRepository.findById(countryId)
+                .orElseThrow(() -> new NotFoundDataException("Producers from this country not found"));
+        return producerRepository.findByCountry(c).stream()
                 .map(producerDtoMapping::entityToDto)
                 .toList();
     }
 
     @Override
-    public void add(ProducerDtoResponse dto) {
+    public void create(ProducerDtoResponse dto) {
         producerRepository.save(producerDtoMapping.dtoToEntity(dto));
     }
 
@@ -60,9 +64,7 @@ public class ProducerServiceImpl implements ProducerService {
         if (optionalProducer.isPresent()) {
             Producer p = optionalProducer.get();
             p.setName(dto.getName());
-            Country c = new Country();
-            c.setCountry(dto.getCountryName());
-            p.setCountry(c);
+            p.setCountry(countryRepository.findByCountryIgnoreCaseContaining(dto.getCountryName()));
             producerRepository.save(p);
         } else {
             throw new NotFoundDataException("Producer with id " + id + " not found");

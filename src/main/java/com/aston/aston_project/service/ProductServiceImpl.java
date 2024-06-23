@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +19,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductDtoMapping productDtoMapping;
+    private final ProducerRepository producerRepository;
 
     @Override
     public ProductDtoFullResponse getById(Long id) {
@@ -31,6 +31,30 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDtoShort> getAll() {
         return productRepository.findAll().stream()
+                .map(productDtoMapping::entityToDtoShort)
+                .toList();
+    }
+
+    @Override
+    public List<ProductDtoShort> findByNameIgnoreCaseContaining(String namePart) {
+        return productRepository.findByNameIgnoreCaseContaining(namePart).stream()
+                .map(productDtoMapping::entityToDtoShort)
+                .toList();
+    }
+
+    @Override
+    public List<ProductDtoShort> findByProducer(Long producerId) {
+        Producer p = producerRepository.findById(producerId)
+                .orElseThrow(() -> new NotFoundDataException("No data for such a producer found"));
+        return productRepository.findByProducer(p).stream()
+                .map(productDtoMapping::entityToDtoShort)
+                .toList();
+    }
+
+    @Override
+    public List<ProductDtoShort> findByRecipe(Boolean isPrescriptionRequired) {
+        return productRepository.findAll().stream()
+                .filter(p -> p.getIsPrescriptionRequired() == isPrescriptionRequired)
                 .map(productDtoMapping::entityToDtoShort)
                 .toList();
     }

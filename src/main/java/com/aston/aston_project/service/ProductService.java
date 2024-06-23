@@ -10,7 +10,6 @@ import java.util.List;
 @Service
 public interface ProductService {
 
-
     ProductDtoFullResponse getById(Long id);
 
     List<ProductDtoShort> getAll();
@@ -22,4 +21,10 @@ public interface ProductService {
     void updateRecipe(Long id, Boolean isRecipe);
 
     void delete(Long id);
+
+    List<ProductDtoShort> findByNameIgnoreCaseContaining(String namePart);
+
+    List<ProductDtoShort> findByProducer(Long producerId);
+
+    List<ProductDtoShort> findByRecipe(Boolean isPrescriptionRequired);
 }

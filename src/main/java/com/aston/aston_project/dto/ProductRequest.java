@@ -15,5 +15,4 @@ public class ProductRequest {
     private Boolean isPrescriptionRequired;
     private Long producer;
     private Map<Long, Long> attributesValues;
-
 }
