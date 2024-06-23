@@ -1,6 +1,6 @@
 package com.aston.aston_project.controller;
 
-import com.aston.aston_project.crud.recipe.RecipeCRUDService;
+import com.aston.aston_project.crud.impl.RecipeCRUDServiceImpl;
 import com.aston.aston_project.entity.Recipes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,40 +14,40 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RecipeController {
 
-    private final RecipeCRUDService recipeCRUDService;
+    private final RecipeCRUDServiceImpl recipeCRUDService;
 
 
-    @PostMapping(value = "new_recipe")
+    @PostMapping(value = "/posts/new")
     public ResponseEntity<Recipes> createRecipe(@RequestBody Recipes recipe) {
         recipeCRUDService.addRecipe(recipe);
         return ResponseEntity.status(HttpStatus.CREATED).body(recipe);
     }
 
-    @GetMapping(value = "/recipes/all")
-    public ResponseEntity<List<Recipes>> allRecipes() {
+    @GetMapping(value = "/posts")
+    public List<Recipes> allRecipes() {
         List<Recipes> recipes = recipeCRUDService.getAllRecipes();
 
         if (recipes != null && !recipes.isEmpty()) {
-            return ResponseEntity.ok(recipes);
-        } else return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(recipes).getBody();
+        } else return (List<Recipes>) ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/posts/{id}")
     public ResponseEntity<Recipes> getRecipeById(@PathVariable Long id) {
         Recipes recipe = recipeCRUDService.getRecipeByID(id);
 
         return recipe != null ? ResponseEntity.ok(recipe) : ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/delete/{link}")
-    public ResponseEntity<String> deleteByLink(@PathVariable String link) {
+    @PutMapping(value = "/posts/{link}")
+    public Object deleteByLink(@PathVariable String link) {
         recipeCRUDService.deleteRecipeByLink(link);
 
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping(value = "/delete/{id}")
-    public ResponseEntity<Long> deleteByID(@PathVariable Long id) {
+    @PutMapping(value = "/posts/{id}")
+    public Object deleteByID(@PathVariable Long id) {
         recipeCRUDService.deleteRecipeByID(id);
 
         return ResponseEntity.ok().build();

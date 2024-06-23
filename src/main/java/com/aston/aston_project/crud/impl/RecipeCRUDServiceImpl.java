@@ -1,6 +1,5 @@
-package com.aston.aston_project.crud.recipe.impl;
+package com.aston.aston_project.crud.impl;
 
-import com.aston.aston_project.crud.recipe.RecipeCRUDService;
 import com.aston.aston_project.entity.Recipes;
 import com.aston.aston_project.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,16 +10,15 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class RecipeCRUDServiceImpl implements RecipeCRUDService {
+public class RecipeCRUDServiceImpl {
 
     private final RecipeRepository recipeRepository;
 
-    @Override
+
     public Recipes addRecipe(Recipes recipe) {
         return recipeRepository.save(recipe);
     }
 
-    @Override
     public List<Recipes> getAllRecipes() {
         Optional<List <Recipes>> recipes = Optional.of(recipeRepository.findAll());
         return recipes
@@ -30,7 +28,6 @@ public class RecipeCRUDServiceImpl implements RecipeCRUDService {
         });
     }
 
-    @Override
     public Recipes getRecipeByID(long id) {
         return recipeRepository.findById(id)
                 .orElseThrow(() ->{
@@ -39,7 +36,6 @@ public class RecipeCRUDServiceImpl implements RecipeCRUDService {
                 });
     }
 
-    @Override
     public void updateRecipeById(long id, Recipes recipe) {
         Optional<Recipes> optionalRecipe = recipeRepository.findById(id);
 
@@ -53,7 +49,6 @@ public class RecipeCRUDServiceImpl implements RecipeCRUDService {
         }
     }
 
-    @Override
     public Recipes deleteRecipeByLink(String link) {
         Optional<Recipes> recipesOptional = Optional.ofNullable(recipeRepository.findByLink(link));
 
@@ -62,7 +57,6 @@ public class RecipeCRUDServiceImpl implements RecipeCRUDService {
         return recipeRepository.deleteByLink(link);
         }
 
-    @Override
     public void deleteRecipeByID(long id) {
         if (recipeRepository.findById(id).isEmpty()) throw new NullPointerException(String.format("No recipe found for name %s", id));
 

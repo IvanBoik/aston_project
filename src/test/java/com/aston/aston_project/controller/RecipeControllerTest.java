@@ -1,8 +1,7 @@
 package com.aston.aston_project.controller;
 
-import com.aston.aston_project.crud.recipe.RecipeCRUDService;
+import com.aston.aston_project.crud.impl.RecipeCRUDServiceImpl;
 import com.aston.aston_project.entity.Recipes;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -19,7 +18,7 @@ import static org.mockito.Mockito.*;
 public class RecipeControllerTest extends com.aston.aston_project.Mock{
 
     @Mock
-    private RecipeCRUDService recipeCRUDService;
+    private RecipeCRUDServiceImpl recipeCRUDService;
 
     @InjectMocks
     private RecipeController recipeController;
@@ -57,7 +56,7 @@ public class RecipeControllerTest extends com.aston.aston_project.Mock{
         when(recipeCRUDService.getAllRecipes()).thenReturn(recipesList);
 
 //        when
-        ResponseEntity<List<Recipes>> actual = recipeController.allRecipes();
+        List<Recipes> actual = recipeController.allRecipes();
 
 //        then
         assertEquals(expected, actual);
@@ -91,7 +90,7 @@ public class RecipeControllerTest extends com.aston.aston_project.Mock{
         ResponseEntity<String> expected = new ResponseEntity<>(HttpStatus.OK);
 
 //        when
-        ResponseEntity<String> actual = recipeController.deleteByLink(anyString());
+        String actual = (String) recipeController.deleteByLink(anyString());
 
 //        then
         assertEquals(expected, actual);
@@ -107,11 +106,11 @@ public class RecipeControllerTest extends com.aston.aston_project.Mock{
         when(recipeCRUDService.getRecipeByID(1L)).thenReturn(recipe);
         doNothing().when(recipeCRUDService).deleteRecipeByID(any());
 
-        ResponseEntity<Long> response = recipeController.deleteByID(1L);
+        Long response = (Long) recipeController.deleteByID(1L);
 
 //        then
         verify(recipeCRUDService, times(1)).getRecipeByID(1L);
         verify(recipeCRUDService, times(1)).deleteRecipeByID(any());
-        Assertions.assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        assertEquals(HttpStatus.NO_CONTENT, response.getClass());
     }
 }

@@ -1,6 +1,5 @@
-package com.aston.aston_project.crud.productList.impl;
+package com.aston.aston_project.crud.impl;
 
-import com.aston.aston_project.crud.productList.ProductListCRUDService;
 import com.aston.aston_project.entity.ProductList;
 import com.aston.aston_project.repository.ProductListRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,16 +10,14 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ProductListCRUDServiceImpl implements ProductListCRUDService {
+public class ProductListCRUDServiceImpl {
 
     private final ProductListRepository productListRepository;
 
-    @Override
     public ProductList addProductList(ProductList productList) {
         return productListRepository.save(productList);
     }
 
-    @Override
     public List<ProductList> getAllProductLists() {
         Optional<List <ProductList>> productLists = Optional.of(productListRepository.findAll());
         return productLists
@@ -30,7 +27,6 @@ public class ProductListCRUDServiceImpl implements ProductListCRUDService {
                 });
     }
 
-    @Override
     public ProductList getProductListByID(long id) {
         return productListRepository.findById(id)
                 .orElseThrow(() -> {

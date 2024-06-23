@@ -29,7 +29,12 @@ public class Order {
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address idAddress;
 
+    @ManyToOne
     private TypeOrder typeOrder;
+
+    @ManyToOne
     private Status status;
+
+    @ManyToOne
     private TypePayment typePayment;
 }

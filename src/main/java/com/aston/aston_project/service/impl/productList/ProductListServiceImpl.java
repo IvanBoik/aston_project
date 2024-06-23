@@ -1,9 +1,8 @@
-package com.aston.aston_project.service.productList.impl;
+package com.aston.aston_project.service.impl.productList;
 
 import com.aston.aston_project.entity.Product;
 import com.aston.aston_project.entity.User;
 import com.aston.aston_project.repository.ProductListRepository;
-import com.aston.aston_project.service.productList.ProductListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +10,12 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ProductListServiceImpl implements ProductListService {
+public class ProductListServiceImpl {
 
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final ProductListRepository productListRepository;
 
-    @Override
     public Integer findTotalProductCountByIdUser(Long id, String name) {
         Optional<User> optionalUser = userRepository.findById(id);
         Optional<Product> optionalProduct = productRepository.findByName(name);
