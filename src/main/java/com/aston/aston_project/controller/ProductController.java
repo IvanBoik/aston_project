@@ -1,23 +1,42 @@
 package com.aston.aston_project.controller;
 
-import com.aston.aston_project.service.ProductServiceImpl;
+import com.aston.aston_project.entity.Producer;
 import lombok.AllArgsConstructor;
+import com.aston.aston_project.entity.Product;
+import com.aston.aston_project.dto.*;
+import com.aston.aston_project.service.ProducerService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
-public class ProductController {
 
-    private final ProductServiceImpl productService;
+public final class ProductController {
+    public ProducerService producerService;
 
-    @PostMapping("/product") //todo
+    @PostMapping
+    public ResponseEntity<Producer> create(@RequestBody ProducerDto dto){
+        producerService.add(dto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
-    @GetMapping("/product/{id}") //todo
+    @GetMapping
+    public ResponseEntity<List<Producer>> readAll(){
+        return new ResponseEntity<>(producerService.getAll(),HttpStatus.OK);
+    }
 
-    @GetMapping("/products") //todo
+    @PutMapping("/{id}")
+    public ResponseEntity<Product> update(@RequestBody Producer producer, @PathVariable long id){
+        producerService.update(id,producer);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
-    @PutMapping("/product/{id}") //todo
-
-    @DeleteMapping("/product/{id}") //todo
+    @DeleteMapping("/{id}")
+    public HttpStatus delete(@PathVariable long id){
+        producerService.delete(id);
+        return HttpStatus.OK;
+    }
 
 }

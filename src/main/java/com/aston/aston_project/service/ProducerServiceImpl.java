@@ -6,18 +6,24 @@ import com.aston.aston_project.entity.Producer;
 import com.aston.aston_project.repository.ProducerRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.aston.aston_project.dto.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProducerServiceImpl implements ProducerService {
+
     private final ProducerRepository producerRepository;
 
     @Override
-    public void add(Producer producer) {
+    public void add(ProducerDto producerDto) {
+        Producer producer = new Producer();
+        producer.setName(producerDto.getName());
+        producer.setCountry(producerDto.getCountry());
         producerRepository.save(producer);
     }
 
