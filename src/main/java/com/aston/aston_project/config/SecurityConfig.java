@@ -43,7 +43,6 @@ public class SecurityConfig extends WebMvcConfigurationSupport {
      * @author Kirill Zemlyakov
      */
     @Bean
-    @ConditionalOnProperty(name = "security", havingValue = "enabled")
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .httpBasic(AbstractHttpConfigurer::disable)
