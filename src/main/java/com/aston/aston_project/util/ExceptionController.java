@@ -1,7 +1,10 @@
 package com.aston.aston_project.util;
 
 import com.aston.aston_project.util.exception.DataException;
+import com.aston.aston_project.util.exception.DuplicateEmailException;
 import com.aston.aston_project.util.exception.TokenException;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
@@ -80,6 +83,12 @@ public class ExceptionController implements ResponseBodyAdvice<Object> {
                ex.getParameter().getParameterType().getSimpleName();
     }
 
+    @ExceptionHandler(ValidationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String validationException(ValidationException ex){
+        return ex.getMessage();
+    }
+
     @ExceptionHandler(DataException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String dataException(DataException e){
@@ -90,7 +99,7 @@ public class ExceptionController implements ResponseBodyAdvice<Object> {
     @ExceptionHandler(Throwable.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public String internalServerError(Throwable thr){
-        log.error(thr.getMessage());
+        thr.printStackTrace();
         return "Internal server error";
     }
 

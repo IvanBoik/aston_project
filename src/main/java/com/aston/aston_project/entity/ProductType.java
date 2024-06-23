@@ -8,10 +8,13 @@ import lombok.Setter;
 @Table(name = "PRODUCT_TYPE")
 @Getter
 @Setter
-public class Type {
+public class ProductType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     *  May be unique, see schema
+     */
     private String name;
 }

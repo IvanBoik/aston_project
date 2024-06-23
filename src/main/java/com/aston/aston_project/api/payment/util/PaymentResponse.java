@@ -1,6 +1,6 @@
 package com.aston.aston_project.api.payment.util;
 
-import com.aston.aston_project.entity.StatusTransaction;
+import com.aston.aston_project.entity.en.PaymentTypeEnum;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,5 +16,5 @@ public interface PaymentResponse {
 
     BigDecimal amount();
 
-    StatusTransaction status();
+    PaymentTypeEnum status();
 }

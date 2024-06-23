@@ -28,7 +28,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: time
-                  type: TIME(0) WITHOUT TIME ZONE
+                  type: timestamp(6)
                   constraints:
                     nullable: false
               - column:

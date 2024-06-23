@@ -45,7 +45,7 @@ public class JwtUtilsTests {
     }
     @ParameterizedTest
     @ValueSource(strings = "some string")
-    public void jwt_utis_throws_token_parse_exception_when_token_is_malformed(String token){
+    public void jwt_utils_throws_token_parse_exception_when_token_is_malformed(String token){
         assertThrows(TokenException.class, ()->jwtUtils.getUserEmail(token));
     }
 

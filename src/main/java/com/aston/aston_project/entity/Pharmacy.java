@@ -13,7 +13,6 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-@NamedEntityGraph(name = "withAddress",attributeNodes = {@NamedAttributeNode("address")})
 public class Pharmacy {
 
     @Id
@@ -26,9 +25,9 @@ public class Pharmacy {
 
     private BigDecimal balance;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Address address;
 
-    @OneToMany(mappedBy = "pharmacy", fetch = FetchType.LAZY)
+    @OneToMany
     private List<PharmacyProduct> product = new ArrayList<>();
 }

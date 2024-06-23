@@ -22,14 +22,13 @@ public class Product {
 
     private BigDecimal price;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "type_id")
-    private Type type;
+    @ManyToOne
+    private ProductType type;
 
     @Column(name = "is_recipe")
     private Boolean isPrescriptionRequired;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "creator_id")
     private Producer producer;
 

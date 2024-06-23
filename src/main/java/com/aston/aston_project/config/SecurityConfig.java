@@ -7,18 +7,14 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
@@ -33,6 +29,7 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
+@ConditionalOnProperty(name = "security", havingValue = "enabled")
 public class SecurityConfig extends WebMvcConfigurationSupport {
 
     private AuthFilter authFilter;
@@ -47,6 +44,23 @@ public class SecurityConfig extends WebMvcConfigurationSupport {
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        return http
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .passwordManagement(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(AbstractHttpConfigurer::disable)
+                .exceptionHandling(configurer->
+                        configurer.authenticationEntryPoint(authEntryPoint))
+                .authorizeHttpRequests(reqMatch ->
+                        reqMatch.requestMatchers("auth/test").authenticated()
+                                .anyRequest().permitAll())
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(exceptionFilter, AuthFilter.class)
+                .build();
+    }
+
+    @Bean
+    public SecurityFilterChain filterChainNoSecure(HttpSecurity http) throws Exception {
         return http
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .passwordManagement(AbstractHttpConfigurer::disable)
@@ -80,10 +94,5 @@ public class SecurityConfig extends WebMvcConfigurationSupport {
     protected void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(mappingJackson2HttpMessageConverter());
         super.addDefaultHttpMessageConverters(converters);
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }

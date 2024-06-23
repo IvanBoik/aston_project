@@ -25,17 +25,17 @@ public class Payment {
     @UpdateTimestamp
     private LocalTime time;
     private BigDecimal amount;
-    @Enumerated(EnumType.STRING)
-    private StatusTransaction statusId;
+
     @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order orderId;
+    @JoinColumn(name = "status_id")
+    private PaymentType paymentType;
+
     @ManyToOne
-    @JoinColumn(name = "from_id")
-    private User fromId;
+    private Order order;
     @ManyToOne
-    @JoinColumn(name = "to_id")
-    private Pharmacy toId;
+    private User from;
+    @ManyToOne
+    private Pharmacy to;
 
 
 }

@@ -40,8 +40,8 @@ databaseChangeLog: #параметр в котором находятся миг
   - include:
       file: db/changelog/changeset/payment-table.yaml
   - include:
-      file: db/changelog/changeset/recipe-table.yaml
-  - include:
       file: db/changelog/changeset/product-list-table.yaml
+  - include:
+      file: db/changelog/changeset/recipe-table.yaml
   - include:
       file: db/changelog/changeset/attribute-value-insertion.yaml
