@@ -53,6 +53,7 @@ public class SecurityConfig extends WebMvcConfigurationSupport {
                         configurer.authenticationEntryPoint(authEntryPoint))
                 .authorizeHttpRequests(reqMatch ->
                         reqMatch.requestMatchers("auth/test").authenticated()
+                                .requestMatchers("/orders/{order}","orders","orders/recipes","recipes/{id}/check","orders/suspicious").hasRole("MANAGER")
                                 .anyRequest().permitAll())
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(exceptionFilter, AuthFilter.class)

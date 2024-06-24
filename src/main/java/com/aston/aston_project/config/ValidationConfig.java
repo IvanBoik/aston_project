@@ -17,9 +17,4 @@ public class ValidationConfig {
     public MethodValidationPostProcessor methodValidationPostProcessor(){
         return new MethodValidationPostProcessor();
     }
-
-    @Bean
-    public LocaleResolver localeResolver(){
-        return new FixedLocaleResolver(Locale.UK);
-    }
 }

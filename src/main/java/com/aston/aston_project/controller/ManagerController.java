@@ -1,0 +1,51 @@
+package com.aston.aston_project.controller;
+
+import com.aston.aston_project.api.recipe.util.RecipeChecker;
+import com.aston.aston_project.api.recipe.util.RecipeCheckerResponse;
+import com.aston.aston_project.dto.OrderExtendedResponseDTO;
+import com.aston.aston_project.dto.OrderWithRecipeDTO;
+import com.aston.aston_project.dto.SuspiciousOrderDTO;
+import com.aston.aston_project.entity.en.OrderStatusEnum;
+import com.aston.aston_project.service.ManagerService;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+@AllArgsConstructor
+public class ManagerController {
+
+    private ManagerService managerService;
+
+    @GetMapping("/orders")
+    public List<OrderExtendedResponseDTO> getAllOrders(){
+        List<OrderExtendedResponseDTO> allOrders = managerService.getAllOrders();
+        return allOrders;
+    }
+
+    @GetMapping("/orders/suspicious")
+    public List<SuspiciousOrderDTO> getAllSuspiciousOrders(){
+        return managerService.getAllSuspiciousOrders();
+    }
+
+    @PatchMapping("/orders/{order}")
+    public OrderExtendedResponseDTO switchStatus(@PathVariable @Positive Long order,
+                                                 @RequestParam OrderStatusEnum status) {
+        return managerService.setOrderStatus(order, status);
+    }
+
+    @GetMapping("/orders/recipes")
+    public List<OrderWithRecipeDTO> getAllOrdersWithRecipe(){
+        return managerService.getRecipeOrders();
+    }
+
+    @GetMapping("/recipes/{id}/check")
+    public RecipeCheckerResponse checkRecipe(@PathVariable @Positive Long id){
+        return managerService.checkRecipe(id);
+    }
+}

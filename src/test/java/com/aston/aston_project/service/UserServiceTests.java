@@ -1,31 +1,36 @@
 package com.aston.aston_project.service;
 
+import com.aston.aston_project.config.SecurityConfig;
+import com.aston.aston_project.controller.AuthController;
 import com.aston.aston_project.dto.SignUpRequest;
 import com.aston.aston_project.entity.Role;
 import com.aston.aston_project.entity.en.RoleEnum;
+import com.aston.aston_project.filter.AuthFilter;
 import com.aston.aston_project.jwt.JwtUtils;
 import com.aston.aston_project.repository.RoleRepository;
 import com.aston.aston_project.repository.UserRepository;
+import com.aston.aston_project.util.CustomAuthEntryPoint;
 import com.aston.aston_project.util.exception.DuplicateEmailException;
 import com.aston.aston_project.util.exception.IncorrectDataException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
-@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
+@WebMvcTest(controllers = {UserService.class} ,excludeAutoConfiguration = {DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
 public class UserServiceTests {
     @MockBean
     private UserRepository userRepository;
