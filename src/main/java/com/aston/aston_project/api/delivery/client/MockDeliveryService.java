@@ -5,21 +5,21 @@ import com.aston.aston_project.api.delivery.util.DeliveryResponse;
 import com.aston.aston_project.api.delivery.util.DeliveryService;
 import com.aston.aston_project.api.delivery.util.DeliveryStatus;
 import com.aston.aston_project.util.exception.NotFoundDataException;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
-import java.util.function.UnaryOperator;
 
 
+/**
+ * Component whose purpose is to simulate delivery service logic
+ * @author K.Zemlyakov
+ */
 @Data
 @Component
 public class MockDeliveryService implements DeliveryService {

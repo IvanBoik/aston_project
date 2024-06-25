@@ -7,6 +7,10 @@ import com.aston.aston_project.entity.Recipe;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+/**
+ * Component whose purpose is to simulate recipe checking logic
+ * @author K.Zemlyakov
+ */
 @Component
 @AllArgsConstructor
 public class MockRecipeChecker implements RecipeChecker {
