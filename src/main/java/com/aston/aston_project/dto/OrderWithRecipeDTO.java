@@ -6,7 +6,9 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class OrderWithRecipeDTO {
@@ -14,6 +16,6 @@ public class OrderWithRecipeDTO {
     private UserResponseDTO user;
     @JsonFormat(pattern = "yyyy.MM.dd hh:mm:ss")
     private LocalDateTime time;
-    private List<SimpleProductResponseDTO> products = new ArrayList<>();
+    private Set<SimpleProductResponseDTO> products = new HashSet<>();
     private List<RecipeResponseDTO> recipes = new ArrayList<>();
 }
