@@ -4,5 +4,5 @@ import com.aston.aston_project.entity.Recipe;
 
 public interface RecipeChecker {
 
-    RecipeCheckerResponse check(Recipe recipes);
+    RecipeCheckerResponse check(Recipe recipe);
 }
