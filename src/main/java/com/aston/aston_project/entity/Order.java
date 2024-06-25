@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,17 +43,6 @@ public class Order {
 
     @OneToMany(mappedBy = "order",fetch = FetchType.EAGER)
     private List<ProductList> productList = new ArrayList<>();
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "product_list",
-            joinColumns = @JoinColumn(
-                    name = "order_id",
-                    referencedColumnName = "id"
-            ),
-            inverseJoinColumns = @JoinColumn(
-            name = "product_id",
-            referencedColumnName = "id"))
-    private List<Product> products = new ArrayList<>();
 
     @OneToMany(mappedBy = "order",fetch = FetchType.EAGER)
     private List<Recipe> recipeList = new ArrayList<>();
