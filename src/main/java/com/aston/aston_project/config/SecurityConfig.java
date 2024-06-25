@@ -43,7 +43,6 @@ public class SecurityConfig extends WebMvcConfigurationSupport {
      * @author Kirill Zemlyakov
      */
     @Bean
-    @ConditionalOnProperty(name = "security", havingValue = "enabled")
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .httpBasic(AbstractHttpConfigurer::disable)
@@ -54,23 +53,7 @@ public class SecurityConfig extends WebMvcConfigurationSupport {
                         configurer.authenticationEntryPoint(authEntryPoint))
                 .authorizeHttpRequests(reqMatch ->
                         reqMatch.requestMatchers("auth/test").authenticated()
-                                .anyRequest().permitAll())
-                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(exceptionFilter, AuthFilter.class)
-                .build();
-    }
-
-    @Bean
-    public SecurityFilterChain filterChainNoSecure(HttpSecurity http) throws Exception {
-        return http
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .passwordManagement(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(AbstractHttpConfigurer::disable)
-                .exceptionHandling(configurer->
-                        configurer.authenticationEntryPoint(authEntryPoint))
-                .authorizeHttpRequests(reqMatch ->
-                        reqMatch.requestMatchers("auth/test").authenticated()
+                                .requestMatchers("/managers/v1/**").hasRole("MANAGER")
                                 .anyRequest().permitAll())
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(exceptionFilter, AuthFilter.class)
@@ -91,6 +74,12 @@ public class SecurityConfig extends WebMvcConfigurationSupport {
         return jsonConverter;
     }
 
+
+    /**
+     * Configuring project message converters
+     * @param converters - autowired by spring value
+     *                   @author Kirill Zemlyakov
+     */
     @Override
     protected void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(mappingJackson2HttpMessageConverter());

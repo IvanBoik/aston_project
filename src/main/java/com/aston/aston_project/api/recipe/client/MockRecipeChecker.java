@@ -7,16 +7,20 @@ import com.aston.aston_project.entity.Recipe;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+/**
+ * Component whose purpose is to simulate recipe checking logic
+ * @author K.Zemlyakov
+ */
 @Component
 @AllArgsConstructor
 public class MockRecipeChecker implements RecipeChecker {
 
     private MockRecipeResponseGenerator generator;
     @Override
-    public RecipeCheckerResponse check(Recipe recipes) {
-        if(recipes == null){
+    public RecipeCheckerResponse check(Recipe recipe) {
+        if(recipe == null){
             throw new RecipeCheckerException("recipe is null");
         }
-        return generator.generate(recipes);
+        return generator.generate(recipe);
     }
 }

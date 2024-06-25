@@ -1,5 +1,6 @@
 package com.aston.aston_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,7 +30,8 @@ public class User {
     )
     private List<Product> wishList = new ArrayList<>();
 
-    @ManyToMany
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "USER_ADDRESS",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "address_id")

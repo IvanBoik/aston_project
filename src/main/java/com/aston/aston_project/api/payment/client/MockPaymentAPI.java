@@ -7,6 +7,10 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
+/**
+ * Component whose purpose is to simulate payment service logic
+ * @author K.Zemlyakov
+ */
 @Component
 @AllArgsConstructor
 public class MockPaymentAPI implements PaymentApi {

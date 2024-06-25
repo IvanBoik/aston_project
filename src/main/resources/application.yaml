@@ -7,6 +7,8 @@ spring:
     url: jdbc:postgresql://localhost:5432/aston_project #установите phAdmin4, создайте database с именем aston_project
     username: ${DB_USER} #создайте в phAdmin4 roles и пропишите имя и пороль. В настройках  базы(aston_project) owner укажите эту роль
     password: ${DB_PASSWORD} #я для простоты так и создала root/pass
+  main:
+    allow-bean-definition-overriding: true
   jpa:
     show-sql: true
     properties:
