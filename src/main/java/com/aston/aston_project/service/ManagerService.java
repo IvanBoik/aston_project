@@ -3,7 +3,8 @@ package com.aston.aston_project.service;
 import com.aston.aston_project.api.recipe.util.RecipeChecker;
 import com.aston.aston_project.api.recipe.util.RecipeCheckerResponse;
 import com.aston.aston_project.dto.OrderExtendedResponseDTO;
-import com.aston.aston_project.dto.OrderWithRecipeDTO;
+import com.aston.aston_project.dto.OrderWithProductAndRecipeDTO;
+import com.aston.aston_project.dto.OrderWithProductsDTO;
 import com.aston.aston_project.dto.SuspiciousOrderDTO;
 import com.aston.aston_project.entity.Order;
 import com.aston.aston_project.entity.OrderStatus;
@@ -12,6 +13,7 @@ import com.aston.aston_project.entity.en.OrderStatusEnum;
 import com.aston.aston_project.mapper.OrderMapper;
 import com.aston.aston_project.repository.OrderRepository;
 import com.aston.aston_project.repository.OrderStatusRepository;
+import com.aston.aston_project.repository.ProductListRepository;
 import com.aston.aston_project.repository.RecipeRepository;
 import com.aston.aston_project.util.exception.NotFoundDataException;
 import jakarta.transaction.Transactional;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 /**
@@ -35,6 +38,7 @@ public class ManagerService {
     private OrderStatusRepository orderStatusRepository;
     private RecipeChecker recipeChecker;
     private RecipeRepository recipeRepository;
+    private ProductListRepository productListRepository;
 
 
     /**
@@ -78,9 +82,10 @@ public class ManagerService {
      * @author K. Zemlyakov
      */
 
-    public List<OrderWithRecipeDTO> getRecipeOrders(){
-        List<Order> allRecipeOrders = orderRepository.getAllRecipeOrders();
-        return allRecipeOrders.stream().map(orderMapper::toOrderWithRecipeDTO).toList();
+    public List<OrderWithProductAndRecipeDTO> getRecipeOrders(){
+        List<OrderWithProductsDTO> allRecipeOrders = productListRepository.getAllRecipeOrders();
+        allRecipeOrders.forEach((v)-> System.out.println(v.getOrder()));
+        return allRecipeOrders.stream().map(orderMapper::toOrderWithProductAndRecipeDTO).toList();
     }
 
     /**
