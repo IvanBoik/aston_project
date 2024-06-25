@@ -63,7 +63,8 @@ public class ProducerServiceImpl implements ProducerService {
 
     @Override
     public void create(ProducerDtoResponse dto) {
-        producerRepository.save(producerDtoMapping.dtoToEntity(dto));
+        Country c = countryRepository.findByCountryIgnoreCaseContaining(dto.getCountryName());
+        producerRepository.save(producerDtoMapping.dtoToEntity(dto, c));
     }
 
     @Override

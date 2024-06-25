@@ -1,20 +1,18 @@
 package com.aston.aston_project.dto.util;
 
 import com.aston.aston_project.dto.ProducerDtoResponse;
+import com.aston.aston_project.entity.Country;
 import com.aston.aston_project.entity.Producer;
-import com.aston.aston_project.repository.CountryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
 public class ProducerDtoMapping {
-    private final CountryRepository countryRepository;
-
-    public Producer dtoToEntity(ProducerDtoResponse dto) {
+    public Producer dtoToEntity(ProducerDtoResponse dto, Country country) {
         Producer producer = new Producer();
         producer.setName(dto.getName());
-        producer.setCountry(countryRepository.findByCountryIgnoreCaseContaining(dto.getCountryName()));
+        producer.setCountry(country);
         return producer;
     }
 
