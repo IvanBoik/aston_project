@@ -52,9 +52,40 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDtoShort> findByRecipe(Boolean isPrescriptionRequired) {
+    public List<ProductDtoShort> findByRecipe(Integer recipe) {
+        Boolean isPrescriptionRequired;
+        isPrescriptionRequired = recipe == 1;
         return productRepository.findAll().stream()
                 .filter(p -> p.getIsPrescriptionRequired() == isPrescriptionRequired)
+                .map(productDtoMapping::entityToDtoShort)
+                .toList();
+    }
+
+    @Override
+    public List<ProductDtoShort> findByNameIgnoreCaseContainingAndProducer(String name, Long producerId) {
+        Producer p = producerRepository.findById(producerId)
+                .orElseThrow(() -> new NotFoundDataException("No data for such a producer found"));
+        return productRepository.findByNameIgnoreCaseContainingAndProducer(name, p).stream()
+                .map(productDtoMapping::entityToDtoShort)
+                .toList();
+    }
+
+    @Override
+    public List<ProductDtoShort> findByNameIgnoreCaseContainingAndIsPrescriptionRequired(String name, Integer recipe) {
+        boolean isPrescriptionRequired;
+        isPrescriptionRequired = recipe == 1;
+        return productRepository.findByNameIgnoreCaseContainingAndIsPrescriptionRequired(name, isPrescriptionRequired).stream()
+                .map(productDtoMapping::entityToDtoShort)
+                .toList();
+    }
+
+    @Override
+    public List<ProductDtoShort> findByProducerAndIsPrescriptionRequired(Long producerId, Integer recipe) {
+        Producer p = producerRepository.findById(producerId)
+                .orElseThrow(() -> new NotFoundDataException("No data for such a producer found"));
+        boolean isPrescriptionRequired;
+        isPrescriptionRequired = recipe == 1;
+        return productRepository.findByProducerAndIsPrescriptionRequired(p, isPrescriptionRequired).stream()
                 .map(productDtoMapping::entityToDtoShort)
                 .toList();
     }

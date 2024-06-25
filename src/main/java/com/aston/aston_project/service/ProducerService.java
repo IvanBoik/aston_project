@@ -18,7 +18,9 @@ public interface ProducerService {
 
     void delete(Long id);
 
-    List<ProducerDtoResponse> findByNameLike(String namePart);
+    List<ProducerDtoResponse> findByNameIgnoreCaseContaining(String namePart);
 
     List<ProducerDtoResponse> findByCountry(Long countryId);
+
+    List<ProducerDtoResponse> findByNameIgnoreCaseContainingAndCountry(String name, Long countryId);
 }

@@ -26,7 +26,10 @@ public class ProducerController {
             @RequestParam(required = false) Optional<String> name,
             @RequestParam(required = false) Optional<Long> country) {
         if (name.isPresent()) {
-            return producerService.findByNameLike(name.get());
+            if (country.isPresent()) {
+                return producerService.findByNameIgnoreCaseContainingAndCountry(name.get(), country.get());
+            }
+            return producerService.findByNameIgnoreCaseContaining(name.get());
         }
         if (country.isPresent()) {
             return producerService.findByCountry(country.get());

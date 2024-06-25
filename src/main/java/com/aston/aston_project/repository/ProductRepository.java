@@ -10,4 +10,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByNameIgnoreCaseContaining(String namePart);
 
     List<Product> findByProducer(Producer producer);
+
+    List<Product> findByNameIgnoreCaseContainingAndProducer(String name, Producer producer);
+
+    List<Product> findByNameIgnoreCaseContainingAndIsPrescriptionRequired(String name, Boolean isPrescriptionRequired);
+
+    List<Product> findByProducerAndIsPrescriptionRequired(Producer producer, Boolean isPrescriptionRequired);
 }

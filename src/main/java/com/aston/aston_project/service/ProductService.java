@@ -26,5 +26,11 @@ public interface ProductService {
 
     List<ProductDtoShort> findByProducer(Long producerId);
 
-    List<ProductDtoShort> findByRecipe(Boolean isPrescriptionRequired);
+    List<ProductDtoShort> findByRecipe(Integer recipe);
+
+    List<ProductDtoShort> findByNameIgnoreCaseContainingAndProducer(String name, Long producerId);
+
+    List<ProductDtoShort> findByNameIgnoreCaseContainingAndIsPrescriptionRequired(String name, Integer integer);
+
+    List<ProductDtoShort> findByProducerAndIsPrescriptionRequired(Long producerId, Integer recipe);
 }

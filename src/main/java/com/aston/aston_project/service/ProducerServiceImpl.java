@@ -37,8 +37,8 @@ public class ProducerServiceImpl implements ProducerService {
     }
 
     @Override
-    public List<ProducerDtoResponse> findByNameLike(String namePart) {
-        return producerRepository.findByNameLike(namePart).stream()
+    public List<ProducerDtoResponse> findByNameIgnoreCaseContaining(String namePart) {
+        return producerRepository.findByNameIgnoreCaseContaining(namePart).stream()
                 .map(producerDtoMapping::entityToDto)
                 .toList();
     }
@@ -48,6 +48,15 @@ public class ProducerServiceImpl implements ProducerService {
         Country c = countryRepository.findById(countryId)
                 .orElseThrow(() -> new NotFoundDataException("Producers from this country not found"));
         return producerRepository.findByCountry(c).stream()
+                .map(producerDtoMapping::entityToDto)
+                .toList();
+    }
+
+    @Override
+    public List<ProducerDtoResponse> findByNameIgnoreCaseContainingAndCountry(String name, Long countryId) {
+        Country c = countryRepository.findById(countryId)
+                .orElseThrow(() -> new NotFoundDataException("Producers from this country not found"));
+        return producerRepository.findByNameIgnoreCaseContainingAndCountry(name, c).stream()
                 .map(producerDtoMapping::entityToDto)
                 .toList();
     }

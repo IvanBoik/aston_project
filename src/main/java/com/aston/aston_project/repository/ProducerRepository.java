@@ -8,7 +8,9 @@ import java.util.List;
 
 public interface ProducerRepository extends JpaRepository<Producer, Long> {
 
-    List<Producer> findByNameLike(String namePart);
+    List<Producer> findByNameIgnoreCaseContaining(String namePart);
 
     List<Producer> findByCountry(Country country);
+
+    List<Producer> findByNameIgnoreCaseContainingAndCountry(String name, Country country);
 }
