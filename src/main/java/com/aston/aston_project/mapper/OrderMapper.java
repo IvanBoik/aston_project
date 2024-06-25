@@ -7,7 +7,7 @@ import com.aston.aston_project.entity.Order;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(uses = {AddressMapper.class, UserMapper.class, DefaultMapper.class, RecipeMapper.class, ProductMapper.class, ProductListMapper.class})
+@Mapper(uses = {AddressMapper.class, UserMapper.class, DefaultMapper.class, RecipeMapper.class, ProductMapper.class})
 public interface OrderMapper {
 
 
