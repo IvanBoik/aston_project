@@ -17,13 +17,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 """)
     List<SuspiciousOrderDTO> getAllSuspiciousOrders();
 
-    @Query(
-            value = """
-            SELECT o FROM Order o
-            JOIN ProductList pl ON pl.order.id = o.id
-            WHERE pl.product.isPrescriptionRequired IS TRUE
-            """
-    )
-    List<Order> getAllRecipeOrders();
+
 
 }

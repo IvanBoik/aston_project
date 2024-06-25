@@ -2,7 +2,7 @@ package com.aston.aston_project.controller;
 
 import com.aston.aston_project.api.recipe.util.RecipeCheckerResponse;
 import com.aston.aston_project.dto.OrderExtendedResponseDTO;
-import com.aston.aston_project.dto.OrderWithRecipeDTO;
+import com.aston.aston_project.dto.OrderWithProductAndRecipeDTO;
 import com.aston.aston_project.dto.SuspiciousOrderDTO;
 import com.aston.aston_project.entity.en.OrderStatusEnum;
 import com.aston.aston_project.service.ManagerService;
@@ -42,7 +42,7 @@ public class ManagerController {
     }
 
     @GetMapping("/orders/recipes")
-    public List<OrderWithRecipeDTO> getAllOrdersWithRecipe(){
+    public List<OrderWithProductAndRecipeDTO> getAllOrdersWithRecipe(){
         return managerService.getRecipeOrders();
     }
 
