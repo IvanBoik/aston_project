@@ -37,7 +37,10 @@ public class Product {
             joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "value_id", referencedColumnName = "id")
     )
-    @MapKeyJoinColumn (name = "attribute_id",referencedColumnName = "id")
+    @MapKeyJoinColumn(name = "attribute_id", referencedColumnName = "id")
     private Map<Attribute, Value> attributesValues = new HashMap<>();
 
+    public void setAttributesValues(Attribute att, Value val) {
+        this.attributesValues.put(att, val);
+    }
 }

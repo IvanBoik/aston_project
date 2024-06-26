@@ -2,7 +2,6 @@ package com.aston.aston_project.service;
 
 
 import com.aston.aston_project.dto.SignUpRequest;
-import com.aston.aston_project.entity.Role;
 import com.aston.aston_project.entity.User;
 import com.aston.aston_project.jwt.JwtUtils;
 import com.aston.aston_project.repository.RoleRepository;

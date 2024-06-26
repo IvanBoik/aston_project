@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: alter-date-column
+      author: Kirill Zemlyakov
+      changes:
+        - dropColumn:
+            columnName: date
+            tableName: order
