@@ -22,8 +22,8 @@ public class ProductDtoMapping {
         productDtoFull.setType(product.getType().getName());
         productDtoFull.setIsPrescriptionRequired(product.getIsPrescriptionRequired());
         productDtoFull.setProducer(producerDtoMapping.entityToDto(product.getProducer()));
-        for (Attribute key : product.getAttributesValues().keySet()) {
-            productDtoFull.setAttributesValues(key.getAttribute(), product.getAttributesValues().get(key).getValue());
+        for (Map.Entry<Attribute, Value> key : product.getAttributesValues().entrySet()) {
+            productDtoFull.setAttributesValues(key.getKey().getAttribute(), key.getValue().getValue());
         }
         return productDtoFull;
     }
@@ -40,8 +40,8 @@ public class ProductDtoMapping {
 
     public Product dtoToEntity(ProductRequest dto) {
         Map<Attribute, Value> productEntityAttributes = new HashMap<>();
-        for (Long att : dto.getAttributesValues().keySet()) {
-            productEntityAttributes.put(new Attribute(att), new Value(dto.getAttributesValues().get(att)));
+        for (Map.Entry<Long, Long> att : dto.getAttributesValues().entrySet()) {
+            productEntityAttributes.put(new Attribute(att.getKey()), new Value(att.getValue()));
         }
         return Product.builder()
                 .name(dto.getName())
