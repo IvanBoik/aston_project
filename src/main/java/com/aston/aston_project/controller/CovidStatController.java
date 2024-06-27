@@ -1,8 +1,8 @@
 package com.aston.aston_project.controller;
 
-import com.aston.aston_project.feign.CovidFeignClient;
+import com.aston.aston_project.feign.client.CovidFeignClient;
+import com.aston.aston_project.feign.dto.CovidResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,11 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class CovidStatController {
 private final CovidFeignClient feignClient;
 
-    @GetMapping("/Russia")
-    public void showStat(){
-        feignClient.readCovidStat();
+    @GetMapping("/info")
+    public CovidResponse showStat(){
+       return feignClient.readCovidStat();
     }
-//    public ResponseEntity showStat(){
-//        return ResponseEntity.ok(feignClient.readCovidStat());
-//    }
+//
 }
