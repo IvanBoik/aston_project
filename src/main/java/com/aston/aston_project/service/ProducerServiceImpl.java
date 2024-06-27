@@ -63,7 +63,8 @@ public class ProducerServiceImpl implements ProducerService {
 
     @Override
     public void create(ProducerDtoResponse dto) {
-        Country c = countryRepository.findByCountryIgnoreCaseContaining(dto.getCountryName());
+        List<Country> list = countryRepository.findByCountryIgnoreCaseContaining(dto.getCountryName());
+        Country c =list.stream().findAny().get();
         producerRepository.save(producerDtoMapping.dtoToEntity(dto, c));
     }
 
@@ -74,7 +75,9 @@ public class ProducerServiceImpl implements ProducerService {
         if (optionalProducer.isPresent()) {
             Producer p = optionalProducer.get();
             p.setName(dto.getName());
-            p.setCountry(countryRepository.findByCountryIgnoreCaseContaining(dto.getCountryName()));
+            List<Country> list = countryRepository.findByCountryIgnoreCaseContaining(dto.getCountryName());
+            Country c =list.stream().findAny().get();
+            p.setCountry(c);
             producerRepository.save(p);
         } else {
             throw new NotFoundDataException("Producer with id " + id + " not found");
