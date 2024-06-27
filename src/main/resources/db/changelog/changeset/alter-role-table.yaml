@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: alter-role-table
+      author: K. Zemlyakov
+      changes:
+        - sqlFile:
+            path: db/script/admin-role.sql
+            encoding: UTF-8
