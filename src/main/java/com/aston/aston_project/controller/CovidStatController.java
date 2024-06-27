@@ -11,11 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/covid")
 @AllArgsConstructor
 public class CovidStatController {
-private final CovidFeignClient feignClient;
+    private final CovidFeignClient feignClient;
 
     @GetMapping("/info")
-    public CovidResponse showStat(){
-       return feignClient.readCovidStat();
+    public CovidResponse showStat() {
+        return feignClient.readCovidStat();
     }
-//
 }

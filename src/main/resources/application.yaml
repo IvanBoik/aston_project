@@ -30,11 +30,11 @@ logging:
     org.springframework.web: "info"
     org.hibernate: "error"
     aston_project: "debug"
-  #file:
+    #file:
     #name: appLog.log
   pattern: #Для разработки можете отключить записть в файл, поставив перед file решетку
     file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
-    console:  "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n"
 
 jwt:
   secret: ${JWT_SECRET}
