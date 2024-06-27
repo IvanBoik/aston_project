@@ -1,11 +1,10 @@
 package com.aston.aston_project.service;
 
 import com.aston.aston_project.dto.ProducerDtoResponse;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+
 public interface ProducerService {
 
     ProducerDtoResponse getById(Long id);

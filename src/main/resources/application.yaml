@@ -33,3 +33,14 @@ jwt:
   issuer: ${JWT_ISSUER}
 
 security: enabled # Можем отключить для разработки
+
+feign:
+  client:
+    baseUrl: https://disease.sh/v3/covid-19/countries
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+#        encoder: feignEncoder
+#        decoder: feignDecoder
+#        contract: SpringContract
