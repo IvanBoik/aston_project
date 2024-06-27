@@ -1,9 +1,8 @@
 package com.aston.aston_project.util;
 
 import com.aston.aston_project.util.exception.DataException;
-import com.aston.aston_project.util.exception.DuplicateEmailException;
+import com.aston.aston_project.util.exception.NotFoundDataException;
 import com.aston.aston_project.util.exception.TokenException;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -28,6 +27,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 /**
  * Application exception handling managed here
  * Application ANY response wrapping here see 'beforeBodyWrite' method
+ *
  * @author Kirill Zemlyakov
  * @see org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice
  * @see ResponseWrapper
@@ -45,7 +45,7 @@ public class ExceptionController implements ResponseBodyAdvice<Object> {
 
     @ExceptionHandler({TokenException.class})
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
-    public String tokenException(TokenException e){
+    public String tokenException(TokenException e) {
         return e.getMessage();
     }
 
@@ -53,52 +53,57 @@ public class ExceptionController implements ResponseBodyAdvice<Object> {
     @ResponseStatus(value = HttpStatus.METHOD_NOT_ALLOWED)
     public String methodNotAllowedException(HttpRequestMethodNotSupportedException ex) {
         return "Method '" +
-               ex.getMethod() +
-               "' not allowed to this path";
+                ex.getMethod() +
+                "' not allowed to this path";
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public String pageNotFoundException(NoHandlerFoundException ex) {
         return "Path '" +
-               ex.getRequestURL() +
-               "' not found";
+                ex.getRequestURL() +
+                "' not found";
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String requestMissed(MissingServletRequestParameterException ex, WebRequest request) {
         return "Missed " +
-               ex.getParameterType() +
-               " request parameter " +
-               ex.getParameterName();
+                ex.getParameterType() +
+                " request parameter " +
+                ex.getParameterName();
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String methodMismatched(MethodArgumentTypeMismatchException ex) {
         return "Argument " +
-               ex.getName() +
-               " request type " +
-               ex.getParameter().getParameterType().getSimpleName();
+                ex.getName() +
+                " request type " +
+                ex.getParameter().getParameterType().getSimpleName();
     }
 
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String validationException(ValidationException ex){
+    public String validationException(ValidationException ex) {
         return ex.getMessage();
     }
 
     @ExceptionHandler(DataException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String dataException(DataException e){
+    public String dataException(DataException e) {
         return e.getMessage();
     }
 
+    @ExceptionHandler(NotFoundDataException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String notFoundDataException(NotFoundDataException e) {
+        return e.getMessage();
+    }
 
     @ExceptionHandler(Throwable.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public String internalServerError(Throwable thr){
+    public String internalServerError(Throwable thr) {
         thr.printStackTrace();
         return "Internal server error";
     }
@@ -112,6 +117,6 @@ public class ExceptionController implements ResponseBodyAdvice<Object> {
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         ServletServerHttpResponse servletResponse = (ServletServerHttpResponse) response;
         int status = servletResponse.getServletResponse().getStatus();
-        return new ResponseWrapper(status,body);
+        return new ResponseWrapper(status, body);
     }
 }
