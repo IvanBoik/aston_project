@@ -16,16 +16,25 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate: #при старте хибер делает импорт сущностей в бд как вы ему тут сказали:
       ddl-auto: validate #create-drop(создает при старте и удаляет при окончании работы), create(просто создает), none(ничего не делает)
+  cloud:
+    openfeign:
+      client:
+        config:
+          covid-client:
+            url: "https://disease.sh/v3/covid-19/countries"
+            read-timeout: 5000
+            logger-level: full
+            connect-timeout: 5000
 logging:
   level:
     org.springframework.web: "info"
     org.hibernate: "error"
     aston_project: "debug"
-  #file:
+    #file:
     #name: appLog.log
   pattern: #Для разработки можете отключить записть в файл, поставив перед file решетку
     file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
-    console:  "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n"
 
 jwt:
   secret: ${JWT_SECRET}
