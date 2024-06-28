@@ -1,11 +1,10 @@
 package com.aston.aston_project.controller;
 
 import com.aston.aston_project.dto.SignUpRequest;
+import com.aston.aston_project.feign.dto.YandexResponse;
 import com.aston.aston_project.service.UserService;
-import jakarta.annotation.PostConstruct;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +32,11 @@ public class AuthController {
     @PostMapping("/signUp")
     public String signUp(@RequestBody SignUpRequest request) {
         return userService.signUp(request);
+    }
+
+    @GetMapping("/test")
+    public YandexResponse yandexTest(@RequestParam("location") String location, String address){
+        return userService.yandexTest(location,address);
     }
 
 }

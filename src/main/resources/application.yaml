@@ -22,9 +22,18 @@ spring:
         config:
           covid-client:
             url: "https://disease.sh/v3/covid-19/countries"
-            read-timeout: 5000
             logger-level: full
+            read-timeout: 5000
             connect-timeout: 5000
+          yandex-search-api:
+            url: "https://search-maps.yandex.ru/v1"
+            logger-level: full
+            default-query-parameters:
+              apikey: ${YANDEX_KEY}
+              lang: "ru_RU"
+            connect-timeout: 5000
+            read-timeout: 5000
+
 logging:
   level:
     org.springframework.web: "info"
