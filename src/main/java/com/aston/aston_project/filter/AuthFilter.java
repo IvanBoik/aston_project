@@ -9,7 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,15 +22,14 @@ import java.io.IOException;
 /**
  * Custom authorization filter which responsibility is to manage Authorization header,
  * validate JWT token and authorize {@link com.aston.aston_project.entity.User}
+ *
  * @author Kirill Zemlyakov
  */
 @Component
+@AllArgsConstructor
 public class AuthFilter extends GenericFilterBean {
 
-    @Autowired
     private JwtUtils jwtUtils;
-
-    @Autowired
     private UserService userService;
 
     @Override
@@ -38,13 +37,11 @@ public class AuthFilter extends GenericFilterBean {
         String jwt = parseJwt((HttpServletRequest) request);
         if (jwt != null) {
             String email = jwtUtils.getUserEmail(jwt);
-            try{
+            try {
                 UserDetails userDetails = userService.getUserDetailsByEmail(email);
-                if (userDetails != null) {
-                    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(auth);
-                }
-            }catch(NotFoundDataException e){
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            } catch (NotFoundDataException e) {
                 throw new TokenException("User with that email not found exception");
             }
         }

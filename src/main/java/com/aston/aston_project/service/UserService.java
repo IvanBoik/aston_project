@@ -3,9 +3,12 @@ package com.aston.aston_project.service;
 
 import com.aston.aston_project.dto.SignUpRequest;
 import com.aston.aston_project.entity.User;
+import com.aston.aston_project.feign.client.YandexSearchLocationClient;
+import com.aston.aston_project.feign.dto.YandexResponse;
 import com.aston.aston_project.jwt.JwtUtils;
 import com.aston.aston_project.repository.RoleRepository;
 import com.aston.aston_project.repository.UserRepository;
+import com.aston.aston_project.util.LocationUtil;
 import com.aston.aston_project.util.PasswordUtils;
 import com.aston.aston_project.util.UserDetails;
 import com.aston.aston_project.util.exception.DuplicateEmailException;
@@ -21,6 +24,7 @@ public class UserService {
     private JwtUtils jwtUtils;
     private UserRepository repository;
     private RoleRepository roleRepository;
+    private YandexSearchLocationClient yandexClient;
 
     public UserDetails getUserDetailsByEmail(String email) throws NotFoundDataException {
         User user = repository.findUserByEmail(email);
@@ -69,6 +73,15 @@ public class UserService {
         }
         if (!request.getPhone().toString().matches("^[87]\\d{10}$")) {
             throw new IncorrectDataException("Phone %s is incorrect".formatted(request.getPhone()));
+        }
+    }
+
+    public YandexResponse yandexTest(String location, String address) {
+        try{
+            LocationUtil.parse(location);
+            return yandexClient.getLocation(location, address);
+        }catch (NumberFormatException e){
+            throw new IncorrectDataException("Location is incorrect");
         }
     }
 }
