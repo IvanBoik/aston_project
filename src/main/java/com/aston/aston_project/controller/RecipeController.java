@@ -17,13 +17,13 @@ public class RecipeController {
     private final RecipeCRUDServiceImpl recipeCRUDService;
 
 
-    @PostMapping(value = "/posts/new")
+    @PostMapping(value = "/recipes/new")
     public ResponseEntity<Recipes> createRecipe(@RequestBody Recipes recipe) {
         recipeCRUDService.addRecipe(recipe);
         return ResponseEntity.status(HttpStatus.CREATED).body(recipe);
     }
 
-    @GetMapping(value = "/posts")
+    @GetMapping(value = "/recipes")
     public List<Recipes> allRecipes() {
         List<Recipes> recipes = recipeCRUDService.getAllRecipes();
 
@@ -32,21 +32,21 @@ public class RecipeController {
         } else return (List<Recipes>) ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/posts/{id}")
+    @GetMapping(value = "/recipes/{id}")
     public ResponseEntity<Recipes> getRecipeById(@PathVariable Long id) {
         Recipes recipe = recipeCRUDService.getRecipeByID(id);
 
         return recipe != null ? ResponseEntity.ok(recipe) : ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/posts/{link}")
+    @PutMapping(value = "/recipes/{link}")
     public Object deleteByLink(@PathVariable String link) {
         recipeCRUDService.deleteRecipeByLink(link);
 
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping(value = "/posts/{id}")
+    @PutMapping(value = "/recipes/{id}")
     public Object deleteByID(@PathVariable Long id) {
         recipeCRUDService.deleteRecipeByID(id);
 

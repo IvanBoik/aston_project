@@ -16,6 +16,7 @@ public class ProductListServiceImpl {
     private final ProductRepository productRepository;
     private final ProductListRepository productListRepository;
 
+//    Считает количество всех лекарств, заказанных пользователем
     public Integer findTotalProductCountByIdUser(Long id, String name) {
         Optional<User> optionalUser = userRepository.findById(id);
         Optional<Product> optionalProduct = productRepository.findByName(name);

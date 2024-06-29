@@ -18,13 +18,13 @@ public class ProductListController {
     private final ProductListCRUDServiceImpl productListCRUDService;
     private final ProductListServiceImpl productListService;
 
-    @PostMapping(value = "/posts/new")
+    @PostMapping(value = "/product_lists/new")
     public ProductList createPL(@RequestBody ProductList productList) {
         productListCRUDService.addProductList(productList);
         return ResponseEntity.status(HttpStatus.CREATED).body(productList).getBody();
     }
 
-    @GetMapping(value = "/posts")
+    @GetMapping(value = "/product_lists")
     public List<ProductList> allPLs() {
         List<ProductList> productLists = productListCRUDService.getAllProductLists();
 
@@ -33,7 +33,7 @@ public class ProductListController {
         } else return (List<ProductList>) ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/posts/{id}")
+    @GetMapping(value = "/product_lists/{id}")
     public ResponseEntity<ProductList> getPLById(@PathVariable Long id) {
         ProductList productList = productListCRUDService.getProductListByID(id);
 
