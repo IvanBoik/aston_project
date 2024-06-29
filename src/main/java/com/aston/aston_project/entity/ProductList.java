@@ -1,7 +1,6 @@
 package com.aston.aston_project.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 
 @Entity
@@ -16,15 +15,11 @@ public class ProductList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Product idProduct;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Product product;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order idOrder;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Order order;
 
-    @Column(name = "count")
-    @PositiveOrZero
     private Integer count;
 }

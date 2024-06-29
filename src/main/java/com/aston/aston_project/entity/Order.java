@@ -4,9 +4,12 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Table(schema = "public",name = "order")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -20,21 +23,27 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User idUser;
+    private User user;
 
     @CreationTimestamp
-    private Timestamp time;
+    private LocalDateTime time;
 
     @ManyToOne
     @JoinColumn(name = "address_id", referencedColumnName = "id")
-    private Address idAddress;
+    private Address address;
 
     @ManyToOne
-    private TypeOrder typeOrder;
+    private OrderType type;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private OrderStatus status;
 
     @ManyToOne
-    private Status status;
+    private OrderPaymentType paymentType;
 
-    @ManyToOne
-    private TypePayment typePayment;
+    @OneToMany(mappedBy = "order",fetch = FetchType.EAGER)
+    private List<ProductList> productList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "order",fetch = FetchType.EAGER)
+    private List<Recipe> recipeList = new ArrayList<>();
 }

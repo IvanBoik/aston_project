@@ -1,7 +1,7 @@
 package com.aston.aston_project.controller;
 
-import com.aston.aston_project.crud.impl.RecipeCRUDServiceImpl;
-import com.aston.aston_project.entity.Recipes;
+import com.aston.aston_project.service.RecipeServiceImpl;
+import com.aston.aston_project.entity.Recipe;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -18,24 +18,24 @@ import static org.mockito.Mockito.*;
 public class RecipeControllerTest extends com.aston.aston_project.Mock{
 
     @Mock
-    private RecipeCRUDServiceImpl recipeCRUDService;
+    private RecipeServiceImpl recipeCRUDService;
 
     @InjectMocks
     private RecipeController recipeController;
 
 
-    private final Recipes recipe = new Recipes();
-    private final List<Recipes> recipesList = new ArrayList<>();
+    private final Recipe recipe = new Recipe();
+    private final List<Recipe> recipesList = new ArrayList<>();
 
 
     @Test
     void createRecipe_AddNewRecipe_Success() {
 
 //        given
-        ResponseEntity<Recipes> expected = new ResponseEntity<>(recipe, HttpStatus.CREATED);
+        ResponseEntity<Recipe> expected = new ResponseEntity<>(recipe, HttpStatus.CREATED);
 
 //        when
-        ResponseEntity<Recipes> actual = recipeController.createRecipe(recipe);
+        Recipe actual = recipeController.createRecipe(recipe);
 
 //        then
         assertEquals(expected, actual);
@@ -47,16 +47,16 @@ public class RecipeControllerTest extends com.aston.aston_project.Mock{
     void allRecipes_ReturnListOfAllRecipesOfThreeObjects_Success() {
 
 //        given
-        recipesList.add(new Recipes());
-        recipesList.add(new Recipes());
-        recipesList.add(new Recipes());
+        recipesList.add(new Recipe());
+        recipesList.add(new Recipe());
+        recipesList.add(new Recipe());
 
-        ResponseEntity<List<Recipes>> expected = new ResponseEntity<>(recipesList, HttpStatus.OK);
+        ResponseEntity<List<Recipe>> expected = new ResponseEntity<>(recipesList, HttpStatus.OK);
 
         when(recipeCRUDService.getAllRecipes()).thenReturn(recipesList);
 
 //        when
-        List<Recipes> actual = recipeController.allRecipes();
+        List<Recipe> actual = recipeController.allRecipes();
 
 //        then
         assertEquals(expected, actual);
@@ -69,12 +69,12 @@ public class RecipeControllerTest extends com.aston.aston_project.Mock{
         Long idRecipe = anyLong();
         recipe.setId(idRecipe);
 
-        ResponseEntity<Recipes> expected = new ResponseEntity<>(recipe, HttpStatus.OK);
+        ResponseEntity<Recipe> expected = new ResponseEntity<>(recipe, HttpStatus.OK);
 
         when(recipeCRUDService.getRecipeByID(idRecipe)).thenReturn(recipe);
 
 //        when
-        ResponseEntity<Recipes> actual = recipeController.getRecipeById(idRecipe);
+        ResponseEntity<Recipe> actual = recipeController.getRecipeById(idRecipe);
 
 //        then
         assertEquals(expected, actual);

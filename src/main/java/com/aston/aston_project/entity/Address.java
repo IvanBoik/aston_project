@@ -21,5 +21,5 @@ public class Address {
 
     private String street;
 
-    private Integer room;
+    private Short room;
 }
