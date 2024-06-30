@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import java.util.List;
@@ -24,12 +26,12 @@ import java.util.List;
 
 /**
  * Spring security configuration
+ *
  * @author Kirill Zemlyakov
  */
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
-@ConditionalOnProperty(name = "security", havingValue = "enabled")
 public class SecurityConfig extends WebMvcConfigurationSupport {
 
     private AuthFilter authFilter;
@@ -40,28 +42,61 @@ public class SecurityConfig extends WebMvcConfigurationSupport {
      * General security configuration bean
      * 'exceptionHandling' allows to handle {@link org.springframework.security.core.AuthenticationException} in {@link CustomAuthEntryPoint}
      * 'authorizeHttpRequests' allows to define restriction to various paths
+     *
      * @author Kirill Zemlyakov
      */
     @Bean
+    @ConditionalOnProperty(name = "security", havingValue = "enabled")
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .passwordManagement(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(AbstractHttpConfigurer::disable)
-                .exceptionHandling(configurer->
+                .exceptionHandling(configurer ->
                         configurer.authenticationEntryPoint(authEntryPoint))
                 .authorizeHttpRequests(reqMatch ->
-                        reqMatch.requestMatchers("auth/test").authenticated()
+                        reqMatch.requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/managers/v1/**").hasRole("MANAGER")
-                                .anyRequest().permitAll())
+                                .anyRequest().authenticated())
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(exceptionFilter, AuthFilter.class)
                 .build();
     }
 
     /**
+     * When security is disabled
+     * this filterChain is using
+     * @author Kirill Zemlyakov
+     */
+    @Bean
+    @ConditionalOnProperty(name = "security", havingValue = "disabled", matchIfMissing = true)
+    public SecurityFilterChain noSecurityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .passwordManagement(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(AbstractHttpConfigurer::disable)
+                .exceptionHandling(configurer ->
+                        configurer.authenticationEntryPoint(authEntryPoint))
+                .authorizeHttpRequests(registry ->
+                        registry.anyRequest().permitAll()
+                )
+                .build();
+    }
+
+    /**
+     * Method configures ignore accept headers
+     * @param configurer configuring default media type to application/json
+     */
+    @Override
+    protected void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+        configurer.ignoreAcceptHeader(true).defaultContentType(MediaType.APPLICATION_JSON);
+    }
+
+    /**
      * When response body wrapping into JSON this bean allows to correct {@link String} mapping
+     *
      * @author Kirill Zemlyakov
      */
     @Bean
@@ -77,8 +112,9 @@ public class SecurityConfig extends WebMvcConfigurationSupport {
 
     /**
      * Configuring project message converters
+     *
      * @param converters - autowired by spring value
-     *                   @author Kirill Zemlyakov
+     * @author Kirill Zemlyakov
      */
     @Override
     protected void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
