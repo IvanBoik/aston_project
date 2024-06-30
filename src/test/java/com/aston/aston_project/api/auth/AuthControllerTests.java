@@ -1,36 +1,25 @@
 package com.aston.aston_project.api.auth;
-
-import com.aston.aston_project.config.SecurityConfig;
-import com.aston.aston_project.controller.AuthController;
+import com.aston.aston_project.config.TestConfig;
 import com.aston.aston_project.dto.SignUpRequest;
 import com.aston.aston_project.entity.Role;
 import com.aston.aston_project.entity.User;
 import com.aston.aston_project.entity.en.RoleEnum;
-import com.aston.aston_project.filter.AuthFilter;
 import com.aston.aston_project.jwt.JwtUtils;
 import com.aston.aston_project.repository.RoleRepository;
 import com.aston.aston_project.repository.UserRepository;
 import com.aston.aston_project.service.UserService;
-import com.aston.aston_project.util.CustomAuthEntryPoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.hash.Hashing;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.StandardCharsets;
@@ -40,9 +29,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith({SpringExtension.class})
-@WebMvcTest(controllers = {AuthController.class, SecurityConfig.class, AuthFilter.class, CustomAuthEntryPoint.class, UserService.class},
-        excludeAutoConfiguration = {DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
+
+@SpringBootTest(classes = TestConfig.class)
+@AutoConfigureMockMvc
 public class AuthControllerTests {
 
     @Autowired
