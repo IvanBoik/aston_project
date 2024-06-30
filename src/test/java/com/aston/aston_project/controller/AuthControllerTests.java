@@ -1,4 +1,4 @@
-package com.aston.aston_project.api.auth;
+package com.aston.aston_project.controller;
 import com.aston.aston_project.config.TestConfig;
 import com.aston.aston_project.dto.SignUpRequest;
 import com.aston.aston_project.entity.Role;

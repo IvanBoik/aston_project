@@ -25,7 +25,8 @@ public class UserService {
     private RoleRepository roleRepository;
     private YandexSearchLocationClient yandexClient;
 
-    public UserService(JwtUtils jwtUtils, UserRepository repository, RoleRepository roleRepository, @Lazy YandexSearchLocationClient yandexClient) {
+    public UserService(JwtUtils jwtUtils, UserRepository repository, RoleRepository roleRepository, @Lazy
+    YandexSearchLocationClient yandexClient) {
         this.jwtUtils = jwtUtils;
         this.repository = repository;
         this.roleRepository = roleRepository;
