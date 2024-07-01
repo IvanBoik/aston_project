@@ -66,7 +66,7 @@ public class MockDeliveryService implements DeliveryService {
     }
 
     @Override
-    public CompletableFuture<DeliveryResponse> approveDelivering(UUID deliveryId) {
+    public CompletableFuture<DeliveryResponse> approveDelivery(UUID deliveryId) {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 if (CASH.containsKey(deliveryId)) {

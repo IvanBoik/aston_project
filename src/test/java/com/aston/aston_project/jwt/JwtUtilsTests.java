@@ -1,7 +1,5 @@
-package com.aston.aston_project.api.security;
+package com.aston.aston_project.jwt;
 
-import com.aston.aston_project.jwt.JwtProperties;
-import com.aston.aston_project.jwt.JwtUtils;
 import com.aston.aston_project.util.exception.TokenException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

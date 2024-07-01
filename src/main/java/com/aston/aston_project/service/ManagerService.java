@@ -84,7 +84,6 @@ public class ManagerService {
 
     public List<OrderWithProductAndRecipeDTO> getRecipeOrders(){
         List<OrderWithProductsDTO> allRecipeOrders = productListRepository.getAllRecipeOrders();
-        allRecipeOrders.forEach((v)-> System.out.println(v.getOrder()));
         return allRecipeOrders.stream().map(orderMapper::toOrderWithProductAndRecipeDTO).toList();
     }
 
