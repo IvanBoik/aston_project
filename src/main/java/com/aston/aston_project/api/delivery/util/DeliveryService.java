@@ -10,7 +10,7 @@ public interface DeliveryService {
 
     CompletableFuture<DeliveryResponse> getCurrentStatus(UUID deliveryId);
 
-    CompletableFuture<DeliveryResponse> approveDelivering(UUID deliveryId);
+    CompletableFuture<DeliveryResponse> approveDelivery(UUID deliveryId);
 
     CompletableFuture<DeliveryResponse> declineDelivery(UUID deliveryId);
 }
