@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -42,14 +41,10 @@ public class AttributeServiceImpl implements AttributeService {
     @Override
     @Transactional
     public void update(Long id, AttributeDTO dto) {
-        Optional<Attribute> optionalAttribute = attributeRepository.findById(id);
-        if (optionalAttribute.isPresent()) {
-            Attribute attribute = optionalAttribute.get();
-            attribute.setAttribute(dto.getName());
-            attributeRepository.save(attribute);
-        } else {
-            throw new NotFoundDataException("Product attribute with id " + id + " not found");
-        }
+        Attribute attribute = attributeRepository.findById(id)
+                .orElseThrow(() -> new NotFoundDataException("Product attribute with id " + id + " not found"));
+        attribute.setAttribute(dto.getName());
+        attributeRepository.save(attribute);
     }
 
     @Override

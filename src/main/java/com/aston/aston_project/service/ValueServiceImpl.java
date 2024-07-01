@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -42,14 +41,10 @@ public class ValueServiceImpl implements ValueService {
     @Override
     @Transactional
     public void update(Long id, ValueDTO dto) {
-        Optional<Value> optionalValue = valueRepository.findById(id);
-        if (optionalValue.isPresent()) {
-            Value value = optionalValue.get();
-            value.setValue(dto.getName());
-            valueRepository.save(value);
-        } else {
-            throw new NotFoundDataException("Value with id " + id + " not found");
-        }
+        Value value = valueRepository.findById(id)
+                .orElseThrow(() -> new NotFoundDataException("Value with id " + id + " not found"));
+        value.setValue(dto.getName());
+        valueRepository.save(value);
     }
 
     @Override

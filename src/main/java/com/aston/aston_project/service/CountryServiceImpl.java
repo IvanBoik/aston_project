@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -42,14 +41,10 @@ public class CountryServiceImpl implements CountryService {
     @Override
     @Transactional
     public void update(Long id, CountryDTO dto) {
-        Optional<Country> optionalCountry = countryRepository.findById(id);
-        if (optionalCountry.isPresent()) {
-            Country c = optionalCountry.get();
-            c.setCountry(dto.getName());
-            countryRepository.save(c);
-        } else {
-            throw new NotFoundDataException("Country with id " + id + " not found");
-        }
+        Country country = countryRepository.findById(id)
+                .orElseThrow(() -> new NotFoundDataException("Country with id " + id + " not found"));
+        country.setCountry(dto.getName());
+        countryRepository.save(country);
     }
 
     @Override

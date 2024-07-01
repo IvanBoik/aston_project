@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -70,16 +69,12 @@ public class ProducerServiceImpl implements ProducerService {
     @Override
     @Transactional
     public void update(Long id, ProducerDtoResponse dto) {
-        Optional<Producer> optionalProducer = producerRepository.findById(id);
-        if (optionalProducer.isPresent()) {
-            Producer p = optionalProducer.get();
-            p.setName(dto.getName());
-            Country c = getCountryIfExistsOrCreateNew(dto);
-            p.setCountry(c);
-            producerRepository.save(p);
-        } else {
-            throw new NotFoundDataException("Producer with id " + id + " not found");
-        }
+        Producer producer = producerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundDataException("Producer with id " + id + " not found"));
+        producer.setName(dto.getName());
+        Country country = this.getCountryIfExistsOrCreateNew(dto);
+        producer.setCountry(country);
+        producerRepository.save(producer);
     }
 
     private Country getCountryIfExistsOrCreateNew(ProducerDtoResponse dto) {

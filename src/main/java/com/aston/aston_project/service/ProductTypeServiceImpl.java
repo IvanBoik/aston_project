@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -42,14 +41,10 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     @Override
     @Transactional
     public void update(Long id, ProductTypeDTO dto) {
-        Optional<ProductType> optionalProductType = productTypeRepository.findById(id);
-        if (optionalProductType.isPresent()) {
-            ProductType productType = optionalProductType.get();
-            productType.setName(dto.getName());
-            productTypeRepository.save(productType);
-        } else {
-            throw new NotFoundDataException("Product type with id " + id + " not found");
-        }
+        ProductType productType = productTypeRepository.findById(id)
+                .orElseThrow(() -> new NotFoundDataException("Product type with id " + id + " not found"));
+        productType.setName(dto.getName());
+        productTypeRepository.save(productType);
     }
 
     @Override
