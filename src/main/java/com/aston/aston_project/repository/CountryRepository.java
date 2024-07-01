@@ -3,6 +3,8 @@ package com.aston.aston_project.repository;
 import com.aston.aston_project.entity.Country;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface CountryRepository extends JpaRepository<Country, Long> {
-    Country findByCountryIgnoreCaseContaining(String country);
+    List<Country> findByCountryIgnoreCaseContaining(String country);
 }
