@@ -1,6 +1,6 @@
 package com.aston.aston_project.repository;
 
-import com.aston.aston_project.dto.SuspiciousOrderDTO;
+import com.aston.aston_project.dto.order.SuspiciousOrderDTO;
 import com.aston.aston_project.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +17,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 """)
     List<SuspiciousOrderDTO> getAllSuspiciousOrders();
 
-
-
+    List<Order> findByUserEmail(String email);
 }

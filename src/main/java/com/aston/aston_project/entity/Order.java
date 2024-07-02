@@ -35,15 +35,18 @@ public class Order {
     @ManyToOne
     private OrderType type;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
     private OrderStatus status;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private OrderPaymentType paymentType;
 
-    @OneToMany(mappedBy = "order",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order",fetch = FetchType.EAGER,cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
     private List<ProductList> productList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "order",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order",fetch = FetchType.EAGER,cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
     private List<Recipe> recipeList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "order",fetch = FetchType.EAGER,cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
+    private List<Payment> payments = new ArrayList<>();
 }
