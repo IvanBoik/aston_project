@@ -1,6 +1,6 @@
 package com.aston.aston_project.repository;
 
-import com.aston.aston_project.dto.OrderWithProductsDTO;
+import com.aston.aston_project.dto.order.OrderWithProductsDTO;
 import com.aston.aston_project.entity.ProductList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

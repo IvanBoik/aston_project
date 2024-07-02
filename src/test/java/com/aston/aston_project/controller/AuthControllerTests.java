@@ -23,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -63,13 +64,13 @@ public class AuthControllerTests {
                 .role(role)
                 .password(Hashing.sha256().hashBytes("1234".getBytes(StandardCharsets.UTF_8)).toString()).build();
 
-        when(userRepository.findUserByEmail("test@test.tt")).thenReturn(test);
+        when(userRepository.findUserByEmail("test@test.tt")).thenReturn(Optional.ofNullable(test));
     }
 
     @ParameterizedTest
     @CsvSource("test@test.tt,1234")
     public void return_status_success_when_data_is_correct(String email,String password) throws Exception {
-        mockMvc.perform(post("/auth")
+        mockMvc.perform(post("/api/v1/auth")
                         .queryParam("email",email)
                         .queryParam("password",password))
                 .andExpect(status().isOk());
@@ -78,7 +79,7 @@ public class AuthControllerTests {
     @ParameterizedTest
     @CsvSource("test@test.tt,1234")
     public void return_method_not_allowed_when_data_is_correct(String email,String password) throws Exception {
-        mockMvc.perform(get("/auth")
+        mockMvc.perform(get("/api/v1/auth")
                         .queryParam("email",email)
                         .queryParam("password",password))
                 .andExpect(status().isMethodNotAllowed());
@@ -87,7 +88,7 @@ public class AuthControllerTests {
     @ParameterizedTest
     @CsvSource("test@test.tt,123")
     public void return_status_bad_request_when_data_is_incorrect(String email,String password) throws Exception {
-        mockMvc.perform(post("/auth")
+        mockMvc.perform(post("/api/v1/auth")
                         .queryParam("email",email)
                         .queryParam("password",password))
                 .andExpect(status().isBadRequest());
@@ -96,7 +97,7 @@ public class AuthControllerTests {
     @ParameterizedTest
     @ValueSource(strings = "test@test.tt")
     public void return_status_bad_request_when_query_param_missed(String email) throws Exception {
-        mockMvc.perform(post("/auth")
+        mockMvc.perform(post("/api/v1/auth")
                         .queryParam("email",email))
                 .andExpect(status().isBadRequest());
     }
@@ -104,7 +105,7 @@ public class AuthControllerTests {
     @ParameterizedTest
     @CsvSource("dasdasd,1234")
     public void return_status_bad_request_when_email_is_not_correct(String email,String password) throws Exception {
-        mockMvc.perform(post("/auth")
+        mockMvc.perform(post("/api/v1/auth")
                         .queryParam("email",email)
                         .queryParam("password",password))
                 .andExpect(status().isBadRequest());
@@ -116,7 +117,7 @@ public class AuthControllerTests {
         SignUpRequest request = new SignUpRequest(
                 "name", "surname", email, "password", "79626211678"
         );
-        mockMvc.perform(post("/auth/signUp")
+        mockMvc.perform(post("/api/v1/auth/signUp")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
@@ -128,7 +129,7 @@ public class AuthControllerTests {
         SignUpRequest request = new SignUpRequest(
                 "name", "surname", "user.mail.ru", "password", phone
         );
-        mockMvc.perform(post("/auth/signUp")
+        mockMvc.perform(post("/api/v1/auth/signUp")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
@@ -139,7 +140,7 @@ public class AuthControllerTests {
         SignUpRequest request = new SignUpRequest(
                 "name", "surname", "user@mail.ru", "password", "79626211678"
         );
-        mockMvc.perform(post("/auth/signUp")
+        mockMvc.perform(post("/api/v1/auth/signUp")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk());

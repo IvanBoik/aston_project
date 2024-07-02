@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/producers")
+@RequestMapping("/api/v1/producers")
 public class ProducerController {
 
     private final ProducerService producerService;

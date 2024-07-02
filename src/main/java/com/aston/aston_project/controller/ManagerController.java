@@ -1,9 +1,9 @@
 package com.aston.aston_project.controller;
 
 import com.aston.aston_project.api.recipe.util.RecipeCheckerResponse;
-import com.aston.aston_project.dto.OrderExtendedResponseDTO;
-import com.aston.aston_project.dto.OrderWithProductAndRecipeDTO;
-import com.aston.aston_project.dto.SuspiciousOrderDTO;
+import com.aston.aston_project.dto.order.OrderWithUserAndAddressDTO;
+import com.aston.aston_project.dto.order.OrderWithProductAndRecipeDTO;
+import com.aston.aston_project.dto.order.SuspiciousOrderDTO;
 import com.aston.aston_project.entity.en.OrderStatusEnum;
 import com.aston.aston_project.service.ManagerService;
 import jakarta.validation.constraints.Positive;
@@ -19,14 +19,14 @@ import java.util.List;
  * @author K. Zemlyakov
  */
 @RestController
-@RequestMapping(value ="/managers/v1",produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value ="api/v1/managers",produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 public class ManagerController {
 
     private ManagerService managerService;
 
     @GetMapping("/orders")
-    public List<OrderExtendedResponseDTO> getAllOrders(){
+    public List<OrderWithUserAndAddressDTO> getAllOrders(){
         return managerService.getAllOrders();
     }
 
@@ -36,8 +36,8 @@ public class ManagerController {
     }
 
     @PatchMapping("/orders/{order}")
-    public OrderExtendedResponseDTO switchStatus(@PathVariable @Positive Long order,
-                                                 @RequestParam OrderStatusEnum status) {
+    public OrderWithUserAndAddressDTO switchStatus(@PathVariable @Positive Long order,
+                                                   @RequestParam OrderStatusEnum status) {
         return managerService.setOrderStatus(order, status);
     }
 

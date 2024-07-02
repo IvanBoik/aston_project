@@ -34,7 +34,7 @@ public class ManagerControllerIT {
     @Test
     public void getAllOrders_returnsValidData() throws Exception {
         mockMvc.perform(
-                get("/managers/v1/orders")
+                get("/api/v1/managers/orders")
                         .with(user("test").roles("MANAGER")))
                 .andExpectAll(
                         status().isOk(),
@@ -47,13 +47,13 @@ public class ManagerControllerIT {
     @Test
     @WithAnonymousUser
     public void getAllOrders_forbidden() throws Exception {
-        mockMvc.perform(get("/managers/v1/orders"))
+        mockMvc.perform(get("/api/v1/managers/orders"))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     public void getAllOrders_methodNotAllowed() throws Exception{
-        mockMvc.perform(post("/managers/v1/orders")
+        mockMvc.perform(post("/api/v1/managers/orders")
                         .with(user("test").roles("MANAGER")))
                 .andExpect(status().isMethodNotAllowed());
     }
@@ -61,7 +61,7 @@ public class ManagerControllerIT {
     @Test
     public void getAllSuspiciousOrders_returnsValidData() throws Exception {
         mockMvc.perform(
-                        get("/managers/v1/orders/suspicious")
+                        get("/api/v1/managers/orders/suspicious")
                                 .with(user("test").roles("MANAGER")))
                 .andExpectAll(
                         status().isOk(),
@@ -74,20 +74,20 @@ public class ManagerControllerIT {
     @Test
     @WithAnonymousUser
     public void getAllSuspiciousOrders_forbidden() throws Exception {
-        mockMvc.perform(get("/managers/v1/orders/suspicious"))
+        mockMvc.perform(get("/api/v1/managers/orders/suspicious"))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     public void getAllSuspiciousOrders_methodNotAllowed() throws Exception{
-        mockMvc.perform(post("/managers/v1/orders/suspicious")
+        mockMvc.perform(post("/api/v1/managers/orders/suspicious")
                         .with(user("test").roles("MANAGER")))
                 .andExpect(status().isMethodNotAllowed());
     }
 
     @Test
     public void switchStatus_switchingStatus() throws Exception {
-        mockMvc.perform(patch("/managers/v1/orders/1")
+        mockMvc.perform(patch("/api/v1/managers/orders/1")
                         .param("status","DRAFT")
                 .with(user("test").roles("MANAGER")))
                 .andExpectAll(
@@ -98,7 +98,7 @@ public class ManagerControllerIT {
 
     @Test
     public void switchStatus_orderNotFound() throws Exception {
-        mockMvc.perform(patch("/managers/v1/orders/9999")
+        mockMvc.perform(patch("/api/v1/managers/orders/9999")
                         .param("status","DRAFT")
                         .with(user("test").roles("MANAGER")))
                 .andExpectAll(
@@ -109,7 +109,7 @@ public class ManagerControllerIT {
 
     @Test
     public void switchStatus_orderNotPresent() throws Exception {
-        mockMvc.perform(patch("/managers/v1/orders/")
+        mockMvc.perform(patch("/api/v1/managers/orders/")
                         .param("status","DRAFT")
                         .with(user("test").roles("MANAGER")))
                 .andExpectAll(
@@ -120,7 +120,7 @@ public class ManagerControllerIT {
 
     @Test
     public void switchStatus_statusNotPresent() throws Exception {
-        mockMvc.perform(patch("/managers/v1/orders/1")
+        mockMvc.perform(patch("/api/v1/managers/orders/1")
                         .with(user("test").roles("MANAGER")))
                 .andExpectAll(
                         status().isBadRequest(),
@@ -130,7 +130,7 @@ public class ManagerControllerIT {
 
     @Test
     public void switchStatus_statusNotValid() throws Exception {
-        mockMvc.perform(patch("/managers/v1/orders/1")
+        mockMvc.perform(patch("/api/v1/managers/orders/1")
                         .param("status","incorrect")
                         .with(user("test").roles("MANAGER")))
                 .andExpectAll(
@@ -141,7 +141,7 @@ public class ManagerControllerIT {
 
     @Test
     public void switchStatus_methodNotAllowed() throws Exception {
-        mockMvc.perform(get("/managers/v1/orders/1")
+        mockMvc.perform(get("/api/v1/managers/orders/1")
                         .param("status","DRAFT")
                         .with(user("test").roles("MANAGER")))
                 .andExpectAll(
@@ -153,7 +153,7 @@ public class ManagerControllerIT {
     @Test
     @WithAnonymousUser
     public void switchStatus_forbidden() throws Exception {
-        mockMvc.perform(get("/managers/v1/orders/1")
+        mockMvc.perform(get("/api/v1/managers/orders/1")
                         .param("status","DRAFT"))
                 .andExpectAll(
                         status().isForbidden(),
@@ -164,7 +164,7 @@ public class ManagerControllerIT {
     @Test
     public void getAllOrdersWithRecipe_returnsValidData() throws Exception{
             mockMvc.perform(
-                            get("/managers/v1/orders/recipes")
+                            get("/api/v1/managers/orders/recipes")
                                     .with(user("test").roles("MANAGER")))
                     .andExpectAll(
                             status().isOk(),
@@ -177,20 +177,20 @@ public class ManagerControllerIT {
     @Test
     @WithAnonymousUser
     public void getAllOrdersWithRecipe_forbidden() throws Exception {
-        mockMvc.perform(get("/managers/v1/orders/recipes"))
+        mockMvc.perform(get("/api/v1/managers/orders/recipes"))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     public void getAllOrdersWithRecipe_methodNotAllowed() throws Exception{
-        mockMvc.perform(post("/managers/v1/orders/recipes")
+        mockMvc.perform(post("/api/v1/managers/orders/recipes")
                         .with(user("test").roles("MANAGER")))
                 .andExpect(status().isMethodNotAllowed());
     }
 
     @RetryingTest(3)
     public void checkRecipe_isValid() throws Exception {
-        mockMvc.perform(get("/managers/v1/recipes/1/check")
+        mockMvc.perform(get("/api/v1/managers/recipes/1/check")
                 .with(user("test").roles("MANAGER")))
                 .andExpectAll(
                         status().isOk(),
@@ -201,7 +201,7 @@ public class ManagerControllerIT {
 
     @RetryingTest(30)
     public void checkRecipe_isNotValidRandomly() throws Exception {
-        mockMvc.perform(get("/managers/v1/recipes/1/check")
+        mockMvc.perform(get("/api/v1/managers/recipes/1/check")
                         .with(user("test").roles("MANAGER")))
                 .andExpectAll(
                         status().isOk(),
@@ -212,7 +212,7 @@ public class ManagerControllerIT {
 
     @Test
     public void checkRecipe_isNotValid() throws Exception {
-        mockMvc.perform(get("/managers/v1/recipes/2/check")
+        mockMvc.perform(get("/api/v1/managers/recipes/2/check")
                         .with(user("test").roles("MANAGER")))
                 .andExpectAll(
                         status().isOk(),
@@ -223,7 +223,7 @@ public class ManagerControllerIT {
 
     @Test
     public void checkRecipe_isNotFound() throws Exception {
-        mockMvc.perform(get("/managers/v1/recipes/999/check")
+        mockMvc.perform(get("/api/v1/managers/recipes/999/check")
                         .with(user("test").roles("MANAGER")))
                 .andExpectAll(
                         status().isBadRequest());
@@ -231,7 +231,7 @@ public class ManagerControllerIT {
 
     @Test
     public void checkRecipe_methodNotAllowed() throws Exception {
-        mockMvc.perform(post("/managers/v1/recipes/1/check")
+        mockMvc.perform(post("/api/v1/managers/recipes/1/check")
                         .with(user("test").roles("MANAGER")))
                 .andExpectAll(
                         status().isMethodNotAllowed(),
@@ -241,7 +241,7 @@ public class ManagerControllerIT {
 
     @Test
     public void checkRecipe_forbidden() throws Exception {
-        mockMvc.perform(post("/managers/v1/recipes/1/check"))
+        mockMvc.perform(post("/api/v1/managers/recipes/1/check"))
                 .andExpectAll(
                         status().isForbidden(),
                         content().contentType(MediaType.APPLICATION_JSON)

@@ -56,8 +56,8 @@ public class SecurityConfig extends WebMvcConfigurationSupport {
                 .exceptionHandling(configurer ->
                         configurer.authenticationEntryPoint(authEntryPoint))
                 .authorizeHttpRequests(reqMatch ->
-                        reqMatch.requestMatchers("/auth/**").permitAll()
-                                .requestMatchers("/managers/v1/**").hasRole("MANAGER")
+                        reqMatch.requestMatchers("/api/v1/auth/**").permitAll()
+                                .requestMatchers("/api/v1/managers/**").hasRole("MANAGER")
                                 .anyRequest().authenticated())
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(exceptionFilter, AuthFilter.class)

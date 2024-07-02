@@ -2,10 +2,10 @@ package com.aston.aston_project.service;
 
 import com.aston.aston_project.api.recipe.util.RecipeChecker;
 import com.aston.aston_project.api.recipe.util.RecipeCheckerResponse;
-import com.aston.aston_project.dto.OrderExtendedResponseDTO;
-import com.aston.aston_project.dto.OrderWithProductAndRecipeDTO;
-import com.aston.aston_project.dto.OrderWithProductsDTO;
-import com.aston.aston_project.dto.SuspiciousOrderDTO;
+import com.aston.aston_project.dto.order.OrderWithUserAndAddressDTO;
+import com.aston.aston_project.dto.order.OrderWithProductAndRecipeDTO;
+import com.aston.aston_project.dto.order.OrderWithProductsDTO;
+import com.aston.aston_project.dto.order.SuspiciousOrderDTO;
 import com.aston.aston_project.entity.Order;
 import com.aston.aston_project.entity.OrderStatus;
 import com.aston.aston_project.entity.Recipe;
@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 
 /**
@@ -46,8 +45,8 @@ public class ManagerService {
      * @return Extended {@link Order} information
      * @author K. Zemlyakov
      */
-    public List<OrderExtendedResponseDTO> getAllOrders() {
-        return orderRepository.findAll().stream().map(orderMapper::toExtendedDTO).toList();
+    public List<OrderWithUserAndAddressDTO> getAllOrders() {
+        return orderRepository.findAll().stream().map(orderMapper::toExtendedWithUserDTO).toList();
     }
 
     /**
@@ -68,12 +67,12 @@ public class ManagerService {
      * @author K. Zemlyakov
      */
     @Transactional
-    public OrderExtendedResponseDTO setOrderStatus(Long order, OrderStatusEnum status) {
+    public OrderWithUserAndAddressDTO setOrderStatus(Long order, OrderStatusEnum status) {
         Optional<Order> optionalOrder = orderRepository.findById(order);
         Order foundOrder = optionalOrder.orElseThrow(()->new NotFoundDataException("Order with this id not found"));
         Optional<OrderStatus> optionalOrderStatus = orderStatusRepository.findByStatus(status);
         optionalOrderStatus.ifPresentOrElse(foundOrder::setStatus,() -> foundOrder.setStatus(new OrderStatus(status)));
-        return orderMapper.toExtendedDTO(orderRepository.save(foundOrder));
+        return orderMapper.toExtendedWithUserDTO(orderRepository.save(foundOrder));
     }
 
     /**

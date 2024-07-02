@@ -2,10 +2,10 @@ package com.aston.aston_project.service;
 
 import com.aston.aston_project.api.recipe.client.MockRecipeCheckerResponse;
 import com.aston.aston_project.api.recipe.util.RecipeChecker;
-import com.aston.aston_project.dto.OrderExtendedResponseDTO;
-import com.aston.aston_project.dto.OrderWithProductAndRecipeDTO;
-import com.aston.aston_project.dto.OrderWithProductsDTO;
-import com.aston.aston_project.dto.SuspiciousOrderDTO;
+import com.aston.aston_project.dto.order.OrderWithUserAndAddressDTO;
+import com.aston.aston_project.dto.order.OrderWithProductAndRecipeDTO;
+import com.aston.aston_project.dto.order.OrderWithProductsDTO;
+import com.aston.aston_project.dto.order.SuspiciousOrderDTO;
 import com.aston.aston_project.entity.Order;
 import com.aston.aston_project.entity.OrderStatus;
 import com.aston.aston_project.entity.Product;
@@ -59,7 +59,7 @@ public class ManagerServiceTests {
     void getAllOrders_returnsNotEmptyList() {
         Order order = Order.builder().build();
         when(orderRepository.findAll()).thenReturn(List.of(order));
-        when(orderMapper.toExtendedDTO(order)).thenReturn(new OrderExtendedResponseDTO());
+        when(orderMapper.toExtendedWithUserDTO(order)).thenReturn(new OrderWithUserAndAddressDTO());
         assertEquals(1,service.getAllOrders().size());
         verify(orderRepository).findAll();
 
@@ -119,16 +119,16 @@ public class ManagerServiceTests {
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
         when(orderStatusRepository.findByStatus(OrderStatusEnum.DECLINED)).thenReturn(Optional.of(new OrderStatus(OrderStatusEnum.DECLINED)));
         when(orderRepository.save(order)).thenReturn(order);
-        OrderExtendedResponseDTO response = new OrderExtendedResponseDTO();
+        OrderWithUserAndAddressDTO response = new OrderWithUserAndAddressDTO();
         response.setId(1L);
         response.setStatus(OrderStatusEnum.DECLINED);
-        when(orderMapper.toExtendedDTO(order)).thenReturn(response);
+        when(orderMapper.toExtendedWithUserDTO(order)).thenReturn(response);
 
         assertEquals(OrderStatusEnum.DECLINED,service.setOrderStatus(1L,OrderStatusEnum.DECLINED).getStatus());
 
         verify(orderRepository).findById(1L);
         verify(orderStatusRepository).findByStatus(OrderStatusEnum.DECLINED);
-        verify(orderMapper).toExtendedDTO(order);
+        verify(orderMapper).toExtendedWithUserDTO(order);
 
         verifyNoMoreInteractions(orderMapper,orderRepository,orderStatusRepository,recipeRepository,recipeChecker,productListRepository);
     }
