@@ -1,6 +1,8 @@
 package com.aston.aston_project.service;
 
+import com.aston.aston_project.dto.RecipeDtoFull;
 import com.aston.aston_project.entity.Recipe;
+import com.aston.aston_project.mapper.RecipeMapper;
 import com.aston.aston_project.repository.RecipeRepository;
 import com.aston.aston_project.util.exception.NotFoundDataException;
 import lombok.RequiredArgsConstructor;
@@ -14,23 +16,20 @@ import java.util.Optional;
 public class RecipeServiceImpl {
 
     private final RecipeRepository recipeRepository;
+    private final RecipeMapper recipeMapper;
 
 
-    public Recipe addRecipe(Recipe recipe) {
-        return recipeRepository.save(recipe);
+    public Recipe addRecipe(RecipeDtoFull recipe) {
+        return recipeRepository.save(recipeMapper.toEntity(recipe));
     }
 
-    public List<Recipe> getAllRecipes() {
-        List <Recipe> recipes = recipeRepository.findAll();
-        return recipes;
+    public List<RecipeDtoFull> getAllRecipes() {
+        return recipeRepository.findAll().stream().map(recipeMapper::toDtoFull).toList();
     }
 
-    public Recipe getRecipeByID(long id) {
-        return recipeRepository.findById(id)
-                .orElseThrow(() ->{
-                    new NotFoundDataException("No one recipe found");
-                    return null;
-                });
+    public RecipeDtoFull getRecipeByID(long id) {
+        return recipeMapper.toDtoFull(recipeRepository.findById(id)
+                .orElseThrow(() -> new NotFoundDataException("Recipe with id " + id + " not found")));
     }
 
     public void updateRecipeById(long id, Recipe recipe) {
@@ -42,7 +41,7 @@ public class RecipeServiceImpl {
             existingRecipe.setId(recipe.getId());
             recipeRepository.save(existingRecipe);
         } else {
-            throw new NotFoundDataException("Recipe not found with id " + id);
+            throw new NotFoundDataException("Recipe with id " + id + " not found");
         }
     }
 

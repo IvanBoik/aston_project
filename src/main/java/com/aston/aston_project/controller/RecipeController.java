@@ -1,5 +1,6 @@
 package com.aston.aston_project.controller;
 
+import com.aston.aston_project.dto.RecipeDtoFull;
 import com.aston.aston_project.service.RecipeServiceImpl;
 import com.aston.aston_project.entity.Recipe;
 import lombok.RequiredArgsConstructor;
@@ -10,46 +11,35 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/recipe")
+@RequestMapping("/recipes")
 @RequiredArgsConstructor
 public class RecipeController {
 
-    private final RecipeServiceImpl recipeCRUDService;
+    private final RecipeServiceImpl recipeService;
 
 
     @PostMapping()
-    public Recipe createRecipe(@RequestBody Recipe recipe) {
-        recipeCRUDService.addRecipe(recipe);
-        return ResponseEntity.status(HttpStatus.CREATED).body(recipe).getBody();
+    public Recipe createRecipe(@RequestBody RecipeDtoFull recipe) {
+        return recipeService.addRecipe(recipe);
     }
 
     @GetMapping()
-    public List<Recipe> allRecipes() {
-        List<Recipe> recipes = recipeCRUDService.getAllRecipes();
-
-        if (recipes != null && !recipes.isEmpty()) {
-            return ResponseEntity.ok(recipes).getBody();
-        } else return (List<Recipe>) ResponseEntity.noContent().build();
+    public List<RecipeDtoFull> allRecipes() {
+        return recipeService.getAllRecipes();
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Recipe> getRecipeById(@PathVariable Long id) {
-        Recipe recipe = recipeCRUDService.getRecipeByID(id);
-
-        return recipe != null ? ResponseEntity.ok(recipe) : ResponseEntity.noContent().build();
+    public RecipeDtoFull getRecipeById(@PathVariable Long id) {
+        return recipeService.getRecipeByID(id);
     }
 
-    @PutMapping(value = "/{link}")
-    public Object deleteByLink(@PathVariable String link) {
-        recipeCRUDService.deleteRecipeByLink(link);
-
-        return ResponseEntity.ok().build();
+    @DeleteMapping(value = "/{link}")
+    public void deleteByLink(@PathVariable String link) {
+        recipeService.deleteRecipeByLink(link);
     }
 
-    @PutMapping(value = "/{id}")
-    public Object deleteByID(@PathVariable Long id) {
-        recipeCRUDService.deleteRecipeByID(id);
-
-        return ResponseEntity.ok().build();
+    @DeleteMapping(value = "/{id}")
+    public void deleteByID(@PathVariable Long id) {
+        recipeService.deleteRecipeByID(id);
     }
 }
