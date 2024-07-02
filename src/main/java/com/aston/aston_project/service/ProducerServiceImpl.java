@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -63,22 +62,32 @@ public class ProducerServiceImpl implements ProducerService {
 
     @Override
     public void create(ProducerDtoResponse dto) {
-        Country c = countryRepository.findByCountryIgnoreCaseContaining(dto.getCountryName());
+        Country c = getCountryIfExistsOrCreateNew(dto);
         producerRepository.save(producerDtoMapping.dtoToEntity(dto, c));
     }
 
     @Override
     @Transactional
     public void update(Long id, ProducerDtoResponse dto) {
-        Optional<Producer> optionalProducer = producerRepository.findById(id);
-        if (optionalProducer.isPresent()) {
-            Producer p = optionalProducer.get();
-            p.setName(dto.getName());
-            p.setCountry(countryRepository.findByCountryIgnoreCaseContaining(dto.getCountryName()));
-            producerRepository.save(p);
+        Producer producer = producerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundDataException("Producer with id " + id + " not found"));
+        producer.setName(dto.getName());
+        Country country = this.getCountryIfExistsOrCreateNew(dto);
+        producer.setCountry(country);
+        producerRepository.save(producer);
+    }
+
+    private Country getCountryIfExistsOrCreateNew(ProducerDtoResponse dto) {
+        List<Country> list = countryRepository.findByCountryIgnoreCaseContaining(dto.getCountryName());
+        Country c;
+        if (list.stream().findAny().isEmpty()) {
+            c = new Country();
+            c.setCountry(dto.getCountryName());
+            countryRepository.save(c);
         } else {
-            throw new NotFoundDataException("Producer with id " + id + " not found");
+            c = list.stream().findAny().get();
         }
+        return c;
     }
 
     @Override

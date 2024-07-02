@@ -14,17 +14,24 @@ import com.aston.aston_project.util.UserDetails;
 import com.aston.aston_project.util.exception.DuplicateEmailException;
 import com.aston.aston_project.util.exception.IncorrectDataException;
 import com.aston.aston_project.util.exception.NotFoundDataException;
-import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
 public class UserService {
 
     private JwtUtils jwtUtils;
     private UserRepository repository;
     private RoleRepository roleRepository;
     private YandexSearchLocationClient yandexClient;
+
+    public UserService(JwtUtils jwtUtils, UserRepository repository, RoleRepository roleRepository, @Lazy
+    YandexSearchLocationClient yandexClient) {
+        this.jwtUtils = jwtUtils;
+        this.repository = repository;
+        this.roleRepository = roleRepository;
+        this.yandexClient = yandexClient;
+    }
 
     public UserDetails getUserDetailsByEmail(String email) throws NotFoundDataException {
         User user = repository.findUserByEmail(email);

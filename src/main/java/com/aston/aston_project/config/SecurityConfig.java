@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -58,6 +59,19 @@ public class SecurityConfig extends WebMvcConfigurationSupport {
                 .authorizeHttpRequests(reqMatch ->
                         reqMatch.requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/managers/v1/**").hasRole("MANAGER")
+                                .requestMatchers("/api/covid/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/products/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/api/products/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("ADMIN")
+                                .requestMatchers("/api/products/attributes/**").hasRole("ADMIN")
+                                .requestMatchers("/api/products/attributes/values/**").hasRole("ADMIN")
+                                .requestMatchers("/api/products/types/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/producers/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/producers/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/api/producers/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/producers/**").hasRole("ADMIN")
+                                .requestMatchers("/api/countries/**").hasRole("ADMIN")
                                 .anyRequest().authenticated())
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(exceptionFilter, AuthFilter.class)
@@ -67,6 +81,7 @@ public class SecurityConfig extends WebMvcConfigurationSupport {
     /**
      * When security is disabled
      * this filterChain is using
+     *
      * @author Kirill Zemlyakov
      */
     @Bean
@@ -87,6 +102,7 @@ public class SecurityConfig extends WebMvcConfigurationSupport {
 
     /**
      * Method configures ignore accept headers
+     *
      * @param configurer configuring default media type to application/json
      */
     @Override

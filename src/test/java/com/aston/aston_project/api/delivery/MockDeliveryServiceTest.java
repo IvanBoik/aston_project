@@ -18,13 +18,13 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
 import java.util.UUID;
-import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 
@@ -79,7 +79,7 @@ public class MockDeliveryServiceTest {
         @RetryingTest(3)
         @Order(4)
         public void delivery_service_switching_status_to_delivered() {
-            DeliveryResponse response = deliveryService.approveDelivering(MOCKED_APPROVING_UUID).join();
+            DeliveryResponse response = deliveryService.approveDelivery(MOCKED_APPROVING_UUID).join();
             assertThat(response.getStatus()).isEqualTo(DeliveryStatus.DELIVERED);
         }
 
@@ -139,14 +139,14 @@ public class MockDeliveryServiceTest {
         @RetryingTest(3)
         @Order(5)
         public void delivery_service_switching_status_to_delivered_returns_previous() {
-            DeliveryResponse response = deliveryService.approveDelivering(MOCKED_DECLINING_UUID).join();
+            DeliveryResponse response = deliveryService.approveDelivery(MOCKED_DECLINING_UUID).join();
             assertThat(response.getStatus()).isEqualTo(DeliveryStatus.DECLINED);
         }
 
         @RetryingTest(3)
         @Order(6)
         public void delivery_throws_exception_when_approve_with_incorrect_uuid() {
-            assertThrows(CompletionException.class, () -> deliveryService.approveDelivering(UUID.randomUUID()).join());
+            assertThrows(CompletionException.class, () -> deliveryService.approveDelivery(UUID.randomUUID()).join());
         }
     }
 
@@ -185,9 +185,51 @@ public class MockDeliveryServiceTest {
         @RetryingTest(3)
         @Order(4)
         public void delivery_service_switching_status_to_delivered_returns_previous() {
-            DeliveryResponse response = deliveryService.approveDelivering(MOCKED_DECLINED_PIPELINE).join();
+            DeliveryResponse response = deliveryService.approveDelivery(MOCKED_DECLINED_PIPELINE).join();
             assertThat(response.getStatus()).isEqualTo(DeliveryStatus.DECLINED);
         }
 
+    }
+
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
+    public class InterruptedPipeline {
+
+        @Test
+        public void createDelivery_returns_error_response() throws Exception {
+            CompletableFuture<DeliveryResponse> delivery = deliveryService.createDelivery(request);
+            TimeUnit.MILLISECONDS.sleep(200);
+            delivery.obtrudeException(new InterruptedException());
+            delivery.whenComplete((r,e)->
+                    assertEquals(DeliveryStatus.OTHER,r.getStatus()));
+        }
+
+
+        @Test
+        public void getCurrentStatus_returns_error_response() throws Exception {
+            CompletableFuture<DeliveryResponse> delivery = deliveryService.getCurrentStatus(UUID.randomUUID());
+            TimeUnit.MILLISECONDS.sleep(200);
+            delivery.obtrudeException(new InterruptedException());
+            delivery.whenComplete((r,e)->
+                    assertEquals(DeliveryStatus.OTHER,r.getStatus()));
+        }
+
+        @Test
+        public void approveDelivery_returns_error_response() throws Exception {
+            CompletableFuture<DeliveryResponse> delivery = deliveryService.approveDelivery(UUID.randomUUID());
+            TimeUnit.MILLISECONDS.sleep(200);
+            delivery.obtrudeException(new InterruptedException());
+            delivery.whenComplete((r,e)->
+                    assertEquals(DeliveryStatus.OTHER,r.getStatus()));
+        }
+
+        @Test
+        public void declineDelivery_returns_error_response() throws Exception {
+            CompletableFuture<DeliveryResponse> delivery = deliveryService.declineDelivery(UUID.randomUUID());
+            TimeUnit.MILLISECONDS.sleep(200);
+            delivery.obtrudeException(new InterruptedException());
+            delivery.whenComplete((r,e)->
+                    assertEquals(DeliveryStatus.OTHER,r.getStatus()));
+        }
     }
 }
