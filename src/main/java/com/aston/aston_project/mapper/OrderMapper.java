@@ -22,7 +22,7 @@ public interface OrderMapper {
 
     @Mapping(target = "products",source = "order.productList")
     OrderWithAddressAndProductsDTO toOrderWithAddressAndProductsDto(Order order);
-
-    OrderWithAddressProductsAndRecipesDTO toOrderWithAddressProductsAndRecipesDTO(Order save);
+    @Mapping(target = "products",source = "order.productList")
+    OrderWithAddressProductsAndRecipesDTO toOrderWithAddressProductsAndRecipesDTO(Order order);
 
 }

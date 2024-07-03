@@ -16,13 +16,14 @@ import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
-public class ProductContainsInSystemOrderFilter implements OrderFilter{
+public class ProductContainsInSystemOrderFilter implements OrderFilter {
     private ProductRepository productRepository;
     private PharmacyRepository pharmacyRepository;
+
     @Override
     public void process(User user, Order order, OrderCreateRequestDto request) {
-        Map<Long,Integer> productToCount = request.getProducts().stream()
-                .collect(Collectors.toMap(ProductRequestDto::getId,ProductRequestDto::getCount));
+        Map<Long, Integer> productToCount = request.getProducts().stream()
+                .collect(Collectors.toMap(ProductRequestDto::getId, ProductRequestDto::getCount));
         List<Product> products = productRepository.findAllById(productToCount.keySet());
         Set<Long> productsIds = products.stream().map(Product::getId).collect(Collectors.toSet());
         boolean allProductsExists = productsIds.containsAll(productToCount.keySet());
@@ -31,19 +32,20 @@ public class ProductContainsInSystemOrderFilter implements OrderFilter{
         List<Product> productsInPharmacy = pharmacy.getProduct().stream().map(PharmacyProduct::getProduct).toList();
         Set<Long> productsInPharmacyIds = productsInPharmacy.stream().map(Product::getId).collect(Collectors.toSet());
         boolean pharmacyContainsAllProducts = productsInPharmacyIds.containsAll(productToCount.keySet());
-        if(allProductsExists) {
-            if(pharmacyContainsAllProducts) {
-                order.setProductList(products.stream().map(p->ProductList
-                        .builder()
-                        .product(p)
-                        .count(productToCount.get(p.getId()))
+        if (allProductsExists) {
+            if (pharmacyContainsAllProducts) {
+                order.setProductList(products.stream().map(p -> ProductList
+                                .builder()
+                                .product(p)
+                                .order(order)
+                                .count(productToCount.get(p.getId()))
                                 .build()
                         ).toList()
                 );
-            }else{
+            } else {
                 throw new NotFoundDataException("Product not contains in pharmacy");
             }
-        }else{
+        } else {
             throw new NotFoundDataException("Product with id not found");
         }
     }

@@ -11,6 +11,7 @@ import com.aston.aston_project.entity.ProductList;
 import com.aston.aston_project.entity.User;
 import com.aston.aston_project.entity.en.OrderStatusEnum;
 import com.aston.aston_project.entity.en.OrderTypeEnum;
+import com.aston.aston_project.repository.OrderStatusRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -21,14 +22,20 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class DeliveryOrderFilter implements OrderFilter {
     private DeliveryService deliveryService;
+    private OrderStatusRepository orderStatusRepository;
     @Override
     public void process(User user, Order order, OrderCreateRequestDto request) {
         if(request.getType() == OrderTypeEnum.DELIVERY){
             deliveryService.createDelivery(getRequest(user,order));
-            order.setStatus(new OrderStatus(OrderStatusEnum.IN_PROCESS));
+            OrderStatus orderStatus = orderStatusRepository.findByStatus(OrderStatusEnum.IN_PROCESS)
+                    .orElse(OrderStatus.builder().status(OrderStatusEnum.IN_PROCESS).build());
+            order.setStatus(orderStatus);
         }else{
-            order.setStatus(new OrderStatus(OrderStatusEnum.DRAFT));
+            OrderStatus orderStatus = orderStatusRepository.findByStatus(OrderStatusEnum.DRAFT)
+                    .orElse(OrderStatus.builder().status(OrderStatusEnum.DRAFT).build());
+            order.setStatus(orderStatus);
         }
+        order.setUser(user);
     }
 
     private static DeliveryRequest getRequest(User user,Order order) {

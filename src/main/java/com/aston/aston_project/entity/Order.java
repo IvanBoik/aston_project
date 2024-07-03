@@ -32,21 +32,21 @@ public class Order {
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private OrderType type;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
+    @ManyToOne(cascade = CascadeType.ALL)
     private OrderStatus status;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     private OrderPaymentType paymentType;
 
-    @OneToMany(mappedBy = "order",fetch = FetchType.EAGER,cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
+    @OneToMany(mappedBy = "order",fetch = FetchType.EAGER,cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     private List<ProductList> productList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "order",fetch = FetchType.EAGER,cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
+    @OneToMany(mappedBy = "order",fetch = FetchType.EAGER,cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     private List<Recipe> recipeList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "order",fetch = FetchType.EAGER,cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
+    @OneToMany(mappedBy = "order",fetch = FetchType.EAGER,cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     private List<Payment> payments = new ArrayList<>();
 }

@@ -45,27 +45,10 @@ public class ProductContainsInSystemFilterTest {
         Queue<OrderFilter> orderFilterQueue = new ArrayDeque<>();
         orderFilterQueue.add(orderFilter);
         orderChain = new OrderChain(orderFilterQueue);
-        Product product = Product.builder()
-                .id(1L)
-                .name("Семитикон")
-                .price(BigDecimal.valueOf(1000.00))
-                .isPrescriptionRequired(true)
-                .build();
-        PharmacyProduct productPharmacy = PharmacyProduct.builder()
-                .product(product)
-                .count(300)
-                .build();
-        Pharmacy pharmacy = Pharmacy.builder()
-                .id(1L)
-                .product(
-                        List.of(productPharmacy))
-                .build();
-        Product productNotInPharmacy = Product.builder()
-                .id(2L)
-                .name("Миг")
-                .price(BigDecimal.valueOf(1000.00))
-                .isPrescriptionRequired(false)
-                .build();
+        Product product = getRecipeProduct();
+        PharmacyProduct productPharmacy = getProductPharmacy(product);
+        Pharmacy pharmacy = getPharmacy(productPharmacy);
+        Product productNotInPharmacy = getProductWhichNotInPharmacy();
         when(pharmacyRepository.findById(anyLong())).thenReturn(Optional.empty());
         when(pharmacyRepository.findById(1L)).thenReturn(Optional.of(pharmacy));
         when(productRepository.findAllById(any())).thenReturn(List.of(
@@ -147,4 +130,37 @@ public class ProductContainsInSystemFilterTest {
         assertThrows(NotFoundDataException.class,()->orderChain.doFilter(User.builder().build(), request));
     }
 
+
+    private static Product getProductWhichNotInPharmacy() {
+        return Product.builder()
+                .id(2L)
+                .name("Миг")
+                .price(BigDecimal.valueOf(1000.00))
+                .isPrescriptionRequired(false)
+                .build();
+    }
+
+    private static Pharmacy getPharmacy(PharmacyProduct productPharmacy) {
+        return Pharmacy.builder()
+                .id(1L)
+                .product(
+                        List.of(productPharmacy))
+                .build();
+    }
+
+    private static PharmacyProduct getProductPharmacy(Product product) {
+        return PharmacyProduct.builder()
+                .product(product)
+                .count(300)
+                .build();
+    }
+
+    private static Product getRecipeProduct() {
+        return Product.builder()
+                .id(1L)
+                .name("Семитикон")
+                .price(BigDecimal.valueOf(1000.00))
+                .isPrescriptionRequired(true)
+                .build();
+    }
 }

@@ -4,10 +4,13 @@ import com.aston.aston_project.dto.order.OrderCreateRequestDto;
 import com.aston.aston_project.dto.product.ProductRequestDto;
 import com.aston.aston_project.entity.*;
 import com.aston.aston_project.entity.en.OrderPaymentEnum;
+import com.aston.aston_project.entity.en.PaymentTypeEnum;
+import com.aston.aston_project.repository.OrderPaymentTypeRepository;
+import com.aston.aston_project.repository.PaymentTypeRepository;
 import com.aston.aston_project.repository.PharmacyRepository;
 import com.aston.aston_project.repository.ProductRepository;
 import com.aston.aston_project.util.exception.BalanceProcessingException;
-import com.aston.aston_project.util.exception.NotFoundDataException;
+import lombok.NonNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,6 +39,11 @@ class PaymentOrderFilterTest {
     @Mock
     private PharmacyRepository pharmacyRepository;
     @Mock
+    private OrderPaymentTypeRepository orderPaymentTypeRepository;
+
+    @Mock
+    private PaymentTypeRepository paymentTypeRepository;
+    @Mock
     private Order orderConfiguredBefore;
     @Mock
     private OrderChain orderChain;
@@ -49,39 +57,14 @@ class PaymentOrderFilterTest {
         Queue<OrderFilter> orderFilterQueue = new ArrayDeque<>();
         orderFilterQueue.add(orderFilter);
         orderChain = new OrderChain(orderFilterQueue);
-        Product withRecipe = Product.builder()
-                .id(1L)
-                .name("Семитикон")
-                .price(BigDecimal.valueOf(1000.00))
-                .isPrescriptionRequired(true)
-                .build();
-        Product withoutRecipe = Product.builder()
-                .id(2L)
-                .name("Миг")
-                .price(BigDecimal.valueOf(499.00))
-                .isPrescriptionRequired(false)
-                .build();
-        PharmacyProduct pharmacyProduct = PharmacyProduct.builder()
-                .product(withRecipe)
-                .count(100).build();
-        PharmacyProduct pharmacyProduct2 = PharmacyProduct.builder()
-                .product(withoutRecipe)
-                .count(99).build();
-        pharmacy = Pharmacy.builder()
-                .id(1L)
-                .product(List.of(pharmacyProduct,pharmacyProduct2))
-                .balance(BigDecimal.valueOf(100.00))
-                .build();
+        Product withRecipe = getRecipeOrder();
+        Product withoutRecipe = getWithoutRecipeOrder();
+        PharmacyProduct pharmacyProduct = getPharmacyProduct(withRecipe, 100);
+        PharmacyProduct pharmacyProduct2 = getPharmacyProduct(withoutRecipe, 99);
+        pharmacy = getPharmacy(pharmacyProduct, pharmacyProduct2);
 
-        List<ProductList> list = Stream.of(withRecipe,withoutRecipe)
-                .map(p -> ProductList.builder()
-                        .id(p.getId())
-                        .product(p)
-                        .build()).toList();
-        Recipe recipe = Recipe.builder()
-                .productList(list.get(0))
-                .link("01Д1234567890")
-                .build();
+        List<ProductList> list = getProductLists(withRecipe, withoutRecipe);
+        Recipe recipe = getRecipe(list);
         when(pharmacyRepository.findById(1L)).thenReturn(Optional.of(pharmacy));
         orderConfiguredBefore = Order.builder()
                 .productList(list)
@@ -90,6 +73,8 @@ class PaymentOrderFilterTest {
 
     @Test
     public void process_paymentSuccess(){
+        when(orderPaymentTypeRepository.findByName(OrderPaymentEnum.CARD)).thenReturn(Optional.ofNullable(OrderPaymentType.builder().id(1L).name(OrderPaymentEnum.CARD).build()));
+        when(paymentTypeRepository.findByType(PaymentTypeEnum.PAYED)).thenReturn(Optional.of(PaymentType.builder().id(1L).type(PaymentTypeEnum.PAYED).build()));
         User user = User.builder()
                 .balance(BigDecimal.valueOf(1499.00)).build();
         ProductRequestDto requestProduct = ProductRequestDto.builder()
@@ -102,7 +87,7 @@ class PaymentOrderFilterTest {
                 .products(List.of(requestProduct))
                 .pharmacyId(1L)
                 .build();
-        Order order = orderChain.doFilter(user, orderConfiguredBefore, request, orderChain);
+        Order order = orderChain.doFilter(user, orderConfiguredBefore, request);
         assertEquals(0, BigDecimal.ZERO.compareTo(user.getBalance()));
         assertEquals(0, BigDecimal.valueOf(1599.00).compareTo(pharmacy.getBalance()));
     }
@@ -121,7 +106,7 @@ class PaymentOrderFilterTest {
                 .products(List.of(requestProduct))
                 .pharmacyId(1L)
                 .build();
-        Order order = orderChain.doFilter(user, orderConfiguredBefore, request, orderChain);
+        Order order = orderChain.doFilter(user, orderConfiguredBefore, request);
         assertEquals(0, BigDecimal.valueOf(1000.00).compareTo(user.getBalance()));
         assertEquals(0, BigDecimal.valueOf(100.00).compareTo(pharmacy.getBalance()));
     }
@@ -141,8 +126,57 @@ class PaymentOrderFilterTest {
                 .pharmacyId(1L)
                 .build();
 
-        assertThrows(BalanceProcessingException.class,()->orderChain.doFilter(user, orderConfiguredBefore, request, orderChain));
+        assertThrows(BalanceProcessingException.class,()->orderChain.doFilter(user, orderConfiguredBefore, request));
         assertEquals(0, BigDecimal.valueOf(999.00).compareTo(user.getBalance()));
         assertEquals(0, BigDecimal.valueOf(100.00).compareTo(pharmacy.getBalance()));
+    }
+
+    private static Recipe getRecipe(List<ProductList> list) {
+        return Recipe.builder()
+                .productList(list.get(0))
+                .link("01Д1234567890")
+                .build();
+    }
+
+    @NonNull
+    private static List<ProductList> getProductLists(Product... products) {
+        return Stream.of(products)
+                .map(p -> ProductList.builder()
+                        .id(p.getId())
+                        .product(p)
+                        .count(1)
+                        .build()).toList();
+    }
+
+    private static Pharmacy getPharmacy(PharmacyProduct... pharmacyProducts) {
+        return Pharmacy.builder()
+                .id(1L)
+                .product(List.of(pharmacyProducts))
+                .balance(BigDecimal.valueOf(100.00))
+                .build();
+    }
+
+    private static PharmacyProduct getPharmacyProduct(Product withRecipe, int count) {
+        return PharmacyProduct.builder()
+                .product(withRecipe)
+                .count(count).build();
+    }
+
+    private static Product getWithoutRecipeOrder() {
+        return Product.builder()
+                .id(2L)
+                .name("Миг")
+                .price(BigDecimal.valueOf(499.00))
+                .isPrescriptionRequired(false)
+                .build();
+    }
+
+    private static Product getRecipeOrder() {
+        return Product.builder()
+                .id(1L)
+                .name("Семитикон")
+                .price(BigDecimal.valueOf(1000.00))
+                .isPrescriptionRequired(true)
+                .build();
     }
 }

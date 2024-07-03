@@ -71,7 +71,7 @@ public class ManagerService {
         Optional<Order> optionalOrder = orderRepository.findById(order);
         Order foundOrder = optionalOrder.orElseThrow(()->new NotFoundDataException("Order with this id not found"));
         Optional<OrderStatus> optionalOrderStatus = orderStatusRepository.findByStatus(status);
-        optionalOrderStatus.ifPresentOrElse(foundOrder::setStatus,() -> foundOrder.setStatus(new OrderStatus(status)));
+        optionalOrderStatus.ifPresentOrElse(foundOrder::setStatus,() -> foundOrder.setStatus(OrderStatus.builder().status(status).build()));
         return orderMapper.toExtendedWithUserDTO(orderRepository.save(foundOrder));
     }
 

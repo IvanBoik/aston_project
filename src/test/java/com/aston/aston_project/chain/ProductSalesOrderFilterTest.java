@@ -42,46 +42,20 @@ class ProductSalesOrderFilterTest {
         Queue<OrderFilter> orderFilterQueue = new ArrayDeque<>();
         orderFilterQueue.add(orderFilter);
         orderChain = new OrderChain(orderFilterQueue);
-        Product withRecipe = Product.builder()
-                .id(1L)
-                .name("Семитикон")
-                .price(BigDecimal.valueOf(1000.00))
-                .isPrescriptionRequired(true)
-                .build();
+        Product withRecipe = getProductWithRecipe();
 
-        Product withoutRecipe = Product.builder()
-                .id(2L)
-                .name("Миг")
-                .price(BigDecimal.valueOf(499.00))
-                .isPrescriptionRequired(false)
-                .build();
+        Product withoutRecipe = getProductWithoutRecipe();
 
-        ProductList withRecipeProductList = ProductList.builder()
-                .product(withRecipe)
-                .count(100).build();
+        ProductList withRecipeProductList = getProductList(withRecipe, 100);
 
-        ProductList withoutRecipeProductList = ProductList.builder()
-                .product(withoutRecipe)
-                .count(1).build();
+        ProductList withoutRecipeProductList = getProductList(withoutRecipe, 1);
 
-        orderConfiguredBefore = Order.builder()
-                .productList(List.of(
-                        withRecipeProductList,
-                        withoutRecipeProductList)
-                ).build();
+        orderConfiguredBefore = getOrder(withRecipeProductList, withoutRecipeProductList);
 
-        PharmacyProduct pharmacyProductWithRecipe = PharmacyProduct.builder()
-                .product(withRecipe)
-                .count(101).build();
+        PharmacyProduct pharmacyProductWithRecipe = getPharmacyProduct(withRecipe,101);
 
-        PharmacyProduct pharmacyProductWithoutRecipe = PharmacyProduct.builder()
-                .product(withoutRecipe)
-                .count(10).build();
-        pharmacy = Pharmacy.builder()
-                .product(List.of(
-                        pharmacyProductWithRecipe,
-                        pharmacyProductWithoutRecipe
-                )).balance(BigDecimal.valueOf(100.00)).build();
+        PharmacyProduct pharmacyProductWithoutRecipe = getPharmacyProduct(withoutRecipe,10);
+        pharmacy = getPharmacy(pharmacyProductWithRecipe, pharmacyProductWithoutRecipe);
 
         when(pharmacyRepository.findById(1L)).thenReturn(Optional.of(pharmacy));
     }
@@ -90,44 +64,70 @@ class ProductSalesOrderFilterTest {
     public void process_productCountInPharmacyCorrectlyWorking(){
         OrderCreateRequestDto request = OrderCreateRequestDto.builder()
                 .pharmacyId(1L).build();
-        Order order = orderChain.doFilter(User.builder().build(), orderConfiguredBefore, request, orderChain);
+        Order order = orderChain.doFilter(User.builder().build(), orderConfiguredBefore, request);
         assertEquals(1,pharmacy.getProduct().get(0).getCount());
         assertEquals(9,pharmacy.getProduct().get(1).getCount());
     }
 
     @Test
     public void process_productCountGreaterThanInSystem_throwsIncorrectDataException(){
-        Product withRecipe = Product.builder()
+        Product withRecipe = getProductWithRecipe();
+
+        Product withoutRecipe = getProductWithoutRecipe();
+        ProductList withRecipeProductList = getProductList(withRecipe, 1000);
+
+        ProductList withoutRecipeProductList = getProductList(withoutRecipe, 1);
+
+        orderConfiguredBefore = getOrder(withRecipeProductList, withoutRecipeProductList);
+
+        OrderCreateRequestDto request = OrderCreateRequestDto.builder()
+                .pharmacyId(1L).build();
+
+        assertThrows(IncorrectDataException.class,()->orderChain.doFilter(User.builder().build(), orderConfiguredBefore, request));
+    }
+
+    private static Product getProductWithRecipe() {
+        return Product.builder()
                 .id(1L)
                 .name("Семитикон")
                 .price(BigDecimal.valueOf(1000.00))
                 .isPrescriptionRequired(true)
                 .build();
+    }
 
-        Product withoutRecipe = Product.builder()
+
+    private static Pharmacy getPharmacy(PharmacyProduct pharmacyProductWithRecipe, PharmacyProduct pharmacyProductWithoutRecipe) {
+        return Pharmacy.builder()
+                .product(List.of(
+                        pharmacyProductWithRecipe,
+                        pharmacyProductWithoutRecipe
+                )).balance(BigDecimal.valueOf(100.00)).build();
+    }
+
+    private static PharmacyProduct getPharmacyProduct(Product withRecipe,int count) {
+        return PharmacyProduct.builder()
+                .product(withRecipe)
+                .count(count).build();
+    }
+
+    private static Order getOrder(ProductList... productLists) {
+        return Order.builder()
+                .productList(List.of(productLists)
+                ).build();
+    }
+
+    private static ProductList getProductList(Product withRecipe, int count) {
+        return ProductList.builder()
+                .product(withRecipe)
+                .count(count).build();
+    }
+
+    private static Product getProductWithoutRecipe() {
+        return Product.builder()
                 .id(2L)
                 .name("Миг")
                 .price(BigDecimal.valueOf(499.00))
                 .isPrescriptionRequired(false)
                 .build();
-        ProductList withRecipeProductList = ProductList.builder()
-                .product(withRecipe)
-                .count(1000).build();
-
-        ProductList withoutRecipeProductList = ProductList.builder()
-                .product(withoutRecipe)
-                .count(1).build();
-
-        orderConfiguredBefore = Order.builder()
-                .productList(List.of(
-                        withRecipeProductList,
-                        withoutRecipeProductList)
-                ).build();
-
-        OrderCreateRequestDto request = OrderCreateRequestDto.builder()
-                .pharmacyId(1L).build();
-
-        assertThrows(IncorrectDataException.class,()->orderChain.doFilter(User.builder().build(), orderConfiguredBefore, request, orderChain));
     }
-
 }

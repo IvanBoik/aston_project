@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ManagerServiceTests {
+public class ManagerServiceTest {
     @Mock
     private OrderMapper orderMapper;
 
@@ -117,7 +117,7 @@ public class ManagerServiceTests {
     void setOrderStatus_returnsValidaData(){
         Order order = Order.builder().id(1L).build();
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
-        when(orderStatusRepository.findByStatus(OrderStatusEnum.DECLINED)).thenReturn(Optional.of(new OrderStatus(OrderStatusEnum.DECLINED)));
+        when(orderStatusRepository.findByStatus(OrderStatusEnum.DECLINED)).thenReturn(Optional.of(OrderStatus.builder().status(OrderStatusEnum.DECLINED).build()));
         when(orderRepository.save(order)).thenReturn(order);
         OrderWithUserAndAddressDTO response = new OrderWithUserAndAddressDTO();
         response.setId(1L);

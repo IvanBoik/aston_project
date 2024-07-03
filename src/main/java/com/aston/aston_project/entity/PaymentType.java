@@ -2,6 +2,7 @@ package com.aston.aston_project.entity;
 
 import com.aston.aston_project.entity.en.PaymentTypeEnum;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,7 +19,9 @@ public class PaymentType {
     @Column(name = "name")
     private PaymentTypeEnum type;
 
-    public PaymentType(PaymentTypeEnum type) {
+    @Builder
+    public PaymentType(Long id, PaymentTypeEnum type) {
+        this.id = id;
         this.type = type;
     }
 }

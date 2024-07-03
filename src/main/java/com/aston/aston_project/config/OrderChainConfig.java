@@ -2,7 +2,6 @@ package com.aston.aston_project.config;
 
 import com.aston.aston_project.chain.*;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -21,6 +20,7 @@ public class OrderChainConfig {
     private AddressOrderFilter addressOrderFilter;
     private ProductSalesOrderFilter productSalesOrderFilter;
     @Bean
+    @Scope(value = "request",proxyMode = ScopedProxyMode.TARGET_CLASS)
     public Queue<OrderFilter> orderFilters(){
         Queue<OrderFilter> orderFilters = new ArrayDeque<>();
         orderFilters.add(productContainsInSystemFilter);

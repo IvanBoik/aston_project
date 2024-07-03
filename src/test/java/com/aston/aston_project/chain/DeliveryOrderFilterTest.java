@@ -8,6 +8,7 @@ import com.aston.aston_project.dto.order.OrderCreateRequestDto;
 import com.aston.aston_project.entity.*;
 import com.aston.aston_project.entity.en.OrderStatusEnum;
 import com.aston.aston_project.entity.en.OrderTypeEnum;
+import com.aston.aston_project.repository.OrderStatusRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,10 +19,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
 import java.math.BigDecimal;
-import java.util.ArrayDeque;
-import java.util.List;
-import java.util.Queue;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,6 +30,8 @@ import static org.mockito.Mockito.when;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class DeliveryOrderFilterTest {
 
+    @Mock
+    private OrderStatusRepository orderStatusRepository;
     @Mock
     private DeliveryService service;
 
@@ -45,46 +45,15 @@ class DeliveryOrderFilterTest {
 
     @BeforeEach
     public void init() {
-        CompletableFuture<DeliveryResponse> future = CompletableFuture.supplyAsync(() -> {
-            try {
-                Thread.sleep(500);
-                return new MockDeliveryResponse(UUID.randomUUID(), DeliveryStatus.ON_THE_WAY, "Иван", "+7 999 999 99 99");
-            } catch (InterruptedException e) {
-                return MockDeliveryResponse.error();
-            }
-        });
-        Queue<OrderFilter> orderFilterQueue = new ArrayDeque<>();
-        orderFilterQueue.add(orderFilter);
-        orderChain = new OrderChain(orderFilterQueue);
-
-        Product withRecipe = Product.builder()
-                .id(1L)
-                .name("Семитикон")
-                .price(BigDecimal.valueOf(1000.00))
-                .isPrescriptionRequired(true)
-                .build();
-
-        Product withoutRecipe = Product.builder()
-                .id(2L)
-                .name("Миг")
-                .price(BigDecimal.valueOf(499.00))
-                .isPrescriptionRequired(false)
-                .build();
-        ProductList withRecipeProductList = ProductList.builder()
-                .product(withRecipe)
-                .count(1000).build();
-
-        ProductList withoutRecipeProductList = ProductList.builder()
-                .product(withoutRecipe)
-                .count(1).build();
-
-        orderConfiguredBefore = Order.builder()
-                .productList(List.of(
-                        withRecipeProductList,
-                        withoutRecipeProductList)
-                ).build();
+        CompletableFuture<DeliveryResponse> future = getCompletableFuture();
+        orderChain = getOrderChain(orderFilter);
+        Product withRecipe = getProductWithRecipe();
+        Product withoutRecipe = getWithoutRecipe();
+        ProductList withRecipeProductList = getProductList(withRecipe, 1000);
+        ProductList withoutRecipeProductList = getProductList(withoutRecipe, 1);
+        orderConfiguredBefore = getOrder(withRecipeProductList, withoutRecipeProductList);
         when(service.createDelivery(any())).thenReturn(future);
-
+        when(orderStatusRepository.findByStatus(any())).thenReturn(Optional.empty());
     }
 
     @Test
@@ -105,7 +74,7 @@ class DeliveryOrderFilterTest {
                 .phone("+7888 888 88 88").build();
         OrderCreateRequestDto request = OrderCreateRequestDto.builder().type(OrderTypeEnum.DELIVERY).build();
 
-        Order response = orderChain.doFilter(user, order, request, orderChain);
+        Order response = orderChain.doFilter(user, order, request);
         assertEquals(OrderStatusEnum.IN_PROCESS,response.getStatus().getStatus());
     }
 
@@ -126,8 +95,54 @@ class DeliveryOrderFilterTest {
                 .addresses(List.of(userAddress))
                 .phone("+7888 888 88 88").build();
         OrderCreateRequestDto request = OrderCreateRequestDto.builder().type(OrderTypeEnum.PICKUP).build();
-        Order response = orderChain.doFilter(user, order, request, orderChain);
+        Order response = orderChain.doFilter(user, order, request);
         assertEquals(OrderStatusEnum.DRAFT,response.getStatus().getStatus());
     }
 
+
+    private static Order getOrder(ProductList... productLists) {
+        return Order.builder()
+                .productList(List.of(productLists)
+                ).build();
+    }
+
+    private static ProductList getProductList(Product withRecipe, int count) {
+        return ProductList.builder()
+                .product(withRecipe)
+                .count(count).build();
+    }
+
+    private static Product getWithoutRecipe() {
+        return Product.builder()
+                .id(2L)
+                .name("Миг")
+                .price(BigDecimal.valueOf(499.00))
+                .isPrescriptionRequired(false)
+                .build();
+    }
+
+    private static Product getProductWithRecipe() {
+        return Product.builder()
+                .id(1L)
+                .name("Семитикон")
+                .price(BigDecimal.valueOf(1000.00))
+                .isPrescriptionRequired(true)
+                .build();
+    }
+
+    private static OrderChain getOrderChain(OrderFilter orderFilter){
+        Queue<OrderFilter> orderFilterQueue = new ArrayDeque<>();
+        orderFilterQueue.add(orderFilter);
+        return new OrderChain(orderFilterQueue);
+    }
+    private static CompletableFuture<DeliveryResponse> getCompletableFuture() {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                Thread.sleep(500);
+                return new MockDeliveryResponse(UUID.randomUUID(), DeliveryStatus.ON_THE_WAY, "Иван", "+7 999 999 99 99");
+            } catch (InterruptedException e) {
+                return MockDeliveryResponse.error();
+            }
+        });
+    }
 }

@@ -9,6 +9,7 @@ import com.aston.aston_project.entity.User;
 import com.aston.aston_project.entity.en.OrderPaymentEnum;
 import com.aston.aston_project.entity.en.OrderTypeEnum;
 import com.aston.aston_project.util.exception.IncorrectDataException;
+import lombok.NonNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +22,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,24 +42,15 @@ class RecipesOrderFilterTest {
         Queue<OrderFilter> orderFilterQueue = new ArrayDeque<>();
         orderFilterQueue.add(orderFilter);
         orderChain = new OrderChain(orderFilterQueue);
-        Product withRecipe = Product.builder()
-                .id(1L)
-                .name("Семитикон")
-                .price(BigDecimal.valueOf(1000.00))
-                .isPrescriptionRequired(true)
-                .build();
-        Product withoutRecipe = Product.builder()
-                .id(2L)
-                .name("Миг")
-                .price(BigDecimal.valueOf(499.00))
-                .isPrescriptionRequired(false)
-                .build();
-        List<ProductList> list = Stream.of(withRecipe, withoutRecipe).map(p -> ProductList.builder().product(p).build()).toList();
+        Product withRecipe = getProductWithRecipe();
+        Product withoutRecipe = getProductWithoutRecipe();
+        List<ProductList> list = getProductLists(withRecipe, withoutRecipe);
         orderConfiguredBefore = Order.builder()
                 .productList(list)
                 .recipeList(new ArrayList<>())
                 .build();
     }
+
     @Test
     public void process_whenTypeIsDelivery_throwsIncorrectDataException(){
         OrderCreateRequestDto request = OrderCreateRequestDto.builder()
@@ -76,24 +69,6 @@ class RecipesOrderFilterTest {
         assertThrows(IncorrectDataException.class,()->orderChain.doFilter(User.builder().build(), request));
     }
 
-    @Test
-    public void process_settingEmptyList(){
-        OrderCreateRequestDto request = OrderCreateRequestDto.builder()
-                .type(OrderTypeEnum.PICKUP)
-                .paymentType(OrderPaymentEnum.CASH)
-                .pharmacyId(1L)
-                .products(List.of(
-                        ProductRequestDto.builder()
-                                .id(2L)
-                                .recipe("01Д1234567890")
-                                .count(100)
-                                .build()
-                ))
-                .addressId(1L)
-                .build();
-        Order order = orderChain.doFilter(User.builder().build(),orderConfiguredBefore, request,orderChain);
-        assertTrue(order.getRecipeList().isEmpty());
-    }
 
     @Test
     public void process_settingNotEmptyList(){
@@ -110,29 +85,49 @@ class RecipesOrderFilterTest {
                 ))
                 .addressId(1L)
                 .build();
-        Order order = orderChain.doFilter(User.builder().build(),orderConfiguredBefore, request,orderChain);
+        Order order = orderChain.doFilter(User.builder().build(),orderConfiguredBefore, request);
         assertFalse(order.getRecipeList().isEmpty());
     }
 
     @Test
-    public void process_settingEmptyListWhenProductNotPresent(){
+    public void process_recipeNotPresentInRequest_throwsIncorrectDataException(){
         OrderCreateRequestDto request = OrderCreateRequestDto.builder()
                 .type(OrderTypeEnum.PICKUP)
                 .paymentType(OrderPaymentEnum.CASH)
                 .pharmacyId(1L)
                 .products(List.of(
                         ProductRequestDto.builder()
-                                .id(3L)
-                                .recipe("01Д1234567890")
+                                .id(1L)
                                 .count(100)
                                 .build()
                 ))
                 .addressId(1L)
                 .build();
-        Order order = orderChain.doFilter(User.builder().build(),orderConfiguredBefore, request,orderChain);
-        assertTrue(order.getRecipeList().isEmpty());
+        assertThrows(IncorrectDataException.class,()->orderChain.doFilter(User.builder().build(),orderConfiguredBefore, request));
     }
 
+    @NonNull
+    private static List<ProductList> getProductLists(Product... products) {
+        return Stream.of(products).map(p -> ProductList.builder().product(p).build()).collect(Collectors.toList());
+    }
+
+    private static Product getProductWithoutRecipe() {
+        return Product.builder()
+                .id(2L)
+                .name("Миг")
+                .price(BigDecimal.valueOf(499.00))
+                .isPrescriptionRequired(false)
+                .build();
+    }
+
+    private static Product getProductWithRecipe() {
+        return Product.builder()
+                .id(1L)
+                .name("Семитикон")
+                .price(BigDecimal.valueOf(1000.00))
+                .isPrescriptionRequired(true)
+                .build();
+    }
 
 
 

@@ -1,11 +1,9 @@
 package com.aston.aston_project.chain;
 
 import com.aston.aston_project.dto.order.OrderCreateRequestDto;
-import com.aston.aston_project.entity.Address;
-import com.aston.aston_project.entity.Order;
-import com.aston.aston_project.entity.Pharmacy;
-import com.aston.aston_project.entity.User;
+import com.aston.aston_project.entity.*;
 import com.aston.aston_project.entity.en.OrderTypeEnum;
+import com.aston.aston_project.repository.OrderTypeRepository;
 import com.aston.aston_project.repository.PharmacyRepository;
 import com.aston.aston_project.util.exception.NotFoundDataException;
 import lombok.AllArgsConstructor;
@@ -17,6 +15,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public class AddressOrderFilter implements OrderFilter{
     private PharmacyRepository pharmacyRepository;
+    private OrderTypeRepository orderTypeRepository;
     @Override
     public void process(User user, Order order, OrderCreateRequestDto request) {
         Address address;
@@ -30,6 +29,8 @@ public class AddressOrderFilter implements OrderFilter{
                     .orElseThrow(() -> new NotFoundDataException("Pharmacy with that id not found"));
             address = pharmacy.getAddress();
         }
+        OrderType orderType = orderTypeRepository.findByName(request.getType()).orElse(OrderType.builder().name(request.getType()).build());
+        order.setType(orderType);
         order.setAddress(address);
     }
 }
