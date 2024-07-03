@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/countries")
+@RequestMapping("/api/v1/countries")
 public class CountryController {
     private final CountryService countryService;
 

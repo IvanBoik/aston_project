@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/products/types")
+@RequestMapping("/api/v1/products/types")
 public class ProductTypeController {
     private final ProductTypeService productTypeService;
 

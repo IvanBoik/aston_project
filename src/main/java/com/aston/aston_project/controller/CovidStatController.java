@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/covid")
+@RequestMapping("/api/v1/covid")
 @AllArgsConstructor
 public class CovidStatController {
     private final CovidFeignClient feignClient;

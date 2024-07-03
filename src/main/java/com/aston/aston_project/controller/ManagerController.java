@@ -19,7 +19,7 @@ import java.util.List;
  * @author K. Zemlyakov
  */
 @RestController
-@RequestMapping(value ="/managers/v1",produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value ="/api/v1/managers",produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 public class ManagerController {
 

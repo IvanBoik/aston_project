@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/products/attributes")
+@RequestMapping("/api/v1/products/attributes")
 public class AttributeController {
     private final AttributeService attributeService;
 
