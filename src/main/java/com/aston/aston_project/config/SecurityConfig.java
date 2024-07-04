@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -56,8 +57,18 @@ public class SecurityConfig extends WebMvcConfigurationSupport {
                 .exceptionHandling(configurer ->
                         configurer.authenticationEntryPoint(authEntryPoint))
                 .authorizeHttpRequests(reqMatch ->
-                        reqMatch.requestMatchers("/api/v1/auth/**").permitAll()
-                                .requestMatchers("/api/v1/managers/**").hasRole("MANAGER")
+                        reqMatch.requestMatchers("/api/v1/managers/**").hasRole("MANAGER")
+                                .requestMatchers(HttpMethod.POST, "/api/v1/products/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/products/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/products/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/products/attributes/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/products/attributes/values/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/products/types/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/v1/producers/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/producers/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/producers/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/countries/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/**").permitAll()
                                 .anyRequest().authenticated())
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(exceptionFilter, AuthFilter.class)

@@ -1,7 +1,6 @@
 package com.aston.aston_project.controller;
 
 import com.aston.aston_project.api.recipe.util.RecipeCheckerResponse;
-import com.aston.aston_project.dto.order.OrderWithUserAndAddressDTO;
 import com.aston.aston_project.dto.order.OrderWithProductAndRecipeDTO;
 import com.aston.aston_project.dto.order.SuspiciousOrderDTO;
 import com.aston.aston_project.entity.en.OrderStatusEnum;
@@ -26,7 +25,7 @@ public class ManagerController {
     private ManagerService managerService;
 
     @GetMapping("/orders")
-    public List<OrderWithUserAndAddressDTO> getAllOrders(){
+    public List<OrderExtendedResponseDTO> getAllOrders(){
         return managerService.getAllOrders();
     }
 
@@ -36,8 +35,8 @@ public class ManagerController {
     }
 
     @PatchMapping("/orders/{order}")
-    public OrderWithUserAndAddressDTO switchStatus(@PathVariable @Positive Long order,
-                                                   @RequestParam OrderStatusEnum status) {
+    public OrderExtendedResponseDTO switchStatus(@PathVariable @Positive Long order,
+                                                 @RequestParam OrderStatusEnum status) {
         return managerService.setOrderStatus(order, status);
     }
 
