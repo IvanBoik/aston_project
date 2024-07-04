@@ -1,13 +1,12 @@
 package com.aston.aston_project.controller;
 
+import com.aston.aston_project.dto.AddressResponseDTO;
 import com.aston.aston_project.dto.UserAddressDTO;
 import com.aston.aston_project.entity.Address;
 import com.aston.aston_project.entity.UserAddress;
 import com.aston.aston_project.service.UserAddressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,20 +16,15 @@ public class UserAddressController {
     private final UserAddressService userAddressService;
 
     @PostMapping
-    public UserAddress createRecipe(@RequestBody UserAddressDTO addressDTO) {
+    public UserAddress createUserAddress(@RequestBody UserAddressDTO addressDTO) {
         return userAddressService.addUserAddress(addressDTO);
-    }
-
-    @GetMapping()
-    public List<UserAddressDTO> allUserAddresses() {
-        return userAddressService.getAllAddresses();
     }
 
     @PutMapping("/{id}")
     public void addNewAddress(
             @PathVariable Long id,
-            @RequestBody Address address) {
-        userAddressService.addNewAddress(id, address);
+            @RequestBody AddressResponseDTO dto) {
+        userAddressService.addNewAddress(id, dto);
     }
 
     @PutMapping("/{id}")
