@@ -21,7 +21,7 @@ public class ValueServiceImpl implements ValueService {
     public ValueDTO getById(Long id) {
         return valueDTOMapping.entityToDto(
                 valueRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundDataException("Vakue with id " + id + " not found")));
+                        .orElseThrow(() -> new NotFoundDataException("Value with id " + id + " not found")));
     }
 
     @Override

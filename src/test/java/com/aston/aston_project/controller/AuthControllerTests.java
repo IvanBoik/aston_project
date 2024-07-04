@@ -1,4 +1,5 @@
 package com.aston.aston_project.controller;
+
 import com.aston.aston_project.config.TestConfig;
 import com.aston.aston_project.dto.SignUpRequest;
 import com.aston.aston_project.entity.Role;
@@ -29,7 +30,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @SpringBootTest(classes = TestConfig.class)
 @AutoConfigureMockMvc
 public class AuthControllerTests {
@@ -54,7 +54,7 @@ public class AuthControllerTests {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
-    public void init(){
+    public void init() {
         Role role = new Role();
         role.setId(1);
         role.setName(RoleEnum.ROLE_USER);
@@ -68,28 +68,28 @@ public class AuthControllerTests {
 
     @ParameterizedTest
     @CsvSource("test@test.tt,1234")
-    public void return_status_success_when_data_is_correct(String email,String password) throws Exception {
+    public void return_status_success_when_data_is_correct(String email, String password) throws Exception {
         mockMvc.perform(post("/auth")
-                        .queryParam("email",email)
-                        .queryParam("password",password))
+                        .queryParam("email", email)
+                        .queryParam("password", password))
                 .andExpect(status().isOk());
     }
 
     @ParameterizedTest
     @CsvSource("test@test.tt,1234")
-    public void return_method_not_allowed_when_data_is_correct(String email,String password) throws Exception {
+    public void return_method_not_allowed_when_data_is_correct(String email, String password) throws Exception {
         mockMvc.perform(get("/auth")
-                        .queryParam("email",email)
-                        .queryParam("password",password))
+                        .queryParam("email", email)
+                        .queryParam("password", password))
                 .andExpect(status().isMethodNotAllowed());
     }
 
     @ParameterizedTest
     @CsvSource("test@test.tt,123")
-    public void return_status_bad_request_when_data_is_incorrect(String email,String password) throws Exception {
+    public void return_status_bad_request_when_data_is_incorrect(String email, String password) throws Exception {
         mockMvc.perform(post("/auth")
-                        .queryParam("email",email)
-                        .queryParam("password",password))
+                        .queryParam("email", email)
+                        .queryParam("password", password))
                 .andExpect(status().isBadRequest());
     }
 
@@ -97,16 +97,16 @@ public class AuthControllerTests {
     @ValueSource(strings = "test@test.tt")
     public void return_status_bad_request_when_query_param_missed(String email) throws Exception {
         mockMvc.perform(post("/auth")
-                        .queryParam("email",email))
+                        .queryParam("email", email))
                 .andExpect(status().isBadRequest());
     }
 
     @ParameterizedTest
     @CsvSource("dasdasd,1234")
-    public void return_status_bad_request_when_email_is_not_correct(String email,String password) throws Exception {
+    public void return_status_bad_request_when_email_is_not_correct(String email, String password) throws Exception {
         mockMvc.perform(post("/auth")
-                        .queryParam("email",email)
-                        .queryParam("password",password))
+                        .queryParam("email", email)
+                        .queryParam("password", password))
                 .andExpect(status().isBadRequest());
     }
 
