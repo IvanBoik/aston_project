@@ -10,8 +10,7 @@ import java.util.Map;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 @Builder
 public class Product {
     @Id

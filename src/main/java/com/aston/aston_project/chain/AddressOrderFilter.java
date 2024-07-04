@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+/**
+ * filter which setting order address and check if address correctly set from request
+ * @author K. Zemlyakov
+ */
 @Component
 @AllArgsConstructor
 public class AddressOrderFilter implements OrderFilter{

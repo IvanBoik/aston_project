@@ -1,7 +1,8 @@
-package com.aston.aston_project.service;
+package com.aston.aston_project.controller;
 
 import com.aston.aston_project.config.TestConfig;
 import com.aston.aston_project.repository.OrderRepository;
+import com.aston.aston_project.service.ManagerService;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.RetryingTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = TestConfig.class)
 @AutoConfigureMockMvc
 @Sql("classpath:manager_script.sql")
-public class ManagerControllerIT {
+public class ManagerControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

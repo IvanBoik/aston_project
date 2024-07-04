@@ -22,4 +22,8 @@ public class Address {
     private String street;
 
     private Short room;
+
+    public String getFullAddress(){
+        return String.format("%s, %s, %s, %d", city,street,house,room);
+    }
 }

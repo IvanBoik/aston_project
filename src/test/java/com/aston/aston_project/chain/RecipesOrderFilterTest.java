@@ -66,7 +66,7 @@ class RecipesOrderFilterTest {
                 ))
                 .addressId(1L)
                 .build();
-        assertThrows(IncorrectDataException.class,()->orderChain.doFilter(User.builder().build(), request));
+        assertThrows(IncorrectDataException.class,()->orderChain.doFilter(User.builder().build(), orderConfiguredBefore,request));
     }
 
 

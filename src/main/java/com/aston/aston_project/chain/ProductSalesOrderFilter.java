@@ -10,7 +10,10 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
+/**
+ * filter which setting product count in pharmacy
+ * @author K. Zemlyakov
+ */
 @Component
 @AllArgsConstructor
 public class ProductSalesOrderFilter implements OrderFilter {

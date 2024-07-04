@@ -10,6 +10,10 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
+/**
+ * Order chain configuration
+ * @author K. Zemlyakov
+ */
 @Configuration
 @AllArgsConstructor
 public class OrderChainConfig {

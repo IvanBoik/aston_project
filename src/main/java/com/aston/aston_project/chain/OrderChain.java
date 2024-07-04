@@ -8,6 +8,11 @@ import org.springframework.stereotype.Component;
 
 import java.util.Queue;
 
+/**
+ * Order creation chain
+ * note that queue scope is request because every request queue must be reinitialized
+ * @author K. Zemlyakov
+ */
 @Component
 @AllArgsConstructor
 public class OrderChain {

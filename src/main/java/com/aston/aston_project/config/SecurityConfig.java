@@ -67,6 +67,8 @@ public class SecurityConfig extends WebMvcConfigurationSupport {
                                 .requestMatchers(HttpMethod.POST, "/api/v1/producers/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/producers/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/producers/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/v1/orders/**").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/orders/**").authenticated()
                                 .requestMatchers("/api/v1/countries/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/**").permitAll()
                                 .anyRequest().authenticated())

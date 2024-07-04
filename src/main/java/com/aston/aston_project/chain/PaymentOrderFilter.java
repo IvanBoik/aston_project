@@ -18,6 +18,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+/**
+ * filter which calculates user balance and pharmacy balance depending on order status
+ * @author K. Zemlyakov
+ */
 @Component
 @AllArgsConstructor
 @Data
@@ -29,8 +33,10 @@ public class PaymentOrderFilter implements OrderFilter {
 
     @Override
     public void process(User user, Order order, OrderCreateRequestDto request) {
-        List<Product> products = order.getProductList().stream().peek(pl-> pl.getProduct().getPrice().multiply(BigDecimal.valueOf(pl.getCount()))).map(ProductList::getProduct).toList();
-        BigDecimal price = products.stream().map(Product::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal price = order.getProductList().stream()
+                .map(pl -> pl.getProduct().getPrice()
+                        .multiply(BigDecimal.valueOf(pl.getCount())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
         OrderPaymentEnum requestPaymentType = request.getPaymentType();
         OrderPaymentType orderPaymentType = orderPaymentTypeRepository.findByName(requestPaymentType).orElse(OrderPaymentType.builder().name(requestPaymentType).build());
         order.setPaymentType(orderPaymentType);

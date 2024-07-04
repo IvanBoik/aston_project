@@ -5,10 +5,10 @@ import com.aston.aston_project.dto.order.OrderWithAddressProductsAndRecipesDTO;
 import com.aston.aston_project.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @AllArgsConstructor
@@ -19,13 +19,13 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping
-    public List<OrderWithAddressProductsAndRecipesDTO> getAllUserOrders(Authentication authentication){
-       return orderService.getAllUserOrders((String) authentication.getPrincipal());
+    public List<OrderWithAddressProductsAndRecipesDTO> getAllUserOrders(Principal principal){
+       return orderService.getAllUserOrders(String.valueOf(principal));
     }
 
     @PostMapping
-    public OrderWithAddressProductsAndRecipesDTO createOrder(Authentication authentication, @RequestBody @Valid OrderCreateRequestDto order){
-        return orderService.createOrder(((String) authentication.getPrincipal()),order);
+    public OrderWithAddressProductsAndRecipesDTO createOrder(Principal principal, @RequestBody @Valid OrderCreateRequestDto order){
+        return orderService.createOrder(String.valueOf(principal),order);
     }
 
 }

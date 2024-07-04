@@ -14,6 +14,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Filter which checking real product count in pharmacy
+ * @author K. Zemlyakov
+ */
 @Component
 @AllArgsConstructor
 public class ProductContainsInSystemOrderFilter implements OrderFilter {

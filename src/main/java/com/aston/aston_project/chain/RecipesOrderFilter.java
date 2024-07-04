@@ -13,6 +13,10 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * filter which checking necessary recipes for product and setting them
+ * @author K. Zemlyakov
+ */
 @Component
 @AllArgsConstructor
 public class RecipesOrderFilter implements OrderFilter {
@@ -20,10 +24,13 @@ public class RecipesOrderFilter implements OrderFilter {
     public void process(User user, Order order, OrderCreateRequestDto request) {
         List<ProductList> productList = order.getProductList();
         Set<Long> productRecipes = productList.stream().map(ProductList::getProduct).filter(Product::getIsPrescriptionRequired).map(Product::getId).collect(Collectors.toSet());
-        if (request.getType() == OrderTypeEnum.PICKUP) {
+        if (request.getType() == OrderTypeEnum.DELIVERY&&!productRecipes.isEmpty()) {
+            throw new IncorrectDataException("Recipe orders cannot be delivered");
+        }
+        if (!productRecipes.isEmpty()) {
             Set<Long> productWithRecipeIds = request.getProducts().stream().filter(pr -> pr.getRecipe() != null).map(ProductRequestDto::getId).collect(Collectors.toSet());
             boolean containsAll = productWithRecipeIds.containsAll(productRecipes);
-            if (containsAll && !productRecipes.isEmpty()) {
+            if (containsAll) {
                 List<Recipe> recipeList = request.getProducts().stream().filter(p -> productRecipes.contains(p.getId())).map(r -> Recipe.builder()
                         .link(r.getRecipe())
                         .order(order)
@@ -34,8 +41,6 @@ public class RecipesOrderFilter implements OrderFilter {
             } else {
                 throw new IncorrectDataException("Product recipes not present");
             }
-        } else {
-            throw new IncorrectDataException("Recipe orders cannot be delivered");
         }
     }
 }
