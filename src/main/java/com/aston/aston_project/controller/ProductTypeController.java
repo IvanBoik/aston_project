@@ -20,6 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/products/types")
 public class ProductTypeController {
+
     private final ProductTypeService productTypeService;
 
     @GetMapping("/{id}")

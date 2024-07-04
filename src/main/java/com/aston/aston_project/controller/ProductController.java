@@ -34,8 +34,8 @@ public class ProductController {
     public List<ProductDtoShort> getAll(
             @RequestParam(required = false) Optional<String> name,
             @RequestParam(required = false) Optional<Long> producer,
-            @RequestParam(required = false) Optional<Integer> recipe
-    ) {
+            @RequestParam(required = false) Optional<Integer> recipe) {
+
         if (name.isPresent()) {
             if (producer.isPresent()) {
                 return productService.findByNameIgnoreCaseContainingAndProducer(name.get(), producer.get());

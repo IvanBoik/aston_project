@@ -24,7 +24,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 
 import java.util.List;
 
-
 /**
  * Spring security configuration
  *
@@ -62,7 +61,7 @@ public class SecurityConfig extends WebMvcConfigurationSupport {
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/products/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/products/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/products/attributes/**").hasRole("ADMIN")
-                                .requestMatchers("/api/v1/products/attributes/values/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/products/values/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/products/types/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/api/v1/producers/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/producers/**").hasRole("ADMIN")
