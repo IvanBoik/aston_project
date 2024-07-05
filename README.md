@@ -1,3 +1,4 @@
-# Онлайн магазин аптечной сети!
+# Online-сервисдля аптечной сети![image](https://github.com/IvanBoik/aston_project/assets/145038107/4c3569a0-e118-4a94-98c8-c492a0b1bc39)
 
-[Our_Wow_Pharmacy (2).pptx](https://github.com/user-attachments/files/16108523/Our_Wow_Pharmacy.2.pptx)
+
+
