@@ -28,7 +28,6 @@ import org.springframework.web.multipart.support.StandardMultipartHttpServletReq
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class UserService {
     private JwtUtils jwtUtils;
     private UserRepository repository;
@@ -36,6 +35,20 @@ public class UserService {
     private YandexSearchLocationClient yandexClient;
     private ProductRepository productRepository;
     private ProductDtoMapping productDtoMapping;
+
+    public UserService(JwtUtils jwtUtils,
+                       UserRepository repository,
+                       RoleRepository roleRepository,
+                       @Lazy YandexSearchLocationClient yandexClient,
+                       ProductRepository productRepository,
+                       ProductDtoMapping productDtoMapping) {
+        this.jwtUtils = jwtUtils;
+        this.repository = repository;
+        this.roleRepository = roleRepository;
+        this.yandexClient = yandexClient;
+        this.productRepository = productRepository;
+        this.productDtoMapping = productDtoMapping;
+    }
 
     public UserDetails getUserDetailsByEmail(String email) throws NotFoundDataException {
         User user = getUserByEmail(email);
