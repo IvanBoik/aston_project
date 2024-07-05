@@ -74,7 +74,7 @@ class ProductControllerTest {
                 .andExpectAll(
                         status().isOk(),
                         content().contentType(MediaType.APPLICATION_JSON));
-        verify(productService, times(1)).getAll();
+        verify(productService, times(1)).findWithFilters(any(), any(), any());
     }
 
     @Test
@@ -90,7 +90,7 @@ class ProductControllerTest {
                 .andExpectAll(
                         status().isOk(),
                         content().contentType(MediaType.APPLICATION_JSON));
-        verify(productService, times(1)).findByNameIgnoreCaseContainingAndProducer(anyString(), anyLong());
+        verify(productService, times(1)).findWithFilters(anyString(), anyLong(), any());
     }
 
     @Test
@@ -102,11 +102,11 @@ class ProductControllerTest {
 
         mockMvc.perform(get(baseUrl)
                         .param("name", "A")
-                        .param("recipe", "1"))
+                        .param("recipe", "true"))
                 .andExpectAll(
                         status().isOk(),
                         content().contentType(MediaType.APPLICATION_JSON));
-        verify(productService, times(1)).findByNameIgnoreCaseContainingAndIsPrescriptionRequired(anyString(), anyInt());
+        verify(productService, times(1)).findWithFilters(anyString(), any(), anyBoolean());
     }
 
     @Test
@@ -121,7 +121,7 @@ class ProductControllerTest {
                 .andExpectAll(
                         status().isOk(),
                         content().contentType(MediaType.APPLICATION_JSON));
-        verify(productService, times(1)).findByNameIgnoreCaseContaining(anyString());
+        verify(productService, times(1)).findWithFilters(anyString(), any(), any());
     }
 
     @Test
