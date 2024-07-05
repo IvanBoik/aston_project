@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 
+import static com.aston.aston_project.AstonProjectApplication.log;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/v1/orders")
@@ -19,13 +21,14 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping
-    public List<OrderWithAddressProductsAndRecipesDTO> getAllUserOrders(Principal principal){
-       return orderService.getAllUserOrders(String.valueOf(principal));
+    public List<OrderWithAddressProductsAndRecipesDTO> getAllUserOrders(Principal principal) {
+        log.info("Get request /api/v1/orders, {}", principal.getName());
+        return orderService.getAllUserOrders(String.valueOf(principal));
     }
 
     @PostMapping
-    public OrderWithAddressProductsAndRecipesDTO createOrder(Principal principal, @RequestBody @Valid OrderCreateRequestDto order){
-        return orderService.createOrder(String.valueOf(principal),order);
+    public OrderWithAddressProductsAndRecipesDTO createOrder(Principal principal, @RequestBody @Valid OrderCreateRequestDto order) {
+        log.info("Post request /api/v1/orders, {}, {}", principal.getName(), order.toString());
+        return orderService.createOrder(String.valueOf(principal), order);
     }
-
 }

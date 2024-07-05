@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+import static com.aston.aston_project.AstonProjectApplication.log;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/products")
@@ -21,6 +23,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ProductDtoFullResponse getById(@PathVariable Long id) {
+        log.info("Get request /api/v1/products/{}", id);
         return productService.getById(id);
     }
 
@@ -28,8 +31,10 @@ public class ProductController {
     public List<ProductDtoShort> getAll(
             @RequestParam(required = false) Optional<String> name,
             @RequestParam(required = false) Optional<Long> producer,
-            @RequestParam(required = false) Optional<Integer> recipe
-    ) {
+            @RequestParam(required = false) Optional<Integer> recipe) {
+
+        log.info("Get request /api/v1/products/{}, {}, {}", name, producer, recipe);
+
         if (name.isPresent()) {
             if (producer.isPresent()) {
                 return productService.findByNameIgnoreCaseContainingAndProducer(name.get(), producer.get());
@@ -53,6 +58,7 @@ public class ProductController {
 
     @PostMapping
     public void add(@RequestBody ProductRequest dto) {
+        log.info("Post request /api/v1/products/{}", dto.toString());
         productService.create(dto);
     }
 
@@ -60,6 +66,7 @@ public class ProductController {
     public void update(
             @PathVariable Long id,
             @RequestBody ProductRequest dto) {
+        log.info("Put request /api/v1/products/{}, {}", id, dto.toString());
         productService.update(id, dto);
     }
 
@@ -67,6 +74,7 @@ public class ProductController {
     public void updateRecipe(
             @RequestParam Long id,
             @RequestParam Boolean isRecipe) {
+        log.info("Put request /api/v1/products/{}, {}", id, isRecipe);
         productService.updateRecipe(id, isRecipe);
     }
 
@@ -81,6 +89,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
+        log.info("Delete request /api/v1/products/{}", id);
         productService.delete(id);
     }
 }
