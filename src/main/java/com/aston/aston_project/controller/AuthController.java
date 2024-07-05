@@ -34,9 +34,4 @@ public class AuthController {
         return userService.signUp(request);
     }
 
-    @GetMapping("/test")
-    public YandexResponse yandexTest(@RequestParam("location") String location, String address){
-        return userService.yandexTest(location,address);
-    }
-
 }
