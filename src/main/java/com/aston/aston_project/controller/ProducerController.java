@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 
+import static com.aston.aston_project.AstonProjectApplication.log;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/producers")
@@ -25,6 +27,7 @@ public class ProducerController {
 
     @GetMapping("/{id}")
     public ProducerDtoResponse getById(@PathVariable Long id) {
+        log.info("Get request /api/v1/producers/{}", id);
         return producerService.getById(id);
     }
 
@@ -32,6 +35,7 @@ public class ProducerController {
     public List<ProducerDtoResponse> getAll(
             @RequestParam(required = false) Optional<String> name,
             @RequestParam(required = false) Optional<Long> country) {
+        log.info("Get request /api/v1/producers/{}, {}", name, country);
         if (name.isPresent()) {
             if (country.isPresent()) {
                 return producerService.findByNameIgnoreCaseContainingAndCountry(name.get(), country.get());
@@ -46,6 +50,7 @@ public class ProducerController {
 
     @PostMapping
     public void add(@RequestBody ProducerDtoResponse dto) {
+        log.info("Post request /api/v1/producers/{}", dto.toString());
         producerService.create(dto);
     }
 
@@ -53,11 +58,13 @@ public class ProducerController {
     public void update(
             @PathVariable Long id,
             @RequestBody ProducerDtoResponse dto) {
+        log.info("Put request /api/v1/producers/{}, {}", id, dto.toString());
         producerService.update(id, dto);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
+        log.info("Delete request /api/v1/producers/{}", id);
         producerService.delete(id);
     }
 }

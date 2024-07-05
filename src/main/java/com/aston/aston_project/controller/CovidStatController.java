@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.aston.aston_project.AstonProjectApplication.log;
+
 @RestController
 @RequestMapping("/api/v1/covid")
 @AllArgsConstructor
@@ -15,6 +17,7 @@ public class CovidStatController {
 
     @GetMapping("/info")
     public CovidResponse showStat() {
+        log.info("/api/v1/covid/info");
         return feignClient.readCovidStat();
     }
 }

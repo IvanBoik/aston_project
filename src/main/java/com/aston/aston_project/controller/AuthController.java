@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import static com.aston.aston_project.AstonProjectApplication.log;
+
 @RestController
 @RequestMapping("/api/v1/auth")
 @AllArgsConstructor
@@ -24,19 +26,20 @@ public class AuthController {
             @RequestParam(value = "email") String email,
 
             @NotBlank
-            @RequestParam(value = "password") String password
-    ){
-        return userService.auth(email,password);
+            @RequestParam(value = "password") String password) {
+
+        return userService.auth(email, password);
     }
 
     @PostMapping("/signUp")
     public String signUp(@RequestBody SignUpRequest request) {
+        log.info("Post request /api/v1/auth/signUp/{}", request.toString());
         return userService.signUp(request);
     }
 
     @GetMapping("/test")
-    public YandexResponse yandexTest(@RequestParam("location") String location, String address){
-        return userService.yandexTest(location,address);
+    public YandexResponse yandexTest(@RequestParam("location") String location, String address) {
+        log.info("Post request /api/v1/auth/test/{},{}", location, address);
+        return userService.yandexTest(location, address);
     }
-
 }

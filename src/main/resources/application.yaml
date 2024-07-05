@@ -34,10 +34,11 @@ spring:
 
 logging:
   level:
-    org.springframework.web: "info"
-    org.hibernate: "error"
-    aston_project: "debug"
-    file:
+    root: INFO
+    org.springframework.web: INFO
+    org.hibernate: ERROR
+    aston_project: DEBUG
+  file:
     name: appLog.log
   pattern:
     file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
