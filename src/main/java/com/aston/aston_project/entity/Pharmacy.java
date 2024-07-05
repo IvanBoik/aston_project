@@ -28,6 +28,6 @@ public class Pharmacy {
     @ManyToOne
     private Address address;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "pharmacy")
     private List<PharmacyProduct> product = new ArrayList<>();
 }

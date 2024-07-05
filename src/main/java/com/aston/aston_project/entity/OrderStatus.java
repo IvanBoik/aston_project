@@ -2,14 +2,15 @@ package com.aston.aston_project.entity;
 
 import com.aston.aston_project.entity.en.OrderStatusEnum;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "order_status_type")
 @Getter
 @Setter
-@RequiredArgsConstructor
 @NoArgsConstructor
 public class OrderStatus {
 
@@ -19,6 +20,11 @@ public class OrderStatus {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "name")
-    @NonNull
     private OrderStatusEnum status;
+
+    @Builder
+    public OrderStatus(Long id, OrderStatusEnum status) {
+        this.id = id;
+        this.status = status;
+    }
 }

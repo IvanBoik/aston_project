@@ -67,6 +67,8 @@ public class SecurityConfig extends WebMvcConfigurationSupport {
                                 .requestMatchers(HttpMethod.POST, "/api/v1/producers/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/producers/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/producers/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/v1/orders/**").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/orders/**").authenticated()
                                 .requestMatchers("/api/v1/countries/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/**").permitAll()
                                 .anyRequest().authenticated())
@@ -78,7 +80,6 @@ public class SecurityConfig extends WebMvcConfigurationSupport {
     /**
      * When security is disabled
      * this filterChain is using
-     *
      * @author Kirill Zemlyakov
      */
     @Bean
@@ -99,7 +100,6 @@ public class SecurityConfig extends WebMvcConfigurationSupport {
 
     /**
      * Method configures ignore accept headers
-     *
      * @param configurer configuring default media type to application/json
      */
     @Override

@@ -30,7 +30,7 @@ public class Payment {
     @JoinColumn(name = "status_id")
     private PaymentType paymentType;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Order order;
     @ManyToOne
     private User from;

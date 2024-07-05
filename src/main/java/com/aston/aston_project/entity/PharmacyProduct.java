@@ -9,16 +9,17 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
+@Table(name = "PHARMACY_PRODUCT")
 public class PharmacyProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Pharmacy pharmacy;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Product product;
 
     private Integer count;

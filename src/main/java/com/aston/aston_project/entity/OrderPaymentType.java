@@ -2,12 +2,11 @@ package com.aston.aston_project.entity;
 
 import com.aston.aston_project.entity.en.OrderPaymentEnum;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
 public class OrderPaymentType {
 
     @Id
@@ -16,7 +15,14 @@ public class OrderPaymentType {
 
     @Enumerated(EnumType.STRING)
     private OrderPaymentEnum name;
-//    CASH_TO_COURIER,
+
+    @Builder
+    public OrderPaymentType(Long id, OrderPaymentEnum name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    //    CASH_TO_COURIER,
 //    CARD_TO_COURIER,
 //    PAYMENT_UPON_RECEIPT,
 //    CASH_ON_DELIVERY,

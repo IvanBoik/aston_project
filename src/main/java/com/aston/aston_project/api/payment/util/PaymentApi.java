@@ -6,5 +6,5 @@ import java.math.BigDecimal;
 
 public interface PaymentApi {
 
-    MockPaymentResponse tryPay(BigDecimal amount) throws PaymentException;
+    PaymentResponse tryPay(BigDecimal amount) throws PaymentException;
 }

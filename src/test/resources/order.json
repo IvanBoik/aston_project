@@ -1,0 +1,102 @@
+{
+  "correct": {
+    "type": "DELIVERY",
+    "products": [
+      {
+        "id": 1,
+        "count": 2
+      },
+      {
+        "id": 2,
+        "count": 2
+      },
+      {
+        "id": 3,
+        "count": 2
+      }
+    ],
+    "addressId": 1,
+    "pharmacyId": 1,
+    "paymentType": "CARD"
+  },
+  "incorrect_user_address": {
+    "type": "DELIVERY",
+    "products": [
+      {
+        "id": 1,
+        "count": 2
+      },
+      {
+        "id": 2,
+        "count": 2
+      },
+      {
+        "id": 3,
+        "count": 2
+      }
+    ],
+    "addressId": 2,
+    "pharmacyId": 1,
+    "paymentType": "CARD"
+  },
+  "recipe_not_set": {
+    "type": "PICKUP",
+    "products": [
+      {
+        "id": 4,
+        "count": 2
+      }
+    ],
+    "addressId": 1,
+    "pharmacyId": 2,
+    "paymentType": "CARD"
+  },
+  "recipe_delivery": {
+    "type": "DELIVERY",
+    "products": [
+      {
+        "id": 4,
+        "recipe": "dasdasdas",
+        "count": 2
+      }
+    ],
+    "addressId": 1,
+    "pharmacyId": 2,
+    "paymentType": "CARD"
+  },
+  "products_not_present_in_pharmacy": {
+    "type": "DELIVERY",
+    "products": [
+      {
+        "id": 1000,
+        "count": 2
+      }
+    ],
+    "addressId": 1,
+    "pharmacyId": 1,
+    "paymentType": "CARD"
+  },
+  "product_count_much_bigger": {
+    "type": "DELIVERY",
+    "products": [
+      {
+        "id": 1,
+        "count": 2000
+      }
+    ],
+    "addressId": 1,
+    "pharmacyId": 1,
+    "paymentType": "CARD"
+  },
+  "incorrect_type_not_set": {
+    "products": [
+      {
+        "id": 1,
+        "count": 2000
+      }
+    ],
+    "addressId": 1,
+    "pharmacyId": 1,
+    "paymentType": "CARD"
+  }
+}
