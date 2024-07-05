@@ -16,19 +16,23 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 
+import static com.aston.aston_project.AstonProjectApplication.log;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/products/attributes/values")
+@RequestMapping("/api/v1/products/values")
 public class ValueController {
     private final ValueService valueService;
 
     @GetMapping("/{id}")
     public ValueDTO getById(@PathVariable Long id) {
+        log.info("Get request /api/v1/products/values/{}", id);
         return valueService.getById(id);
     }
 
     @GetMapping
     public List<ValueDTO> getAll(@RequestParam(required = false) Optional<String> name) {
+        log.info("Get request /api/v1/products/values/{}", name);
         if (name.isPresent()) {
             return valueService.findByName(name.get());
         }
@@ -39,16 +43,19 @@ public class ValueController {
     public void update(
             @PathVariable Long id,
             @RequestBody ValueDTO dto) {
+        log.info("Put request /api/v1/products/values/{}, {}", id, dto.toString());
         valueService.update(id, dto);
     }
 
     @PostMapping
     public void add(@RequestBody ValueDTO dto) {
+        log.info("Post request /api/v1/products/values/{}", dto.toString());
         valueService.create(dto);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
+        log.info("Delete request /api/v1/products/values/{}", id);
         valueService.delete(id);
     }
 }

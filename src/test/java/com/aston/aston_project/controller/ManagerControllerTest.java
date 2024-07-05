@@ -22,7 +22,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = TestConfig.class)
 @AutoConfigureMockMvc
 @Sql("classpath:manager_script.sql")
+
 public class ManagerControllerTest {
+
 
     @Autowired
     private MockMvc mockMvc;
