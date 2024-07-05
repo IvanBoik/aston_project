@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/products/attributes/values")
+@RequestMapping("/api/v1/products/values")
 public class ValueController {
     private final ValueService valueService;
 
