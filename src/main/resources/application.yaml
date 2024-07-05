@@ -4,16 +4,16 @@ spring:
   application:
     name: aston_project
   datasource:
-    url: jdbc:postgresql://localhost:5432/aston_project
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://localhost:5432/aston_project #установите phAdmin4, создайте database с именем aston_project
+    username: ${DB_USER} #создайте в phAdmin4 roles и пропишите имя и пороль. В настройках  базы(aston_project) owner укажите эту роль
+    password: ${DB_PASSWORD} #я для простоты так и создала root/pass
   jpa:
     show-sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: validate
+    hibernate: #при старте хибер делает импорт сущностей в бд как вы ему тут сказали:
+      ddl-auto: validate #create-drop(создает при старте и удаляет при окончании работы), create(просто создает), none(ничего не делает)
   cloud:
     openfeign:
       client:
@@ -34,19 +34,22 @@ spring:
 
 logging:
   level:
-    root: INFO
-    org.springframework.web: INFO
-    org.hibernate: ERROR
-    aston_project: DEBUG
-  file:
-    name: appLog.log
-  pattern:
+    org.springframework.web: "info"
+    org.hibernate: "error"
+    aston_project: "debug"
+    #file:
+    #name: appLog.log
+  pattern: #Для разработки можете отключить записть в файл, поставив перед file решетку
     file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n"
 
 jwt:
   secret: ${JWT_SECRET}
-  subject: ${JWT_SUBJECT}}
+  subject: ${JWT_SUBJECT}
   issuer: ${JWT_ISSUER}
 
-security: enabled
+security: enabled # Можем отключить для разработки
+
+mail:
+  password: ${MAIL_PASSWORD}
+  username: ${MAIL_USER}
