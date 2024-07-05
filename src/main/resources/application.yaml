@@ -50,3 +50,7 @@ jwt:
   issuer: ${JWT_ISSUER}
 
 security: enabled
+
+mail:
+  password: ${MAIL_PASSWORD}
+  username: ${MAIL_USER}
