@@ -29,31 +29,11 @@ public class ProductController {
 
     @GetMapping
     public List<ProductDtoShort> getAll(
-            @RequestParam(required = false) Optional<String> name,
-            @RequestParam(required = false) Optional<Long> producer,
-            @RequestParam(required = false) Optional<Integer> recipe) {
-
-        log.info("Get request /api/v1/products/{}, {}, {}", name, producer, recipe);
-
-        if (name.isPresent()) {
-            if (producer.isPresent()) {
-                return productService.findByNameIgnoreCaseContainingAndProducer(name.get(), producer.get());
-            }
-            if (recipe.isPresent()) {
-                return productService.findByNameIgnoreCaseContainingAndIsPrescriptionRequired(name.get(), recipe.get());
-            }
-            return productService.findByNameIgnoreCaseContaining(name.get());
-        }
-        if (producer.isPresent()) {
-            if (recipe.isPresent()) {
-                return productService.findByProducerAndIsPrescriptionRequired(producer.get(), recipe.get());
-            }
-            return productService.findByProducer(producer.get());
-        }
-        if (recipe.isPresent()) {
-            return productService.findByRecipe(recipe.get());
-        }
-        return productService.getAll();
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Long producer,
+            @RequestParam(required = false) Boolean recipe
+    ) {
+        return productService.findWithFilters(name, producer, recipe);
     }
 
     @PostMapping

@@ -9,6 +9,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
+@EqualsAndHashCode(exclude = "id")
 public class Address {
 
     @Id

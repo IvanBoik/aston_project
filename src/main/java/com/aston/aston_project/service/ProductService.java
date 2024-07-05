@@ -31,57 +31,9 @@ public class ProductService {
         );
     }
 
-    public List<ProductDtoShort> getAll() {
-        return productRepository.findAll().stream()
-                .map(productDtoMapping::entityToDtoShort)
-                .toList();
-    }
-
-    public List<ProductDtoShort> findByNameIgnoreCaseContaining(String namePart) {
-        return productRepository.findByNameIgnoreCaseContaining(namePart).stream()
-                .map(productDtoMapping::entityToDtoShort)
-                .toList();
-    }
-    
-    public List<ProductDtoShort> findByProducer(Long producerId) {
-        Producer p = producerRepository.findById(producerId)
-                .orElseThrow(() -> new NotFoundDataException("No data for such a producer found"));
-        return productRepository.findByProducer(p).stream()
-                .map(productDtoMapping::entityToDtoShort)
-                .toList();
-    }
-
-    public List<ProductDtoShort> findByRecipe(Integer recipe) {
-        Boolean isPrescriptionRequired;
-        isPrescriptionRequired = recipe == 1;
-        return productRepository.findAll().stream()
-                .filter(p -> p.getIsPrescriptionRequired() == isPrescriptionRequired)
-                .map(productDtoMapping::entityToDtoShort)
-                .toList();
-    }
-
-    public List<ProductDtoShort> findByNameIgnoreCaseContainingAndProducer(String name, Long producerId) {
-        Producer p = producerRepository.findById(producerId)
-                .orElseThrow(() -> new NotFoundDataException("No data for such a producer found"));
-        return productRepository.findByNameIgnoreCaseContainingAndProducer(name, p).stream()
-                .map(productDtoMapping::entityToDtoShort)
-                .toList();
-    }
-    
-    public List<ProductDtoShort> findByNameIgnoreCaseContainingAndIsPrescriptionRequired(String name, Integer recipe) {
-        boolean isPrescriptionRequired;
-        isPrescriptionRequired = recipe == 1;
-        return productRepository.findByNameIgnoreCaseContainingAndIsPrescriptionRequired(name, isPrescriptionRequired).stream()
-                .map(productDtoMapping::entityToDtoShort)
-                .toList();
-    }
-
-    public List<ProductDtoShort> findByProducerAndIsPrescriptionRequired(Long producerId, Integer recipe) {
-        Producer p = producerRepository.findById(producerId)
-                .orElseThrow(() -> new NotFoundDataException("No data for such a producer found"));
-        boolean isPrescriptionRequired;
-        isPrescriptionRequired = recipe == 1;
-        return productRepository.findByProducerAndIsPrescriptionRequired(p, isPrescriptionRequired).stream()
+    public List<ProductDtoShort> findWithFilters(String name, Long producer, Boolean isPrescriptionRequired) {
+        String nameRegex = "%" + name + "%";
+        return productRepository.findAllWithFilters(nameRegex, producer, isPrescriptionRequired).stream()
                 .map(productDtoMapping::entityToDtoShort)
                 .toList();
     }
@@ -138,5 +90,60 @@ public class ProductService {
                 .forEach(email -> mailSenderService.sendUpdatesInWishList(
                         email, pharmacyProduct.getProduct().getName()
                 ));
+    }
+
+    public List<ProductDtoShort> getAll() {
+        return productRepository.findAll().stream()
+                .map(productDtoMapping::entityToDtoShort)
+                .toList();
+    }
+
+    public List<ProductDtoShort> findByNameIgnoreCaseContaining(String namePart) {
+        return productRepository.findByNameIgnoreCaseContaining(namePart).stream()
+                .map(productDtoMapping::entityToDtoShort)
+                .toList();
+    }
+
+    public List<ProductDtoShort> findByProducer(Long producerId) {
+        Producer p = producerRepository.findById(producerId)
+                .orElseThrow(() -> new NotFoundDataException("No data for such a producer found"));
+        return productRepository.findByProducer(p).stream()
+                .map(productDtoMapping::entityToDtoShort)
+                .toList();
+    }
+
+    public List<ProductDtoShort> findByRecipe(Integer recipe) {
+        Boolean isPrescriptionRequired;
+        isPrescriptionRequired = recipe == 1;
+        return productRepository.findAll().stream()
+                .filter(p -> p.getIsPrescriptionRequired() == isPrescriptionRequired)
+                .map(productDtoMapping::entityToDtoShort)
+                .toList();
+    }
+
+    public List<ProductDtoShort> findByNameIgnoreCaseContainingAndProducer(String name, Long producerId) {
+        Producer p = producerRepository.findById(producerId)
+                .orElseThrow(() -> new NotFoundDataException("No data for such a producer found"));
+        return productRepository.findByNameIgnoreCaseContainingAndProducer(name, p).stream()
+                .map(productDtoMapping::entityToDtoShort)
+                .toList();
+    }
+
+    public List<ProductDtoShort> findByNameIgnoreCaseContainingAndIsPrescriptionRequired(String name, Integer recipe) {
+        boolean isPrescriptionRequired;
+        isPrescriptionRequired = recipe == 1;
+        return productRepository.findByNameIgnoreCaseContainingAndIsPrescriptionRequired(name, isPrescriptionRequired).stream()
+                .map(productDtoMapping::entityToDtoShort)
+                .toList();
+    }
+
+    public List<ProductDtoShort> findByProducerAndIsPrescriptionRequired(Long producerId, Integer recipe) {
+        Producer p = producerRepository.findById(producerId)
+                .orElseThrow(() -> new NotFoundDataException("No data for such a producer found"));
+        boolean isPrescriptionRequired;
+        isPrescriptionRequired = recipe == 1;
+        return productRepository.findByProducerAndIsPrescriptionRequired(p, isPrescriptionRequired).stream()
+                .map(productDtoMapping::entityToDtoShort)
+                .toList();
     }
 }

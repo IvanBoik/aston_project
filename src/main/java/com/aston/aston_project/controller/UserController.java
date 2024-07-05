@@ -1,5 +1,6 @@
 package com.aston.aston_project.controller;
 
+import com.aston.aston_project.dto.AddressDto;
 import com.aston.aston_project.dto.ProductDtoShort;
 import com.aston.aston_project.service.UserService;
 import jakarta.validation.constraints.Positive;
@@ -32,6 +33,18 @@ public class UserController {
 
     @GetMapping("/wishList")
     public List<ProductDtoShort> getWishList(Principal principal) {
-        return userService.getWishList(String.valueOf(principal));
+        return userService.getWishList(principal.getName());
+    }
+
+    @PostMapping("/address")
+    @ResponseStatus(HttpStatus.OK)
+    public void addAddress(Principal principal, @RequestBody AddressDto dto) {
+        userService.addAddress(principal.getName(), dto);
+    }
+
+    @DeleteMapping("/address/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void removeAddress(Principal principal, @PathVariable Long id) {
+        userService.removeAddress(principal.getName(), id);
     }
 }
