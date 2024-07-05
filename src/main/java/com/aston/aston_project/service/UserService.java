@@ -86,7 +86,7 @@ public class UserService {
         }
     }
 
-    public YandexResponse yandexTest(String location, String address) {
+    public YandexResponse getCoordinates(String location, String address) {
         try {
             LocationUtil.parse(location);
             return yandexClient.getLocation(location, address);
