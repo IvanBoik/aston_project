@@ -46,6 +46,7 @@ class AttributeControllerTest {
                         status().isOk(),
                         content().contentType(MediaType.APPLICATION_JSON));
         verify(attributeService, times(1)).getById(anyLong());
+
     }
 
     @Test
