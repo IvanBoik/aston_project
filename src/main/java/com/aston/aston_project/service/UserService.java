@@ -16,6 +16,7 @@ import com.aston.aston_project.util.exception.IncorrectDataException;
 import com.aston.aston_project.util.exception.NotFoundDataException;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
 @Service
 public class UserService {
@@ -34,10 +35,7 @@ public class UserService {
     }
 
     public UserDetails getUserDetailsByEmail(String email) throws NotFoundDataException {
-        User user = repository.findUserByEmail(email);
-        if(user == null){
-            throw new NotFoundDataException("User with that email not found");
-        }
+        User user = getUserByEmail(email);
         return UserDetails.builder()
                 .email(user.getEmail())
                 .role(user.getRole().getName())
@@ -45,12 +43,14 @@ public class UserService {
                 .build();
     }
 
+    public User getUserByEmail(String email) {
+        return repository.findUserByEmail(email).orElseThrow(() -> new NotFoundDataException("User not found"));
+    }
+
     public String auth(String email, String password) {
-        User user = repository.findUserByEmail(email);
-        if(user!=null){
-            if (PasswordUtils.compare(user.getPassword(),password)) {
-                return jwtUtils.getToken(email);
-            }
+        User user = getUserByEmail(email);
+        if (PasswordUtils.compare(user.getPassword(), password)) {
+            return jwtUtils.getToken(email);
         }
         throw new NotFoundDataException("User data is incorrect");
     }
@@ -84,10 +84,10 @@ public class UserService {
     }
 
     public YandexResponse yandexTest(String location, String address) {
-        try{
+        try {
             LocationUtil.parse(location);
             return yandexClient.getLocation(location, address);
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             throw new IncorrectDataException("Location is incorrect");
         }
     }
