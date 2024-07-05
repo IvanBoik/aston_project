@@ -11,7 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients
 public class AstonProjectApplication {
 
-    private static final Logger log = LoggerFactory.getLogger(AstonProjectApplication.class);
+    public static final Logger log = LoggerFactory.getLogger(AstonProjectApplication.class);
 
     public static void main(String[] args) {
         SpringApplication.run(AstonProjectApplication.class, args);
