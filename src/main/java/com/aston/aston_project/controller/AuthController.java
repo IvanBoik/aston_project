@@ -36,10 +36,4 @@ public class AuthController {
         log.info("Post request /api/v1/auth/signUp/{}", request.toString());
         return userService.signUp(request);
     }
-
-    @GetMapping("/test")
-    public YandexResponse yandexTest(@RequestParam("location") String location, String address) {
-        log.info("Post request /api/v1/auth/test/{},{}", location, address);
-        return userService.yandexTest(location, address);
-    }
 }
