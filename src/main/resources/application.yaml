@@ -52,5 +52,5 @@ jwt:
 security: enabled
 
 mail:
-  password: ${MAIL_PASSWORD}
-  username: ${MAIL_USER}
+  password: ${MAIL_PASSWORD:password}
+  username: ${MAIL_USER:user}
