@@ -1,11 +1,16 @@
 package com.aston.aston_project.service;
 
 
+import com.aston.aston_project.dto.ProductDtoShort;
 import com.aston.aston_project.dto.SignUpRequest;
+import com.aston.aston_project.dto.util.ProductDtoMapping;
+import com.aston.aston_project.dto.wishlist.UserAndProductIds;
+import com.aston.aston_project.entity.Product;
 import com.aston.aston_project.entity.User;
 import com.aston.aston_project.feign.client.YandexSearchLocationClient;
 import com.aston.aston_project.feign.dto.YandexResponse;
 import com.aston.aston_project.jwt.JwtUtils;
+import com.aston.aston_project.repository.ProductRepository;
 import com.aston.aston_project.repository.RoleRepository;
 import com.aston.aston_project.repository.UserRepository;
 import com.aston.aston_project.util.LocationUtil;
@@ -14,25 +19,23 @@ import com.aston.aston_project.util.UserDetails;
 import com.aston.aston_project.util.exception.DuplicateEmailException;
 import com.aston.aston_project.util.exception.IncorrectDataException;
 import com.aston.aston_project.util.exception.NotFoundDataException;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
-@Service
-public class UserService {
+import java.util.List;
 
+@Service
+@AllArgsConstructor
+public class UserService {
     private JwtUtils jwtUtils;
     private UserRepository repository;
     private RoleRepository roleRepository;
     private YandexSearchLocationClient yandexClient;
-
-    public UserService(JwtUtils jwtUtils, UserRepository repository, RoleRepository roleRepository, @Lazy
-    YandexSearchLocationClient yandexClient) {
-        this.jwtUtils = jwtUtils;
-        this.repository = repository;
-        this.roleRepository = roleRepository;
-        this.yandexClient = yandexClient;
-    }
+    private ProductRepository productRepository;
+    private ProductDtoMapping productDtoMapping;
 
     public UserDetails getUserDetailsByEmail(String email) throws NotFoundDataException {
         User user = getUserByEmail(email);
@@ -78,7 +81,7 @@ public class UserService {
         if (repository.existsByEmail(request.getEmail())) {
             throw new DuplicateEmailException("User with email = %s already exists".formatted(request.getEmail()));
         }
-        if (!request.getPhone().toString().matches("^[87]\\d{10}$")) {
+        if (!request.getPhone().matches("^[87]\\d{10}$")) {
             throw new IncorrectDataException("Phone %s is incorrect".formatted(request.getPhone()));
         }
     }
@@ -90,5 +93,34 @@ public class UserService {
         } catch (NumberFormatException e) {
             throw new IncorrectDataException("Location is incorrect");
         }
+    }
+
+    @Transactional
+    public void addProductToWishList(String email, Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new NotFoundDataException("Product not found"));
+
+        User user = getUserByEmail(email);
+
+        if (!user.getWishList().contains(product)) {
+            user.getWishList().add(product);
+        }
+    }
+
+    @Transactional
+    public void removeProductFromWishList(String email, Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new NotFoundDataException("Product not found"));
+
+        User user = getUserByEmail(email);
+
+        user.getWishList().remove(product);
+    }
+
+    public List<ProductDtoShort> getWishList(String email) {
+        return getUserByEmail(email).getWishList()
+                .stream()
+                .map(productDtoMapping::entityToDtoShort)
+                .toList();
     }
 }

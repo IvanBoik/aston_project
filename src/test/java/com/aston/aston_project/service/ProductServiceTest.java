@@ -21,7 +21,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +36,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ProductServiceImplTest {
+class ProductServiceTest {
     @Mock
     ProductRepository productRepository;
     @Mock
@@ -45,7 +44,7 @@ class ProductServiceImplTest {
     @Mock
     ProductDtoMapping productMapper;
     @InjectMocks
-    ProductServiceImpl productService;
+    ProductService productService;
 
     @Test
     void testGetById_WithValidId() {
