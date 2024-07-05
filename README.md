@@ -10,6 +10,9 @@
 ![image](https://github.com/IvanBoik/aston_project/assets/145038107/cc6dcaa4-994f-4fad-9d90-388559836d71)
 ![image](https://github.com/IvanBoik/aston_project/assets/145038107/f891db24-9132-4953-8702-86605925096a)
 ![image](https://github.com/IvanBoik/aston_project/assets/145038107/2bbf8b14-ca7e-42a0-97ad-90fbaae2ad8b)
+![image](https://github.com/IvanBoik/aston_project/assets/145038107/dcde51d7-d0b2-454a-ab8b-ea033ab8dab0)
+![image](https://github.com/IvanBoik/aston_project/assets/145038107/506efd54-fea9-4473-af78-d34edce25acb)
+![image](https://github.com/IvanBoik/aston_project/assets/145038107/847c55b7-3039-4f06-873f-e4e6bf064532)
 ![image](https://github.com/IvanBoik/aston_project/assets/145038107/cc082f7c-3d5c-4fc7-94f3-247ad08da148)
 ![image](https://github.com/IvanBoik/aston_project/assets/145038107/9a9589bf-e515-465c-b252-f917289ba404)
 
