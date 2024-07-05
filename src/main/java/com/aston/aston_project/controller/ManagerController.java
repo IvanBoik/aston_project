@@ -13,41 +13,48 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.aston.aston_project.AstonProjectApplication.log;
 
 /**
  * Controller which describes all managers' logic
+ *
  * @author K. Zemlyakov
  */
 @RestController
-@RequestMapping(value ="api/v1/managers",produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "api/v1/managers", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 public class ManagerController {
 
     private ManagerService managerService;
 
     @GetMapping("/orders")
-    public List<OrderWithUserAndAddressDTO> getAllOrders(){
+    public List<OrderWithUserAndAddressDTO> getAllOrders() {
+        log.info("Get request /api/v1/managers/orders");
         return managerService.getAllOrders();
     }
 
     @GetMapping("/orders/suspicious")
-    public List<SuspiciousOrderDTO> getAllSuspiciousOrders(){
+    public List<SuspiciousOrderDTO> getAllSuspiciousOrders() {
+        log.info("Get request /api/v1/managers/orders/suspicious");
         return managerService.getAllSuspiciousOrders();
     }
 
     @PatchMapping("/orders/{order}")
     public OrderWithUserAndAddressDTO switchStatus(@PathVariable @Positive Long order,
-                                                 @RequestParam OrderStatusEnum status) {
+                                                   @RequestParam OrderStatusEnum status) {
+        log.info("Patch request /api/v1/managers/orders/{}, {}", order, status.toString());
         return managerService.setOrderStatus(order, status);
     }
 
     @GetMapping("/orders/recipes")
-    public List<OrderWithProductAndRecipeDTO> getAllOrdersWithRecipe(){
+    public List<OrderWithProductAndRecipeDTO> getAllOrdersWithRecipe() {
+        log.info("Patch request /api/v1/managers/recipes");
         return managerService.getRecipeOrders();
     }
 
     @GetMapping("/recipes/{id}/check")
-    public RecipeCheckerResponse checkRecipe(@PathVariable @Positive Long id){
+    public RecipeCheckerResponse checkRecipe(@PathVariable @Positive Long id) {
+        log.info("Get request /api/v1/managers/orders/{}/check", id);
         return managerService.checkRecipe(id);
     }
 }
